@@ -1,0 +1,17 @@
+ALTER TABLE `appointment` ADD `date_end` DATETIME NULL AFTER `date`;
+
+ALTER TABLE `appointment` ADD `event_title` VARCHAR(255) NULL DEFAULT NULL AFTER `status`, ADD `event_date` DATETIME NULL DEFAULT NULL AFTER `event_title`, ADD `event_name_chair` VARCHAR(150) NULL DEFAULT NULL AFTER `event_date`, ADD `event_chief_guest` VARCHAR(150) NULL DEFAULT NULL AFTER `event_name_chair`, ADD `event_special_guest` VARCHAR(150) NULL DEFAULT NULL AFTER `event_chief_guest`;
+
+ALTER TABLE `appointment` ADD `status_po` TINYINT(1) NOT NULL DEFAULT '0' AFTER `email`, ADD `status_ps` TINYINT(1) NOT NULL DEFAULT '0' AFTER `status_po`;
+
+ALTER TABLE `appointment` ADD `person_name` VARCHAR(100) NULL DEFAULT NULL AFTER `organization`;
+
+
+Single Login (Admin and User)
+Admin Dashboard
+User Panel
+User Dashboard Basic Info.
+User My Appointment
+User Create Appointment (Add Person multiple and Event Details)
+User Appointment List
+User Appointment Details
