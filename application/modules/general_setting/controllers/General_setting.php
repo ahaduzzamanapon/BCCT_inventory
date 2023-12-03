@@ -129,6 +129,60 @@ class General_setting extends Backend_Controller {
       $this->data['subview'] = 'department_edit';
       $this->load->view('backend/_layout_main', $this->data);
    }
+   // group crud
+   public function group(){
+      $this->data['results'] = $this->db->get('groups')->result(); 
+      $this->data['meta_title'] = 'All Group List';
+      $this->data['subview'] = 'group';
+      $this->load->view('backend/_layout_main', $this->data);
+   }
+
+   public function group_add(){
+      $this->form_validation->set_rules('group_name', 'group Name', 'required|trim');
+      if ($this->form_validation->run() == true){
+         $form_data = array(
+            'name'=> $this->input->post('group_name'),
+            ); 
+
+         if($this->Common_model->save('groups', $form_data)){
+            $this->session->set_flashdata('success', 'Group create successfully.');
+            redirect('general_setting/group');
+         }
+      }
+
+      // Load page
+      $this->data['meta_title'] = 'Create Group';
+      $this->data['subview'] = 'group_add';
+      $this->load->view('backend/_layout_main', $this->data);
+   }
+
+   public function group_edit($id){
+      $this->form_validation->set_rules('group_name', 'group Name', 'required|trim');
+
+      if ($this->form_validation->run() == true){
+
+         $form_data = array(
+            'name'       => $this->input->post('group_name')
+            );        
+         if($this->Common_model->edit('groups', $id, 'id', $form_data)){
+            $this->session->set_flashdata('success', 'Information update successfully.');
+            redirect('general_setting/group');
+         }
+      }
+
+      $this->data['info'] = $this->db->where('id', $id)->get('groups')->row();
+      
+      // Load page
+      $this->data['meta_title'] = 'Edit Group';
+      $this->data['subview'] = 'group_edit';
+      $this->load->view('backend/_layout_main', $this->data);
+   }
+   public function group_delete($id){
+     $this->db->where('id', $id);
+     $this->db->delete('groups');
+     $this->session->set_flashdata('success', 'Information delete successfully.');
+     redirect('general_setting/group');
+   }
 
    public function upazila_thana($offset=0){
       //Manage list the users

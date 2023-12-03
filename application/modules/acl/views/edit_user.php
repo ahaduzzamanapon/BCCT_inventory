@@ -91,8 +91,7 @@
                     }
                     ?>
                     <label style="color: black;">
-                      <input type="checkbox" name="groups[]" value="<?php echo $group['id'];?>"<?php echo $checked;?>>
-                      <!-- <input type="radio" name="groups[]" value="<?php echo $group['id'];?>" <?=$checked;?> >  -->
+                      <input type="radio" name="group" value="<?php echo $group['id'];?>"<?php echo $checked;?>>
                       <?php echo htmlspecialchars($group['description'],ENT_QUOTES,'UTF-8');?> <br>
                     </label>
                   </div>
@@ -108,10 +107,7 @@
             <h3>Status</h3>
             <?php echo form_error('active'); ?>
             <input type="radio"  name="active" value="0" <?=set_value('active', $user->active)==0?'checked':'';?>> Inactive <br>
-            <input type="radio" name="active" value="1" <?=set_value('active', $user->active)==1?'checked':'';?>> Active/Verified <br>
-            <input type="radio" name="active" value="2" <?=set_value('active', $user->active)==2?'checked':'';?>> Disable <br>
-            <input type="radio" name="active" value="3" <?=set_value('active', $user->active)==3?'checked':'';?>> Postpond <br>
-            <input type="radio" name="active" value="4" <?=set_value('active', $user->active)==4?'checked':'';?>> Reject
+            <input type="radio" name="active" value="1" <?=set_value('active', $user->active)==1?'checked':'';?>> Active<br>
           </div>
         </div>
 
