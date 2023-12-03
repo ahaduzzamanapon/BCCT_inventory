@@ -356,20 +356,13 @@ class Acl extends Backend_Controller {
                 if ($this->input->post('password')){
                     $data['password'] = $this->input->post('password');
                 }
+                    $groupData = $this->input->post('group');
+                    // dd($groupData);
+                    $this->ion_auth->remove_from_group('', $id);
+                    $this->ion_auth->add_to_group($groupData, $id);
+                        
 
-                // Only allow updating groups if user is admin
-                if ($this->ion_auth->is_admin()){
-                    //Update the groups user belongs to
-                    $groupData = $this->input->post('groups');
-                    if (isset($groupData) && !empty($groupData)) {
-                        $this->ion_auth->remove_from_group('', $id);
-                        foreach ($groupData as $grp) {
-                            $this->ion_auth->add_to_group($grp, $id);
-                        }
-
-                    }
-                }
-
+                    
             // check to see if we are updating the user
                 if($this->ion_auth->update($user->id, $data)){
                     // redirect them back to the admin page if admin, or to the base url if non admin

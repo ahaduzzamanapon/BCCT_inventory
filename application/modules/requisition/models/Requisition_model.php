@@ -7,23 +7,26 @@ class Requisition_model extends CI_Model {
    }
 
    public function get_requisition($limit=1000, $offset=0, $status=NULL) {
+      $desk_arr=[];
+      $desk_arr[]=$this->ion_auth->get_group_id();
+      if(in_array('4', $this->ion_auth->get_permission())){
+         $desk_arr[] = 0;
+      }
+
       $this->db->select('r.*, u.first_name, dp.dept_name, f.fiscal_year_name');
-      $this->db->from('requisitions r');
+      $this->db->from('requisitions as r');
       $this->db->join('users u', 'u.id = r.user_id', 'LEFT');
       $this->db->join('department dp', 'dp.id = u.dept_id', 'LEFT');
       $this->db->join('fiscal_year f', 'f.id = r.f_year_id', 'LEFT');
       if($status){
          $this->db->where('r.status', $status);
       }
+      $this->db->where_in('r.desk_id', $desk_arr);
       $this->db->order_by('r.id', 'DESC');
       $query = $this->db->get()->result();
-      // echo $this->db->last_query(); exit;
       $result['rows'] = $query;
-
-        // count query
       $q = $this->db->select('COUNT(*) as count');
       $this->db->from('requisitions'); 
-      // $this->db->where('user_id', $this->session->userdata('user_id'));
       if($status){
          $this->db->where('status', $status);
       }

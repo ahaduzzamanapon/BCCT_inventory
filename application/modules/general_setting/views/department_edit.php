@@ -5,7 +5,7 @@
      <!--  <li> <?=$module_name?> </li> -->
       <li><?=$meta_title; ?></li>
     </ul>
-
+  
     <div class="row">
        <div class="col-md-8">
           <div class="grid simple horizontal red">

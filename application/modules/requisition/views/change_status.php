@@ -95,9 +95,34 @@
                      <div class="row form-row">
                         <div class="col-md-3" style="margin-bottom: 20px;: ">
                            <label class="form-label">Status Type <span class='required'>*</span></label>
-                           <?php echo form_error('status');?>
-                           <input type="radio" name="status" value="2" <?=set_value('status')=='2'?'checked':'';?>> <span style="color: black; font-size: 14px;"><strong>Approve</strong></span> 
-                           <input type="radio" name="status" value="3" <?=set_value('status')=='3'?'checked':'';?>> <span style="color: black; font-size: 14px;"><strong>Reject</strong></span>
+                           <?php echo form_error('status');
+                           $pw=$this->ion_auth->get_permission();
+                           ?>
+                           <input type="radio" name="status" value="1" <?=$info->status=='1'?'checked':'';?> <?= (in_array(1, $pw) ? '' : 'disabled') ?> > <span style="color: black; font-size: 14px;"><strong>Pending</strong></span> 
+                           <input type="radio" name="status" value="2" <?=$info->status=='2'?'checked':'';?> <?= (in_array(2, $pw) ? '' : 'disabled') ?> > <span style="color: black; font-size: 14px;"><strong>Approve</strong></span> 
+                           <input type="radio" name="status" value="3" <?=$info->status=='3'?'checked':'';?>  <?= (in_array(3, $pw) ? '' : 'disabled') ?> > <span style="color: black; font-size: 14px;"><strong>Reject</strong></span>
+                           <div id="typeerror"></div>
+                        </div>
+
+                        <div class="col-md-9" style="margin-bottom: 20px;: ">
+                        <?php
+                        $group_id=$this->ion_auth->get_group_id();
+                        $group_name=$this->ion_auth->get_group_name();
+                        ?>
+                           <label class="form-label">Send To <span class='required'>*</span></label>
+
+                          <input type="radio" name="desk_id" value=" <?=$group_id?>" checked > <?= $group_name ?> &nbsp;&nbsp;
+
+                           <?php echo form_error('status');
+                           $pw=$this->ion_auth->get_pw();
+                           foreach ($pw as $key => $value) {
+                              $this->db->where('id', $value);
+                              $query = $this->db->get('groups')->row();
+                              if ($query) {
+                                 echo '<input type="radio" name="desk_id" value="'.$query->id.'" >'.$query->name.' &nbsp;&nbsp;';
+                              }
+                           }
+                           ?>
                            <div id="typeerror"></div>
                         </div>
                      </div>

@@ -92,7 +92,7 @@
                     ?>
                     <label style="color: black;">
                       <input type="radio" name="group" value="<?php echo $group['id'];?>"<?php echo $checked;?>>
-                      <?php echo htmlspecialchars($group['description'],ENT_QUOTES,'UTF-8');?> <br>
+                      <?php echo htmlspecialchars($group['name'],ENT_QUOTES,'UTF-8');?> <br>
                     </label>
                   </div>
                 <?php endforeach?>

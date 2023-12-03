@@ -29,7 +29,8 @@
               <thead>
                 <tr>
                   <th style="width:2%"> SL </th>
-                  <th style="width:60%">group Name</th>
+                  <th style="width:60%">Group Name</th>
+                  <th style="width:60%">Group Pawer</th>
                   <th style="width:20%">Action</th>
                 </tr>
               </thead>
@@ -42,8 +43,42 @@
                 <tr>
                   <td class="v-align-middle"><?=$sl.'.'?></td>
                   <td class="v-align-middle"><?=$row->name?></td>
+                  <td class="v-align-middle">
+
+                    <?php 
+                      $pw = explode(',',$row->pw);
+                      $permission = explode(',',$row->permission)
+
+                    ?>
+                      <?php 
+                      if(in_array(1, $permission)){
+                        echo '<span class="btn btn-primary btn-xs btn-mini">Create</span>  <br>';
+                      }
+                      if(in_array(2, $permission)){
+                        echo '<span class="btn btn-success btn-xs btn-mini">Approve</span>  <br>';
+                      }
+                      if(in_array(3, $permission)){
+                        echo '<span class="btn btn-danger btn-xs btn-mini">Reject</span>  <br>';
+                      }
+                      if(in_array(4, $permission)){
+                        echo '<span class="btn btn-warning btn-xs btn-mini">Delivery</span>  <br>';
+                      }
+                    ?>
+                    <?php 
+                      foreach ($pw as $key => $value) {
+                        $this->db->where('id', $value);
+                        $query = $this->db->get('groups')->row();
+                        if ($query) {
+                          echo '<span class="btn btn-primary btn-xs btn-mini">Pass To '.$query->name.'</span>  <br>';
+                        }
+                      }
+                    ?>
+                   
+
+
+                  </td>
                   <!-- <td> <?php echo ($row->status) ?'<span class="btn btn-primary btn-xs btn-mini">Enable </span>': '<span class="btn btn-danger btn-xs btn-mini">Disable</span>';?> </td> -->
-                  <td><?php echo anchor(base_url()."general_setting/group_edit/".$row->id, 'Edit', 'class="btn btn-mini btn-primary"') ;?>&nbsp;<a class="btn btn-mini btn-primary" href="<?=base_url()?>general_setting/group_delete/<?=$row->id?>" onclick="return confirm('Are you sure you want to delete this group?');">Delete</a></td>
+                  <td><?php echo anchor(base_url()."general_setting/group_edit/".$row->id, 'Edit', 'class="btn btn-mini btn-danger"') ;?>&nbsp;<a class="btn btn-mini btn-primary" href="<?=base_url()?>general_setting/group_delete/<?=$row->id?>" onclick="return confirm('Are you sure you want to delete this group?');">Delete</a></td>
                 <?php endforeach;?>                      
               </tbody>
             </table>

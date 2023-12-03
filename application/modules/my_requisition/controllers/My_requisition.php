@@ -36,28 +36,23 @@ class My_requisition extends Backend_Controller {
    }
 
    public function create(){
-      // if(!$this->ion_auth->is_member()){
-      //    redirect('dashboard');
-      // }
       $fiscal_year = $this->Common_model->get_current_fiscal_year();
       $this->data['fiscal_year'] = $fiscal_year->fiscal_year_name;
-
+      
       //Validation
       $this->form_validation->set_rules('title', 'title','required|trim|max_length[255]');
-
       //Validate and input data
       if ($this->form_validation->run() == true){
          $user = $this->ion_auth->user()->row();
-
          $form_data = array(
             'user_id'   => $user->id,
             'department_id' => $user->dept_id, 
             'f_year_id'   => $fiscal_year->id,
             'title'     => $this->input->post('title'),
+            'desk_id'     => 0,
             'created'   => date('Y-m-d H:i:s'),
             'updated'   => date('Y-m-d H:i:s')
             );
-
          // print_r($form_data); exit;
          if($this->Common_model->save('requisitions', $form_data)){     
             // Send Message

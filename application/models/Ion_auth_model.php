@@ -1586,11 +1586,32 @@ class Ion_auth_model extends CI_Model
 		// if no id was passed use the current users id
 		$id || $id = $this->session->userdata('user_id');
 
-		return $this->db->select($this->tables['users_groups'].'.'.$this->join['groups'].' as id, '.$this->tables['groups'].'.name, '.$this->tables['groups'].'.description')
+		return $this->db->select($this->tables['users_groups'].'.'.$this->join['groups'].' as id, '.$this->tables['groups'].'.name, '.$this->tables['groups'].'.description, '.$this->tables['groups'].'.pw, '.$this->tables['groups'].'.permission' )
 		                ->where($this->tables['users_groups'].'.'.$this->join['users'], $id)
 		                ->join($this->tables['groups'], $this->tables['users_groups'].'.'.$this->join['groups'].'='.$this->tables['groups'].'.id')
 		                ->get($this->tables['users_groups']);
 	}
+	public function get_pw()
+	{
+		$group = $this->ion_auth->get_users_groups($this->ion_auth->get_user_id())->row()->pw;
+        return explode(",", $group);
+	}
+	public function get_permission()
+	{
+		$group = $this->ion_auth->get_users_groups($this->ion_auth->get_user_id())->row()->permission;
+        return explode(",", $group);
+	}
+	public function get_group_id()
+	{
+		$group = $this->ion_auth->get_users_groups($this->ion_auth->get_user_id())->row()->id;
+        return $group;
+	}
+	public function get_group_name()
+	{
+		$group = $this->ion_auth->get_users_groups($this->ion_auth->get_user_id())->row()->name;
+        return $group;
+	}
+
 
 	/**
 	 * add_to_group

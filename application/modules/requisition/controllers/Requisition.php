@@ -17,11 +17,6 @@ class Requisition extends Backend_Controller {
 
    public function index($offset=0){
       $limit = 25;
-      // if(!$this->ion_auth->is_member()){
-      //    redirect('dashboard');
-      // }
-
-      //Results
       $results = $this->Requisition_model->get_requisition($limit, $offset); 
       $this->data['results'] = $results['rows'];
       $this->data['total_rows'] = $results['num_rows'];
@@ -37,15 +32,9 @@ class Requisition extends Backend_Controller {
 
    public function request_list($offset=0){
       $limit = 25;
-      // if(!$this->ion_auth->is_member()){
-      //    redirect('dashboard');
-      // }
-
-      //Results
       $results = $this->Requisition_model->get_requisition($limit, $offset, '1'); 
       $this->data['results'] = $results['rows'];
       $this->data['total_rows'] = $results['num_rows'];
-
       //pagination
       $this->data['pagination'] = create_pagination('requisition/request_list/', $this->data['total_rows'], $limit, 3, $full_tag_wrap = true);
 
@@ -116,11 +105,7 @@ class Requisition extends Backend_Controller {
    }
 
    public function change_status($id){
-      if(!($this->ion_auth->is_admin() || $this->ion_auth->in_group('service'))){
-         redirect('dashboard');
-      }
 
-      // $dataID = $id; //exit;
       $dataID = (int) decrypt_url($id); //exit;
       if (!$this->Common_model->exists('requisitions', 'id', $dataID)) { 
          show_404('requisition - update - exitsts', TRUE);
@@ -139,29 +124,31 @@ class Requisition extends Backend_Controller {
             $form_data = array(
                'approve_reject_user' => $this->userSessID,
                'status'       => 2,
+               'desk_id'      =>0,
                'pin_code'     => $pinCode,
                'updated'      => date('Y-m-d H:i:s')
                );
-
+               
             // Send Mail
-            $q = $this->db->select('id, email')->where('id', $this->data['info']->user_id)->get('users');
-            if($q->num_rows() > 0){
-               $email = $q->row()->email;          
-               if($email != ''){
-                  // Send Mail
-                  $message = 'Hello, <br><br>Your requisition item(s) has been approved/processed. Please do the needful to collect your items. Please authorised the delivery with the confirmation code sent your email.<br><br><br>Your secrate PIN code is : '.$pinCode.'<br><br>Remember your secrate pin code and get your products. <br><br><br>';
-                  $this->email->clear();
-                  $this->email->from('testingemail9400@gmail.com', 'TMED Inventory');
-                  $this->email->to($email);
-                  $this->email->subject('TMED - Requisition PIN Code');
-                  $this->email->message($message);
-                  $this->email->send();
-               }
-            }
+            // $q = $this->db->select('id, email')->where('id', $this->data['info']->user_id)->get('users');
+            // if($q->num_rows() > 0){
+            //    $email = $q->row()->email;          
+            //    if($email != ''){
+            //       // Send Mail
+            //       $message = 'Hello, <br><br>Your requisition item(s) has been approved/processed. Please do the needful to collect your items. Please authorised the delivery with the confirmation code sent your email.<br><br><br>Your secrate PIN code is : '.$pinCode.'<br><br>Remember your secrate pin code and get your products. <br><br><br>';
+            //       $this->email->clear();
+            //       $this->email->from('testingemail9400@gmail.com', 'TMED Inventory');
+            //       $this->email->to($email);
+            //       $this->email->subject('TMED - Requisition PIN Code');
+            //       $this->email->message($message);
+            //       $this->email->send();
+            //    }
+            // }
          }else{
             $form_data = array(
                'approve_reject_user' => $this->userSessID,
-               'status'    => 3,
+               'status'    => $this->input->post('status'),
+               'desk_id'      =>$this->input->post('desk_id'),
                'updated'   => date('Y-m-d H:i:s')
                );
          }
@@ -191,14 +178,8 @@ class Requisition extends Backend_Controller {
 
       //Results
       
-      $this->data['items'] = $this->Requisition_model->get_req_items($dataID);  
+      $this->data['items'] = $this->Requisition_model->get_req_items($dataID);
 
-      // print_r($this->data['persons']); exit;
-      // if($this->data['info']->schedule_type == 'Appointment'){
-
-      // }
-      
-      //Load view
       $this->data['meta_title'] = 'Approval Status';
       $this->data['subview'] = 'change_status';
       $this->load->view('backend/_layout_main', $this->data);

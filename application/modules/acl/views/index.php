@@ -74,7 +74,7 @@
                     foreach ($user->groups as $group):
                           //echo anchor("#", htmlspecialchars($group->description,ENT_QUOTES,'UTF-8'), array('class' => 'btn btn-primary btn-xs btn-mini'));
                          //echo anchor("acl/edit_group/".$group->id, strtoupper($group->description), array('class' => 'label label-important'));
-                      echo '<span class="btn btn-primary btn-xs btn-mini" style="background-color:#6b64d0;margin-bottom:1px;">'.htmlspecialchars($group->description,ENT_QUOTES,'UTF-8').'</span>';
+                      echo '<span class="btn btn-primary btn-xs btn-mini" style="background-color:#6b64d0;margin-bottom:1px;">'.htmlspecialchars($group->name,ENT_QUOTES,'UTF-8').'</span>';
                     echo '&nbsp;';
                     endforeach;
                     ?>

@@ -32,9 +32,33 @@
 
               <div class="row form-row">
                 <div class="col-md-6">
-                  <label class="form-label">group</label>
+                  <label class="form-label">Group Name</label>
                   <?php echo form_error('group_name'); ?>
                   <input name="group_name" id="group_name" type="text" value="<?=set_value('group_name')?>" class="form-control input-sm" placeholder="">
+                </div>
+                <div class="col-md-6" style="box-shadow: 0px 0px 2px 1px #999999;">
+                    <h4 class="form-label">Send Permission</h4>
+                    <div class="btn btn-primary btn-xs btn-mini" style="margin-top: 3px;">
+                      <input type="checkbox" name="permission[]" value=1 class="group_control">Create
+                    </div><br>
+                  <div class="btn btn-success btn-xs btn-mini" style="margin-top: 3px;">
+                      <input type="checkbox" name="permission[]" value=2 class="group_control">Approve
+                    </div><br>
+                  <div class="btn btn-danger btn-xs btn-mini" style="margin-top: 3px;">
+                      <input type="checkbox" name="permission[]" value=3 class="group_control">Reject
+                    </div><br>
+                  <div class="btn btn-warning btn-xs btn-mini" style="margin-top: 3px;">
+                      <input type="checkbox" name="permission[]" value=4 class="group_control">Delivery
+                    </div><br>
+                  <?php 
+                  $pw_list=$this->db->get('groups')->result();
+                  ?>
+                  <?php foreach($pw_list as $pw):?>
+                    <div class="btn btn-primary btn-xs btn-mini" style="margin-top: 3px;">
+                      <input type="checkbox" name="pw[]" value="<?=$pw->id?>" class="group_control">Pass To <?=$pw->name?>
+                    </div><br>
+                  <?php endforeach;?>
+                
                 </div>
               </div>
 

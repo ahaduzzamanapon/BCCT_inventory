@@ -5,6 +5,7 @@
      <!--  <li> <?=$module_name?> </li> -->
       <li><?=$meta_title; ?></li>
     </ul>
+
     <div class="row">
        <div class="col-md-8">
           <div class="grid simple horizontal red">
@@ -23,25 +24,47 @@
                       <a class="close" data-dismiss="alert">&times;</a>
                       <?php echo $this->session->flashdata('success');;?>
                   </div>
-              <?php endif; ?>
+              <?php endif;
+              ?>
 
               <?php 
               $attributes = array('id' => 'group_validate');
+              
               echo form_open_multipart("general_setting/group_edit/".$info->id, $attributes);?>
 
               <div class="row form-row">
                 <div class="col-md-6">
-                  <label class="form-label">group</label>
+                  <label class="form-label">Group Name</label>
                   <?php echo form_error('group_name'); ?>
-                  <input name="group_name" id="group_name" type="text" value="<?=set_value('name', $info->dept_name)?>" class="form-control input-sm" placeholder="">
+                  <input name="group_name" id="group_name" type="text" value="<?=$info->name?>" class="form-control input-sm" placeholder="">
                 </div>
-
-                <div class="col-md-6">
-                    <label class="form-label">Status</label>
-                    <?php echo form_error('status'); ?>
-                    <input type="radio" name="status" id="" class="group_control" value="1" <?=set_value('is_current', $info->status)==1?'checked':'';?>> Enable &nbsp;&nbsp;
-                    <input type="radio" name="status" id="" class="group_control" value="0" <?=set_value('is_current', $info->status)==0?'checked':'';?>> Disable
-                 </div>
+                <div class="col-md-6" style="box-shadow: 0px 0px 2px 1px #999999;">
+                    <h4 class="form-label">Send Permission</h4>
+                    <?php 
+                  $pw_list=$this->db->get('groups')->result();
+                  $pw_info= explode(',',$info->pw);
+                  $permission_info = explode(',',$info->permission);
+                  ?>
+                    <div class="btn btn-primary btn-xs btn-mini" style="margin-top: 3px;">
+                      <input type="checkbox" name="permission[]" value=1 class="group_control" <?php if(in_array(1,$permission_info)) echo 'checked';?> >Create
+                    </div><br>
+                  <div class="btn btn-success btn-xs btn-mini" style="margin-top: 3px;">
+                      <input type="checkbox" name="permission[]" value=2 class="group_control" <?php if(in_array(2,$permission_info)) echo 'checked';?>>Approve
+                    </div><br>
+                  <div class="btn btn-danger btn-xs btn-mini" style="margin-top: 3px;">
+                      <input type="checkbox" name="permission[]" value=3 class="group_control" <?php if(in_array(3,$permission_info)) echo 'checked';?>>Reject
+                    </div><br>
+                  <div class="btn btn-warning btn-xs btn-mini" style="margin-top: 3px;">
+                      <input type="checkbox" name="permission[]" value=4 class="group_control" <?php if(in_array(4,$permission_info)) echo 'checked';?>>Delivery
+                    </div><br>
+                
+                  <?php foreach($pw_list as $pw):?>
+                    <div class="btn btn-primary btn-xs btn-mini" style="margin-top: 3px;">
+                      <input type="checkbox" name="pw[]" value="<?=$pw->id?>" class="group_control" <?php if(in_array($pw->id,$pw_info)) echo 'checked';?>>Pass To <?=$pw->name?>
+                    </div><br>
+                  <?php endforeach;?>
+                
+                </div>
               </div>
 
 

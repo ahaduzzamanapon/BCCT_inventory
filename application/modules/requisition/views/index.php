@@ -12,7 +12,12 @@
                <div class="grid-title">
                   <h4><span class="semi-bold"><?=$meta_title; ?></span></h4>
                   <div class="pull-right">
-                     <a href="<?=base_url('my_requisition/create')?>" class="btn btn-blueviolet btn-xs btn-mini"> Create Requisition</a>
+                     <?php
+                      $permission=$this->ion_auth->get_permission();
+                      if(in_array(1,$permission)){
+                        ?>
+                      <a href="<?=base_url('my_requisition/create')?>" class="btn btn-blueviolet btn-xs btn-mini"> Create Requisition</a>
+                      <?php } ?>
                   </div>            
                </div>
 

@@ -138,12 +138,15 @@ class General_setting extends Backend_Controller {
    }
 
    public function group_add(){
+
       $this->form_validation->set_rules('group_name', 'group Name', 'required|trim');
       if ($this->form_validation->run() == true){
+         dd(implode(',', $this->input->post('pw')));
          $form_data = array(
             'name'=> $this->input->post('group_name'),
+            'pw'  =>  implode(',', $this->input->post('pw')),
+            'permission'  =>  implode(',', $this->input->post('permission')),
             ); 
-
          if($this->Common_model->save('groups', $form_data)){
             $this->session->set_flashdata('success', 'Group create successfully.');
             redirect('general_setting/group');
@@ -162,7 +165,9 @@ class General_setting extends Backend_Controller {
       if ($this->form_validation->run() == true){
 
          $form_data = array(
-            'name'       => $this->input->post('group_name')
+            'name'       => $this->input->post('group_name'),
+            'pw'  =>  implode(',', $this->input->post('pw')),
+            'permission'  =>  implode(',', $this->input->post('permission'))
             );        
          if($this->Common_model->edit('groups', $id, 'id', $form_data)){
             $this->session->set_flashdata('success', 'Information update successfully.');
@@ -171,7 +176,7 @@ class General_setting extends Backend_Controller {
       }
 
       $this->data['info'] = $this->db->where('id', $id)->get('groups')->row();
-      
+
       // Load page
       $this->data['meta_title'] = 'Edit Group';
       $this->data['subview'] = 'group_edit';
