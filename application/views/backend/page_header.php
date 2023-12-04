@@ -202,6 +202,10 @@
                                             class="selected"></span> <span class="arrow"></span> </a>
                                     <ul class="sub-menu">
                                         <li> <a href="<?=base_url('purchase');?>"> Purchase List </a> </li>
+                                        <li> <a href="<?=base_url('purchase/purchase_pending');?>"> Purchase Pending </a> </li>
+                                        <li> <a href="<?=base_url('purchase/purchase_approved');?>"> Purchase Approved </a> </li>
+                                        <li> <a href="<?=base_url('purchase/purchase_rejected');?>"> Purchase Rejected </a> </li>
+                                        <li> <a href="<?=base_url('purchase/purchase_received');?>"> Purchase Received </a> </li>
                                     </ul>
                                 </li>
 

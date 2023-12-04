@@ -22,7 +22,7 @@ if (!function_exists('dd')) {
             $output = ob_get_clean();
 
             // Echo the output with a styled <pre> tag
-            echo '<pre style="background: black;color: #27ff00;width: fit-content;height: fit-content;">' . $output . '</pre>';
+            echo '<pre style="background: black;color: #27ff00;width: fit-content;text-align: left;height: fit-content;">' . $output . '</pre>';
         }
 
         // Exit the script with a status code of 1

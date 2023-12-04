@@ -6,23 +6,27 @@ class Purchase_model extends CI_Model {
       parent::__construct();
    }
 
-   public function get_purchase($limit=1000, $offset=0, $fiscal_year=NULL) {
+   public function get_purchase($limit=1000, $offset=0, $status=null) {
+      $desk_arr=[];
+      $desk_arr[]=$this->ion_auth->get_group_id();
+      if(in_array('4', $this->ion_auth->get_permission())){
+         $desk_arr[] = 0;
+      }
       $this->db->select('p.*, f.fiscal_year_name');
       $this->db->from('purchase p');
       $this->db->join('fiscal_year f', 'f.id = p.f_year_id', 'LEFT');
-      if($fiscal_year){
-         $this->db->where('p.f_year_id', $fiscal_year);
+      if($status != null && $status != 4) {
+         $this->db->where('p.status', $status);
+      }elseif($status == 4) {
+         $this->db->where('p.is_received =', 1);
       }
+      $this->db->where_in('p.desk_id', $desk_arr);
       $this->db->order_by('p.id', 'DESC');
       $query = $this->db->get()->result();
       $result['rows'] = $query;
-
         // count query
       $q = $this->db->select('COUNT(*) as count');
       $this->db->from('purchase'); 
-      if($fiscal_year){
-         $this->db->where('f_year_id', $fiscal_year);
-      }
       $query = $this->db->get()->result();
       $tmp = $query;
       $result['num_rows'] = $tmp[0]->count;

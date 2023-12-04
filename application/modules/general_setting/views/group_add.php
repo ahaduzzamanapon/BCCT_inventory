@@ -50,6 +50,9 @@
                   <div class="btn btn-warning btn-xs btn-mini" style="margin-top: 3px;">
                       <input type="checkbox" name="permission[]" value=4 class="group_control">Delivery
                     </div><br>
+                  <div class="btn btn-warning btn-xs btn-mini" style="margin-top: 3px;">
+                      <input type="checkbox" name="permission[]" value=5 class="group_control">View Report
+                    </div><br>
                   <?php 
                   $pw_list=$this->db->get('groups')->result();
                   ?>

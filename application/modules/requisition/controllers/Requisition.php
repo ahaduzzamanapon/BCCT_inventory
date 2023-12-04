@@ -186,11 +186,11 @@ class Requisition extends Backend_Controller {
    }
 
    public function delivery_product($id){
-      if(!($this->ion_auth->in_group('officer'))){
+      $pr = $this->ion_auth->get_permission();
+      if (!in_array(4, $pr)) {
          redirect('dashboard');
-      }
-
-      // $dataID = $id; //exit;
+      };
+      
       $dataID = (int) decrypt_url($id); //exit;
       if (!$this->Common_model->exists('requisitions', 'id', $dataID)) { 
          show_404('requisition - delivery_product - exitsts', TRUE);

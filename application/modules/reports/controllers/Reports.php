@@ -4,18 +4,17 @@ class Reports extends Backend_Controller {
 
 	public function __construct(){
     parent::__construct();
-    redirect('dashboard');
     
     $this->data['module_name'] = $this->data['module_title'] = 'Reports';
     if (!$this->ion_auth->logged_in()):
       redirect('login');
     endif;
-
-    if (!$this->ion_auth->is_admin()):
+    $pr=$this->ion_auth->get_permission();
+    if (!in_array('5', $pr)) {
+      
       redirect('dashboard');
-    endif;
 
-    // $this->load->model('Offices/Offices_model');
+    }
     $this->load->model('Reports_model');
   }
 
@@ -32,6 +31,7 @@ class Reports extends Backend_Controller {
 
 
     if($this->form_validation->run() == true){
+
       if( $btn_submit == 'item_report') {
         // $this->data['region'] = $this->Common_model->get_data('office_region');
         $this->data['date_from'] = $this->input->post('date_from');
@@ -153,12 +153,96 @@ class Reports extends Backend_Controller {
         $mpdf->WriteHtml($html);
         $mpdf->output();
         // $mpdf->output('report.pdf', "D");
+      }else if( $btn_submit == 'request_purchase') {
+        $this->data['date_from'] = $this->input->post('date_from');
+        $this->data['date_to'] = $this->input->post('date_to');
+
+        $arrayInput = array('status' => 1, 'start_date'=>$this->data['date_from'], 'end_date'=>$this->data['date_to']);
+
+        // Results
+        $this->data['results'] = $this->Reports_model->get_requisition($arrayInput);
+
+        // echo '<pre>'; 
+        // print_r($this->data['results']); exit;
+
+        // Generate PDF
+        $this->data['headding'] = 'Request Requisition';
+        $html = $this->load->view('pdf_request_requisition', $this->data, true);
+
+        $mpdf = new mPDF('', 'A4', 10, '', 10, 10, 10, 5);
+        $mpdf->WriteHtml($html);
+        $mpdf->output();
+        // $mpdf->output('report.pdf', "D");
+
+      }else if( $btn_submit == 'approve_purchase') {
+        $this->data['date_from'] = $this->input->post('date_from');
+        $this->data['date_to'] = $this->input->post('date_to');
+
+        $arrayInput = array('status' => 2, 'start_date'=>$this->data['date_from'], 'end_date'=>$this->data['date_to']);
+
+        // Results
+        $this->data['results'] = $this->Reports_model->get_requisition($arrayInput);
+
+        // echo '<pre>'; 
+        // print_r($this->data['results']); exit;
+
+        // Generate PDF
+        $this->data['headding'] = 'Approve Requisition';
+        $html = $this->load->view('pdf_approve_requisition', $this->data, true);
+
+        $mpdf = new mPDF('', 'A4', 10, '', 10, 10, 10, 5);
+        $mpdf->WriteHtml($html);
+        $mpdf->output();
+        // $mpdf->output('report.pdf', "D");
+
+      }else if( $btn_submit == 'rejected_purchase') {
+        $this->data['date_from'] = $this->input->post('date_from');
+        $this->data['date_to'] = $this->input->post('date_to');
+
+        $arrayInput = array('status' => 3, 'start_date'=>$this->data['date_from'], 'end_date'=>$this->data['date_to']);
+
+        // Results
+        $this->data['results'] = $this->Reports_model->get_requisition($arrayInput);
+
+        // echo '<pre>'; 
+        // print_r($this->data['results']); exit;
+
+        // Generate PDF
+        $this->data['headding'] = 'Rejected Requisition';
+        $html = $this->load->view('pdf_rejected_requisition', $this->data, true);
+
+        $mpdf = new mPDF('', 'A4', 10, '', 10, 10, 10, 5);
+        $mpdf->WriteHtml($html);
+        $mpdf->output();
+        // $mpdf->output('report.pdf', "D");
+
+      }else if( $btn_submit == 'recceived_purchase') {
+        // $this->data['region'] = $this->Common_model->get_data('office_region');
+        $this->data['date_from'] = $this->input->post('date_from');
+        $this->data['date_to'] = $this->input->post('date_to');
+
+        $arrayInput = array('start_date'=>$this->data['date_from'], 'end_date'=>$this->data['date_to']);
+
+        // Results
+        $this->data['results'] = $this->Reports_model->get_requisition_delivered($arrayInput);
+
+        // echo '<pre>'; 
+        // print_r($this->data['results']); exit;
+
+        // Generate PDF
+        $this->data['headding'] = 'Delivered Requisition';
+        $html = $this->load->view('pdf_delivered_requisition', $this->data, true);
+
+        $mpdf = new mPDF('', 'A4', 10, '', 10, 10, 10, 5);
+        $mpdf->WriteHtml($html);
+        $mpdf->output();
+        // $mpdf->output('report.pdf', "D");
       }
     }
 
     //Dropdown
     $this->data['users'] = $this->Common_model->get_users();
-    $this->data['fiscal_year'] = $this->Common_model->get_fiscal_year_dd();
+    // $this->data['fiscal_year'] = $this->Common_model->get_fiscal_year();
     // $this->data['scout_section'] = $this->Common_model->set_scout_section();      
     // $this->data['dis_type'] = $this->Common_model->get_scout_district_type();
 

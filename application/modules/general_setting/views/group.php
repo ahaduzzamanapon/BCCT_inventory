@@ -63,6 +63,9 @@
                       if(in_array(4, $permission)){
                         echo '<span class="btn btn-warning btn-xs btn-mini">Delivery</span>  <br>';
                       }
+                      if(in_array(5, $permission)){
+                        echo '<span class="btn btn-warning btn-xs btn-mini">View Report</span>  <br>';
+                      }
                     ?>
                     <?php 
                       foreach ($pw as $key => $value) {

@@ -56,16 +56,18 @@
                            </td>
                            <td> <?=$status?></td>
                            <td align="right">
+                              <?php
+                              if($row->is_delivered==0){
+                              ?>
                               <?php 
-                                 if($this->ion_auth->in_group(array('officer'))){ 
-                                    $delivered='';
-                                    if($row->is_delivered ==1){
-                                       $delivered = 'disabled';
-                                    }
-                                 ?>
+                                 $pr = $this->ion_auth->get_permission();
+                                 $delivered = 'disabled';
+                                 if (in_array(4, $pr)) {
+                                    $delivered = '';
+                                 };
+                               ?>
                               <?=anchor("requisition/delivery_product/".encrypt_url($row->id), 'Delivery Product', array('class' => 'btn btn-blueviolet btn-mini', $delivered=>$delivered))?>
                               <?php } ?>
-
                               <?=anchor("requisition/details/".encrypt_url($row->id), 'Details', array('class' => 'btn btn-primary btn-mini'))?>
                            </td>
                         </tr>

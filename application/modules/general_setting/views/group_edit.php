@@ -57,6 +57,9 @@
                   <div class="btn btn-warning btn-xs btn-mini" style="margin-top: 3px;">
                       <input type="checkbox" name="permission[]" value=4 class="group_control" <?php if(in_array(4,$permission_info)) echo 'checked';?>>Delivery
                     </div><br>
+                  <div class="btn btn-warning btn-xs btn-mini" style="margin-top: 3px;">
+                      <input type="checkbox" name="permission[]" value=5 class="group_control" <?php if(in_array(5,$permission_info)) echo 'checked';?>>View Report
+                    </div><br>
                 
                   <?php foreach($pw_list as $pw):?>
                     <div class="btn btn-primary btn-xs btn-mini" style="margin-top: 3px;">
