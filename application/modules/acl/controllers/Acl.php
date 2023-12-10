@@ -226,7 +226,6 @@ class Acl extends Backend_Controller {
         $tables = $this->config->item('tables','ion_auth');
         $identity_column = $this->config->item('identity','ion_auth');
         $this->data['identity_column'] = $identity_column;
-
         // validate form input
         $this->form_validation->set_rules('full_name', 'full name', 'required');
         if($identity_column!=='email')
@@ -255,13 +254,13 @@ class Acl extends Backend_Controller {
 
             // print_r($additional_data); exit;
         if ($this->form_validation->run() == true && $this->ion_auth->register($identity, $password, $email, $additional_data)) {
+           
             // check to see if we are creating the user
             // redirect them back to the admin page
             $this->session->set_flashdata('message', $this->ion_auth->messages());
             redirect('acl');
         } else {
-            // display the create user form
-            // set the flash data error message if there is one
+          
             $this->data['message'] = (validation_errors() ? validation_errors() : ($this->ion_auth->errors() ? $this->ion_auth->errors() : $this->session->flashdata('message')));
 
             $this->data['full_name'] = array(
