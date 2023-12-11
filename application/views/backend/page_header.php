@@ -194,13 +194,14 @@
                                         <i class="fa fa-tags"></i> <span class="title">Requisition</span> <span
                                             class="selected"></span> <span class="arrow"></span> </a>
                                     <ul class="sub-menu">
-                                        <li> <a href="<?=base_url('requisition');?>"> Requisition List </a> </li>
-                                        <?php
+                                    <?php
                                         $permission=$this->ion_auth->get_permission();
                                         if(in_array(1,$permission)){
                                             ?>
                                        <li> <a href="<?=base_url('my_requisition/create');?>"> Create Requisition </a> </li>
                                         <?php } ?>
+                                        <li> <a href="<?=base_url('requisition');?>"> Requisition List </a> </li>
+                                       
 
 
 

@@ -173,7 +173,7 @@
                                  <tr>
                                     <td><?=$item->item_name?></td>
                                     <td><?=$item->qty_request?>  <?=$item->unit_name?></td>
-                                    <td><input name="qty_approve[]" value="<?=$item->qty_request?>" type="text" class="form-control input-sm"></td>
+                                    <td><input name="qty_approve[]" value="<?=$item->qty_approve?>" type="text" class="form-control input-sm"></td>
                                     <td><?=$item->quantity?> <?=$item->unit_name?></td>
                                     <td><?=$item->remark?></td>
                                     <input type="hidden" name="hide_id[]" value="<?=$item->id?>">

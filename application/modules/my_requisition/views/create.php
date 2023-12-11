@@ -229,7 +229,7 @@ foreach ($categories as $key => $value) {
       items+= '<td><select name="item_sub_cate_id[]"  id="subcategory_'+sl+'" class="sub_category_val_'+sl+' form-control input-sm"><option value="">-- Select One --</option></select></td>';
       items+= '<td><select name="item_id[]" class="item_val_'+sl+' form-control input-sm"><option value="">-- Select One --</option></select></td>';
       items+= '<td><input name="qty_request[]" value="" type="text" class="form-control input-sm"></td>';
-      items+= '<td><input name="remark[]" value="" type="text" class="form-control input-sm"></td>';
+      items+= '<td><textarea name="remark[]" value=""  class="form-control input-sm"></textarea></td>';
       items+= '<td> <a href="javascript:void();" class="label label-important" onclick="removeRow(this)"> <i class="fa fa-minus-circle"></i> Remove </a></td>';
       items+= '</tr>';
       $('#count').val(sl+1);

@@ -120,6 +120,7 @@ class Requisition extends Backend_Controller {
             'id'=>$this->userSessID,
             'Remark'=>$this->input->post('Personal_Remark'),
          ];
+         
          array_push($approve_reject_user, $remarks);
          if($this->input->post('status') == 2){
             $this->load->helper('string');
