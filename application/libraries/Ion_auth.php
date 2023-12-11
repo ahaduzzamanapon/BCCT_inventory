@@ -299,7 +299,7 @@ class Ion_auth
 	public function register($identity, $password, $email, $additional_data = array(), $group_ids = array()) //need to test email activation
 	{
 		$id = $this->ion_auth_model->register($identity, $password, $email, $additional_data, $group_ids);
-		dd($id);
+			redirect('acl');
 	}
 
 	/**
@@ -404,6 +404,13 @@ class Ion_auth
 		$group = $this->config->item('default_group', 'ion_auth');
 		return $this->in_group($group, $id);
 	}
+
+	public function groupe($user_id)
+	{
+		return $this->ion_auth_model->get_users_groups($user_id)->row();
+
+	}
+
 
 	/**
 	 * in_group

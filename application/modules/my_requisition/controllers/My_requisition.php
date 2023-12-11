@@ -17,11 +17,6 @@ class My_requisition extends Backend_Controller {
 
    public function index($offset=0){
       $limit = 25;
-      // if(!$this->ion_auth->is_member()){
-      //    redirect('dashboard');
-      // }
-
-      //Results
       $results = $this->My_requisition_model->get_my_requisition($limit, $offset); 
       $this->data['results'] = $results['rows'];
       $this->data['total_rows'] = $results['num_rows'];
@@ -44,12 +39,15 @@ class My_requisition extends Backend_Controller {
       //Validate and input data
       if ($this->form_validation->run() == true){
          $user = $this->ion_auth->user()->row();
+         $approve_reject_user= [];
          $form_data = array(
             'user_id'   => $user->id,
             'department_id' => $user->dept_id, 
             'f_year_id'   => $fiscal_year->id,
+            'approve_reject_user'   =>json_encode($approve_reject_user),
             'title'     => $this->input->post('title'),
             'desk_id'     => 0,
+            'pin_code'   => mt_rand(1000, 9999),  
             'created'   => date('Y-m-d H:i:s'),
             'updated'   => date('Y-m-d H:i:s')
             );

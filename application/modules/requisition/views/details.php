@@ -97,7 +97,34 @@
                                     </table>
                                  </td>
                               </tr>
-                              <?php //} ?>
+                              <tr>
+                              <th class="tg-khup">Approver List</th>
+                              <td class="tg-ywa9" colspan="6">
+                                 <table>
+                                    <tr>
+                                       <th>SL</th>
+                                       <th>Approver Name </th>
+                                       <th>Remarks</th>
+                                    </tr>
+                                    <?php 
+                                    $sl=0;
+                                    $appruver= json_decode($info->approve_reject_user);
+                                    foreach($appruver as $value){ 
+                                       $sl++;
+                                       $this->db->select('first_name');
+                                       $this->db->where('id',$value->id);
+                                       $query = $this->db->get('users')->row();
+
+                                       ?>
+                                       <tr>
+                                          <td><?=$sl?></td>
+                                          <td><?=$query->first_name?></td>
+                                          <td><?=$value->Remark?></td>
+                                       </tr>
+                                       <?php } ?>
+                                    </table>
+                                 </td>
+                              </tr>
 
                            </table>
                         </div>

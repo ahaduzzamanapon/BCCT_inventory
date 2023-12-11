@@ -104,27 +104,51 @@
                            <div id="typeerror"></div>
                         </div>
 
-                        <div class="col-md-9" style="margin-bottom: 20px;: ">
-                        <?php
-                        $group_id=$this->ion_auth->get_group_id();
-                        $group_name=$this->ion_auth->get_group_name();
-                        ?>
-                           <label class="form-label">Send To <span class='required'>*</span></label>
+                        <div class="col-md-5" style="margin-bottom: 20px;: ">
+                              <?php
+                              $group_id=$this->ion_auth->get_group_id();
+                              $group_name=$this->ion_auth->get_group_name();
+                              ?>
+                              <label class="form-label">Send To <span class='required'>*</span></label>
 
-                          <input type="radio" name="desk_id" value=" <?=$group_id?>" checked > <?= $group_name ?> &nbsp;&nbsp;
+                           <input type="radio" name="desk_id" value=" <?=$group_id?>" checked > <?= $group_name ?> &nbsp;&nbsp;
 
-                           <?php echo form_error('status');
-                           $pw=$this->ion_auth->get_pw();
-                           foreach ($pw as $key => $value) {
-                              $this->db->where('id', $value);
-                              $query = $this->db->get('groups')->row();
-                              if ($query) {
-                                 echo '<input type="radio" name="desk_id" value="'.$query->id.'" >'.$query->name.' &nbsp;&nbsp;';
+                              <?php echo form_error('status');
+                              $pw=$this->ion_auth->get_pw();
+                              foreach ($pw as $key => $value) {
+                                 $this->db->where('id', $value);
+                                 $query = $this->db->get('groups')->row();
+                                 if ($query) {
+                                    echo '<input type="radio" name="desk_id" value="'.$query->id.'" >'.$query->name.' &nbsp;&nbsp;';
+                                 }
                               }
-                           }
-                           ?>
+                              ?>
+                            
                            <div id="typeerror"></div>
+                          
+                           <?php
+                           ?>
                         </div>
+                        <div class="col-md-4">
+                           <table class="table table-bordered col-md-12">
+                                 <thead>
+                                    <tr>
+                                       <th>Approver Name</th>
+                                       <th>Remark</th>
+                                    </tr>
+                                 </thead>
+                                 <tbody>
+                                    <?php
+                                    foreach ($approve_reject_user as $key => $value) {
+                                       $this->db->select('first_name');
+                                       $this->db->where('id',$value->id);
+                                       $query = $this->db->get('users')->row();
+                                       echo '<tr><td>'.$query->first_name.'</td><td>'.$value->Remark.'</td></tr>';
+
+                                    }
+                                    ?>
+                              </table>
+                     </div>
                      </div>
 
                      <div class="row form-row">                        
@@ -161,6 +185,8 @@
                         </div>
 
                      </div>
+                     <label for="">Remark</label>
+                     <textarea name="Personal_Remark" id=""style="width: 993px; height: 84px;"></textarea>
 
 
                      <div class="form-actions">  

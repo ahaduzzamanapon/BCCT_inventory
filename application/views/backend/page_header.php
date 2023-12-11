@@ -175,7 +175,11 @@
                                 <div class="user-info" style="background-color: white; ">
                                     <span style="color: #683091">Login as:</span>
                                     <span class="label label-success">
-                                        <strong><?= $this->session->userdata('current_group_name') ?></strong></span>
+                                        <?php  ;
+                                        $t=$this->ion_auth->groupe($this->session->userdata['user_id']);
+
+                                        ?>
+                                        <strong><?= $t->name ?></strong></span>
                                 </div>
                             </div>
 
@@ -191,6 +195,15 @@
                                             class="selected"></span> <span class="arrow"></span> </a>
                                     <ul class="sub-menu">
                                         <li> <a href="<?=base_url('requisition');?>"> Requisition List </a> </li>
+                                        <?php
+                                        $permission=$this->ion_auth->get_permission();
+                                        if(in_array(1,$permission)){
+                                            ?>
+                                       <li> <a href="<?=base_url('my_requisition/create');?>"> Create Requisition </a> </li>
+                                        <?php } ?>
+
+
+
                                         <li> <a href="<?=base_url('requisition/request_list');?>"> Requisition Pending  List </a> </li>
                                         <li> <a href="<?=base_url('requisition/approve_list');?>"> Requisition Approved List </a> </li>
                                         <li> <a href="<?=base_url('requisition/rejected_list');?>"> Requisition Rejected List </a> </li>

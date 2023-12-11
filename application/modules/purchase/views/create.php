@@ -43,10 +43,10 @@
                                  <?php echo form_error('title');?>
                                  <input name="title" value="<?=set_value('title')?>" type="text" class="form-control input-sm" placeholder=""> 
                               </div>
-                              <div class="col-md-6" style="color: black; font-weight: bold;">
+                              <!-- <div class="col-md-6" style="color: black; font-weight: bold;">
                                  <label class="form-label">&nbsp;</label>
                                  Fiscal Year: <?=$fiscal_year?>
-                              </div>
+                              </div> -->
                            </div>
 
                            <div class="row form-row">
