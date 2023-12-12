@@ -90,14 +90,10 @@
                         </li>
                     </ul>
 
-                    <a href="<?=base_url('dashboard')?>"><span
-                            style="font-size: 22px; font-weight: bold; color: white; padding-top: 15px;">Ministry of
-                            Land</span></a>
+                    <a href="<?=base_url('dashboard')?>"> <img style="height: 61px;width: 255px;" src="<?=base_url('awedget/assets/img/logo.jpg')?>" alt=""></a>
                     <ul class="nav pull-right notifcation-center">
                         <li class="dropdown" id="header_task_bar">
-                            <a href="<?=base_url()?>" class="dropdown-toggle active" data-toggle="">
-                                <div class="iconset top-home"></div>
-                            </a>
+                          
                         </li>
                     </ul>
                 </div>

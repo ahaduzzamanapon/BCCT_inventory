@@ -67,8 +67,7 @@
                                           <td class="tg-ywa9"><?=$info->supplier_name?></td>
                                           <th class="tg-khup"> Status </th>
                                           <td class="tg-ywa9"><?=$status?></td>
-                                          <th class="tg-khup"> Fiscal Year</th>
-                                          <td class="tg-ywa9"><?=$info->f_year_id?></td>
+                                        
                                        </tr> 
                                        <tr>
                                           <th class="tg-khup"> Created </th>
@@ -96,11 +95,11 @@
                            <div id="typeerror"></div>
                         </div>
 
-                        <div class="col-md-9" style="margin-bottom: 20px;: ">
-                        <?php
-                        $group_id=$this->ion_auth->get_group_id();
-                        $group_name=$this->ion_auth->get_group_name();
-                        ?>
+                        <div class="col-md-5" style="margin-bottom: 20px;: ">
+                           <?php
+                           $group_id=$this->ion_auth->get_group_id();
+                           $group_name=$this->ion_auth->get_group_name();
+                           ?>
                            <label class="form-label">Send To <span class='required'>*</span></label>
 
                           <input type="radio" name="desk_id" value=" <?=$group_id?>" checked > <?= $group_name ?> &nbsp;&nbsp;
@@ -116,6 +115,30 @@
                            }
                            ?>
                            <div id="typeerror"></div>
+                        </div>
+                        <div class="col-md-4" >
+                           <table class="table table-bordered" >
+                             <thead>
+                              <tr>
+                                 <th>Approver Name</th>
+                                 <th>Remark</th>
+                              </tr>
+                             </thead>
+                             <tbody>
+                              <?php
+                             $approver = json_decode($info->approved_id);
+                              foreach ($approver as $key => $value) {
+                                 $this->db->where('id', $value->id);
+                                 $query = $this->db->get('users')->row();
+                                 echo '<tr>';
+                                 echo '<td>'.$query->first_name.'</td>';
+                                 echo '<td>'.$value->remark.'</td>';
+                                 echo '</tr>';
+                              }
+                              ?>
+                             </tbody>
+
+                           </table>
                         </div>
                      </div>
 
@@ -142,7 +165,7 @@
                                  <tr>
                                     <td><?=$item->item_name?></td>
                                     <td><?=$item->pur_quantity?>  <?=$item->unit_name?></td>
-                                    <td><input name="pur_approve[]" value="<?=$item->pur_quantity?>" type="text" class="form-control input-sm"></td>
+                                    <td><input name="pur_approve[]" value="<?=$item->pur_approve?>" type="text" class="form-control input-sm"></td>
                                     <td><?=$item->quantity?> <?=$item->unit_name?></td>
                                     <td><?=$item->remark?></td>
                                     <input type="hidden" name="hide_id[]" value="<?=$item->id?>">
@@ -152,6 +175,8 @@
 
                            </fieldset>
                         </div>
+                        <label for=""> Remark </label>
+                        <textarea name="remark" id="remark" class="form-control input-sm" rows="5" ><?=$info->remark?></textarea>
 
                      </div>
 

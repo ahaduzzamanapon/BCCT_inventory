@@ -156,7 +156,6 @@ class Purchase extends Backend_Controller {
       $this->db->where('purchase_id', $id);
       $this->db->group_by('purchase_item.id'); // Add a group by clause to ensure uniqueness
       $this->data['purchase_item_data'] = $this->db->get()->result();
-      // dd($this->data['purchase_item_data']);
       $this->data['meta_title'] = 'Purchase edit Form';
       $this->data['subview'] = 'edit';
       $this->load->view('backend/_layout_main', $this->data);
@@ -166,14 +165,20 @@ class Purchase extends Backend_Controller {
          $this->db->where('id', $id);
          $purchase_data=$this->db->get('purchase')->row();
          $approved_id=json_decode($purchase_data->approved_id);
-         array_push($approved_id, $user->id);
+
+         $remark=[
+            'id' => $user->id,
+            'remark' => $this->input->post('remark')
+         ];
+
+         array_push($approved_id, $remark);
          $app_id=json_encode($approved_id);
          $status=$this->input->post('status');
          if ($status == 2) {
             $form_data = array(
                'approved_id'     => $app_id,
                'status'          => 2,
-               'desk_id'         => 0,
+               'desk_id'         => 0
                );
          }else{
             $form_data = array(
@@ -183,21 +188,14 @@ class Purchase extends Backend_Controller {
                );
          }
          $this->db->where('id', $id);
-         
          if($this->db->update('purchase' , $form_data)){   
-            for ($i=0; $i<sizeof($_POST['pur_item_id']); $i++) { 
+            for ($i=0; $i<sizeof($_POST['hide_id']); $i++) { 
                $form_data2 = array(
-                  'pur_approve'       => $_POST['pur_approve'][$i],                             
-                  'pur_remark'         => $_POST['pur_remark'][$i]
+                  'pur_approve'       => $_POST['pur_approve'][$i]                            
                   );
                   $this->db->where('purchase_id', $id);
                   $this->db->where('id', $_POST['hide_id'][$i]);
                   $this->db->update('purchase_item', $form_data2);
-
-               // $pur_item = $_POST['pur_item_id'][$i];
-               // $pur_quantity = $_POST['pur_quantity'][$i];
-               // $this->db->query("UPDATE items SET quantity = quantity + $pur_quantity where id = $pur_item");
-
             }
 
             $this->session->set_flashdata('success', 'Update Purchase successfully.');
