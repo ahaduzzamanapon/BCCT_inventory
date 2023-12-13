@@ -33,6 +33,7 @@ class Requisition extends Backend_Controller {
    public function request_list($offset=0){
       $limit = 25;
       $results = $this->Requisition_model->get_requisition($limit, $offset, '1'); 
+      $own_req=$this->Requisition_model->get_own_request($this->userSessID , '1');
       $this->data['results'] = $results['rows'];
       $this->data['total_rows'] = $results['num_rows'];
       //pagination

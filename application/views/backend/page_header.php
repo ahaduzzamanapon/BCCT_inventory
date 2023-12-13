@@ -5,7 +5,7 @@
     <meta charset="utf-8" />
     <meta http-equiv="content-type" content="text/html;charset=UTF-8" />
     <link rel="icon" type="image/ico" href="<?=base_url('awedget/assets/img/favicon.ico');?>" />
-    <title><?=$meta_title?> | <?=$domain_title?></title>
+    <title><?=$meta_title?> | BCCT </title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
     <link href="<?=base_url();?>awedget/assets/plugins/pace/pace-theme-flash.css" rel="stylesheet" type="text/css"
         media="screen" />
@@ -90,7 +90,7 @@
                         </li>
                     </ul>
 
-                    <a href="<?=base_url('dashboard')?>"> <img style="height: 61px;width: 255px;" src="<?=base_url('awedget/assets/img/logo.jpg')?>" alt=""></a>
+                    <a href="<?=base_url('dashboard')?>"> <img style="height: 50px;width: 320px;" src="<?=base_url('awedget/assets/img/logo.jpg')?>" alt=""></a>
                     <ul class="nav pull-right notifcation-center">
                         <li class="dropdown" id="header_task_bar">
                           
