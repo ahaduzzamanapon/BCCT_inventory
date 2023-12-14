@@ -34,7 +34,11 @@ class Requisition extends Backend_Controller {
       $limit = 25;
       $results = $this->Requisition_model->get_requisition($limit, $offset, '1'); 
       $own_req=$this->Requisition_model->get_own_request($this->userSessID , '1');
-      $this->data['results'] = $results['rows'];
+      // dd($own_req);
+    // Assuming $results['rows'] and $own_req are the arrays you want to merge
+      $d = array_merge($results['rows'], $own_req);
+      $d = array_map("unserialize", array_unique(array_map("serialize", $d)));
+      $this->data['results'] = $d;
       $this->data['total_rows'] = $results['num_rows'];
       //pagination
       $this->data['pagination'] = create_pagination('requisition/request_list/', $this->data['total_rows'], $limit, 3, $full_tag_wrap = true);

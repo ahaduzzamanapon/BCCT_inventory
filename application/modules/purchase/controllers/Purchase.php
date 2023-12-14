@@ -174,6 +174,7 @@ class Purchase extends Backend_Controller {
          array_push($approved_id, $remark);
          $app_id=json_encode($approved_id);
          $status=$this->input->post('status');
+
          if ($status == 2) {
             $form_data = array(
                'approved_id'     => $app_id,
@@ -184,7 +185,7 @@ class Purchase extends Backend_Controller {
             $form_data = array(
                'approved_id'     => $app_id,
                'status'          => $this->input->post('status'),
-               'desk_id'         => $this->input->post('status'),
+               'desk_id'         => $this->input->post('desk_id'),
                );
          }
          $this->db->where('id', $id);

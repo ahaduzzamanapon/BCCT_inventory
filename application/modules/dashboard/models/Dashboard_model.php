@@ -8,10 +8,18 @@ class Dashboard_model extends CI_Model {
     }
 
     public function get_count_data($status = NULL) {
+        $desk_arr=[];
+        $desk_arr[]=$this->ion_auth->get_group_id();
+        if(in_array('4', $this->ion_auth->get_permission())){
+           $desk_arr[] = 0;
+        }
         $this->db->select('COUNT(*) as count');
+
         if ($status != NULL) {
             $this->db->where('status', $status);
         }
+        $this->db->where_in('desk_id', $desk_arr);
+
         $tmp = $this->db->get('requisitions')->result();
         // echo $this->db->last_query(); exit;
         $ret['count'] = $tmp[0]->count;

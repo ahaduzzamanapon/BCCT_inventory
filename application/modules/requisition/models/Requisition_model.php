@@ -21,14 +21,12 @@ class Requisition_model extends CI_Model {
       if($status){
          $this->db->where('r.status', $status);
       }
-
-      
       $this->db->where_in('r.desk_id', $desk_arr);
 
       $this->db->order_by('r.id', 'DESC');
       $query = $this->db->get()->result();
+
       $result['rows'] = $query;
-      $q = $this->db->select('COUNT(*) as count');
       $this->db->from('requisitions'); 
       if($status){
          $this->db->where('status', $status);
@@ -36,15 +34,15 @@ class Requisition_model extends CI_Model {
       $query = $this->db->get()->result();
       $tmp = $query;
       $result['num_rows'] = $tmp[0]->count;
-
       return $result;
    }
-   public function get_own_request($status=NULL) {
+   public function get_own_request($user_id,$status=NULL) {
       $this->db->select('r.*, u.first_name, dp.dept_name, f.fiscal_year_name');
       $this->db->from('requisitions as r');
       $this->db->join('users u', 'u.id = r.user_id', 'LEFT');
       $this->db->join('department dp', 'dp.id = u.dept_id', 'LEFT');
       $this->db->join('fiscal_year f', 'f.id = r.f_year_id', 'LEFT');
+      $this->db->where('r.user_id', $user_id);
       if($status){
          $this->db->where('r.status', $status);
       }
