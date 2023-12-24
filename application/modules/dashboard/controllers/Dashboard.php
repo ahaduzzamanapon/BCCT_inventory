@@ -20,7 +20,7 @@ class Dashboard extends Backend_Controller {
 	}	
 
 	public function index(){
-         if($this->ion_auth->in_group('User')){
+		if($this->ion_auth->in_group('User')){
 			$this->data['info'] = $this->userData['user_info'];
 			$this->data['user'] = $this->ion_auth->user()->row();
 			$this->data['meta_title'] = 'Dashboard';
@@ -28,16 +28,16 @@ class Dashboard extends Backend_Controller {
 			$this->load->view('backend/_layout_main', $this->data);
 		}else{
 			$result = $this->Dashboard_model->get_count_data();
-			$this->data['total_data'] = $result['count'];
+			$this->data['total_data'] = $result;
 
 			$result = $this->Dashboard_model->get_count_data(1);
-			$this->data['total_pending'] = $result['count'];
+			$this->data['total_pending'] = $result;
 
 			$result = $this->Dashboard_model->get_count_data(2);
-			$this->data['total_approve'] = $result['count'];
+			$this->data['total_approve'] = $result;
 
 			$result = $this->Dashboard_model->get_count_data(3);
-			$this->data['total_rejected'] = $result['count'];
+			$this->data['total_rejected'] = $result;
 
 			// Load Page
 			$this->data['meta_title'] = 'Dashboard';

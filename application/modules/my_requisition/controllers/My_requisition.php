@@ -40,11 +40,13 @@ class My_requisition extends Backend_Controller {
       if ($this->form_validation->run() == true){
          $user = $this->ion_auth->user()->row();
          $approve_reject_user= [];
+         $final_appruver= [];
          $form_data = array(
             'user_id'   => $user->id,
-            'department_id' => $user->dept_id, 
+            'department_id' => $user->dept_id,
             'f_year_id'   => $fiscal_year->id,
             'approve_reject_user'   =>json_encode($approve_reject_user),
+            'final_appruver'   =>json_encode($final_appruver),
             'title'     => $this->input->post('title'),
             'desk_id'     => 0,
             'pin_code'   => mt_rand(1000, 9999),  

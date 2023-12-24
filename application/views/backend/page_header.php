@@ -16,6 +16,7 @@
         type="text/css" media="screen" />
     <link href="<?=base_url();?>awedget/assets/plugins/fullcalendar/dist/fullcalendar.print.min.css" rel="stylesheet"
         type="text/css" media="print" />
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
     <?php /*
    <!--  <link href="<?=base_url();?>awedget/assets/plugins/bootstrap-select2/select2.css" rel="stylesheet"
     type="text/css" media="screen"/> -->
@@ -90,7 +91,7 @@
                         </li>
                     </ul>
 
-                    <a href="<?=base_url('dashboard')?>"> <img style="height: 50px;width: 320px;" src="<?=base_url('awedget/assets/img/logo.jpg')?>" alt=""></a>
+                    <a href="<?=base_url('dashboard')?>"> <img style="height: 60px;width: 251px;" src="<?=base_url('awedget/assets/img/logo.jpg')?>" alt=""></a>
                     <ul class="nav pull-right notifcation-center">
                         <li class="dropdown" id="header_task_bar">
                           

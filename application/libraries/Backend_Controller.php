@@ -19,7 +19,7 @@ class Backend_Controller extends MY_Controller{
 		$this->form_validation->set_error_delimiters('<div class="alert alert-warning"> <i class="fa fa-warning"></i> ', '</div>');		
 		$this->lang->load('auth');
 		$this->data['meta_title'] = 'Page Title';			
-		$this->data['domain_title'] = 'Ministry of Land';		
+		$this->data['domain_title'] = 'BCCT';		
 		$this->load->model('Common_model');	
 		// $this->load->model('scouts_member/Scouts_member_model');
 		// $this->load->model('offices/Offices_model');

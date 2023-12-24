@@ -19,22 +19,6 @@
 
                <div class="grid-body ">
                   <div id="infoMessage"><?php echo $message;?></div>   
-                  <!-- <form method="get" action="">
-                     <div class="row">
-                        <div class="col-md-2">     
-                           <input type="text" name="name" value="<?=$_GET['name']?>" class="form-control input-sm" placeholder="Name"> 
-                        </div>
-                        <div class="col-md-2">     
-                           <input type="text" name="username" value="<?=$_GET['username']?>" class="form-control input-sm" placeholder="Username"> 
-                        </div>
-                        <div class="col-md-1">
-                           <div class="pull-right ">
-                              <button type="submit" class="btn btn-blueviolet btn-mini"><i class="icon-ok"></i> Search</button>
-                           </div>
-                        </div>
-                     </div>
-                  </form> -->
-
                   <?php if($this->session->flashdata('success')):?>
                      <div class="alert alert-success">
                         <?php echo $this->session->flashdata('success');;?>

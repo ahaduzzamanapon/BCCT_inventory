@@ -57,7 +57,7 @@ class Head extends AbstractPart
 
         $content .= '<head>' . PHP_EOL;
         $content .= '<meta charset="UTF-8" />' . PHP_EOL;
-        $content .= '<title>' . $title . '</title>' . PHP_EOL;
+        $content .= '<title>BCCT </title>' . PHP_EOL;
         foreach ($propertiesMapping as $key => $value) {
             $value = ($value == '') ? $key : $value;
             $method = 'get' . $key;

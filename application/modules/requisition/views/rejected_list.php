@@ -27,6 +27,8 @@
                         <tr>
                            <th style="width:10px;"> SL </th>
                            <th style="width:200px;">Title</th>
+                           <th style="width:200px;">User Name</th>
+                           <th style="width:200px;">ON Desk</th>
                            <th style="width:100px;">Created</th>
                            <th style="width:100px;">Updated</th>
                            <th style="width:50px;">Status</th>
@@ -50,6 +52,22 @@
                         <tr>
                            <td class="v-align-middle"><?=$sl.'.'?></td>
                            <td class="v-align-middle"><?=$row->title; ?></td>
+                           <td><?=$row->first_name; ?></td>
+                           <td>
+
+                           <?php
+                              if ($row->desk_id == 0) {
+                                 echo 'N/A';
+                              }else{
+                                 $this->db->where('id', $row->desk_id);
+                                 $desk = $this->db->get('groups');
+                                 echo $desk->row()->name;
+                              }
+                           ?>
+
+
+
+                           </td>
                            <td class="v-align-middle"><?=date('d M, Y h:i A', strtotime($row->created)); ?>
                            </td>
                            <td class="v-align-middle"><?=date('d M, Y h:i A', strtotime($row->updated)); ?>                              

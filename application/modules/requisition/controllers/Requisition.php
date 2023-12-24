@@ -31,19 +31,15 @@ class Requisition extends Backend_Controller {
    }
 
    public function request_list($offset=0){
+
       $limit = 25;
       $results = $this->Requisition_model->get_requisition($limit, $offset, '1'); 
       $own_req=$this->Requisition_model->get_own_request($this->userSessID , '1');
-      // dd($own_req);
-    // Assuming $results['rows'] and $own_req are the arrays you want to merge
       $d = array_merge($results['rows'], $own_req);
       $d = array_map("unserialize", array_unique(array_map("serialize", $d)));
       $this->data['results'] = $d;
       $this->data['total_rows'] = $results['num_rows'];
-      //pagination
       $this->data['pagination'] = create_pagination('requisition/request_list/', $this->data['total_rows'], $limit, 3, $full_tag_wrap = true);
-
-      // Load view
       $this->data['meta_title'] = 'Pending Requisition List';
       $this->data['subview'] = 'request_list';
       $this->load->view('backend/_layout_main', $this->data);
@@ -51,18 +47,14 @@ class Requisition extends Backend_Controller {
 
    public function approve_list($offset=0){
       $limit = 25;
-      // if(!$this->ion_auth->is_member()){
-      //    redirect('dashboard');
-      // }
-
-      //Results
       $results = $this->Requisition_model->get_requisition($limit, $offset, '2'); 
-      $this->data['results'] = $results['rows'];
+      $own_req=$this->Requisition_model->get_own_request($this->userSessID , '2');
+      $d = array_merge($results['rows'], $own_req);
+      $d = array_map("unserialize", array_unique(array_map("serialize", $d)));
+      $this->data['results'] = $d;
       $this->data['total_rows'] = $results['num_rows'];
-
       //pagination
       $this->data['pagination'] = create_pagination('requisition/approve_list/', $this->data['total_rows'], $limit, 3, $full_tag_wrap = true);
-
       // Load view
       $this->data['meta_title'] = 'Approved Requisition List';
       $this->data['subview'] = 'approve_list';
@@ -71,13 +63,17 @@ class Requisition extends Backend_Controller {
 
    public function delivered_list($offset=0){
       $limit = 25;
-      // if(!$this->ion_auth->is_member()){
-      //    redirect('dashboard');
-      // }
-
-      //Results
-      $results = $this->Requisition_model->get_delivered_requisition($limit, $offset, '2'); 
-      $this->data['results'] = $results['rows'];
+      $results = $this->Requisition_model->get_requisition($limit, $offset, '2'); 
+      $own_req=$this->Requisition_model->get_own_request($this->userSessID , '2');
+      $d = array_merge($results['rows'], $own_req);
+      $d = array_map("unserialize", array_unique(array_map("serialize", $d)));
+      $filteredArray = array_filter($d, function ($item) {
+         return $item->is_delivered == 1;
+     });
+     
+     // Convert the filtered array back to indexed array
+     $filteredArray = array_values($filteredArray);
+      $this->data['results'] = $filteredArray;
       $this->data['total_rows'] = $results['num_rows'];
 
       //pagination
@@ -91,19 +87,13 @@ class Requisition extends Backend_Controller {
 
    public function rejected_list($offset=0){
       $limit = 25;
-      // if(!$this->ion_auth->is_member()){
-      //    redirect('dashboard');
-      // }
-
-      //Results
       $results = $this->Requisition_model->get_requisition($limit, $offset, '3'); 
-      $this->data['results'] = $results['rows'];
+      $own_req=$this->Requisition_model->get_own_request($this->userSessID , '3');
+      $d = array_merge($results['rows'], $own_req);
+      $d = array_map("unserialize", array_unique(array_map("serialize", $d)));
+      $this->data['results'] = $d;
       $this->data['total_rows'] = $results['num_rows'];
-
-      //pagination
       $this->data['pagination'] = create_pagination('requisition/rejected_list/', $this->data['total_rows'], $limit, 3, $full_tag_wrap = true);
-
-      // Load view
       $this->data['meta_title'] = 'Rejected Requisition List';
       $this->data['subview'] = 'rejected_list';
       $this->load->view('backend/_layout_main', $this->data);
@@ -117,28 +107,36 @@ class Requisition extends Backend_Controller {
       }
       $this->data['info'] = $this->Requisition_model->get_info($dataID);
       $approve_reject_user= json_decode($this->data['info']->approve_reject_user);
+      $final_appruver= json_decode($this->data['info']->final_appruver);
       //Validation      
       $this->form_validation->set_rules('status', ' status','required|trim');
       //Validate and input data
       if ($this->form_validation->run() == true){
-         $remarks=[
-            'id'=>$this->userSessID,
-            'Remark'=>$this->input->post('Personal_Remark'),
-         ];
+
+       
          
-         array_push($approve_reject_user, $remarks);
          if($this->input->post('status') == 2){
             $this->load->helper('string');
             $pinCode = random_string('alnum',5);
+            $remarks=[
+               'id'=>$this->userSessID,
+               'Remark'=>$this->input->post('Personal_Remark'),
+            ];
+            array_push($final_appruver, $remarks);
 
             $form_data = array(
-               'approve_reject_user' => json_encode($approve_reject_user),
+               'final_appruver' => json_encode($final_appruver),
                'status'       => 2,
                'desk_id'      =>0,
                'pin_code'     => $pinCode,
                'updated'      => date('Y-m-d H:i:s')
                );
          }else{
+            $remarks=[
+               'id'=>$this->userSessID,
+               'Remark'=>$this->input->post('Personal_Remark'),
+            ];
+            array_push($approve_reject_user, $remarks);
             $form_data = array(
                'approve_reject_user' => json_encode($approve_reject_user),
                'status'    => $this->input->post('status'),
@@ -147,7 +145,6 @@ class Requisition extends Backend_Controller {
                );
          }
 
-         // print_r($form_data); exit;
          if($this->Common_model->edit('requisitions',  $dataID, 'id', $form_data)){
 
             // Requisition Data 
@@ -174,6 +171,7 @@ class Requisition extends Backend_Controller {
       
       $this->data['items'] = $this->Requisition_model->get_req_items($dataID);
       $this->data['approve_reject_user'] =$approve_reject_user;
+      $this->data['final_appruver'] =$final_appruver;
 
       $this->data['meta_title'] = 'Approval Status';
       $this->data['subview'] = 'change_status';

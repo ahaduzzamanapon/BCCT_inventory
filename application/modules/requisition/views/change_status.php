@@ -63,7 +63,15 @@
                                           <th class="tg-khup"> Requisition Title </th>
                                           <td class="tg-ywa9"><?=$info->title?></td>
                                           <th class="tg-khup"> Status </th>
-                                          <td class="tg-ywa9"><?=$status?></td>
+                                          <td class="tg-ywa9"><?=$status?>
+                                          <?php
+                                          if ($info->is_delivered==1) {
+                                             echo '<span class="label label-success">Delivered</span>';
+                                          }
+                                          
+                                          ?>   
+                                       
+                                       </td>
                                           <th class="tg-khup"> Fiscal Year</th>
                                           <td class="tg-ywa9"><?=$info->fiscal_year_name?></td>
                                        </tr> 
@@ -104,7 +112,7 @@
                            <div id="typeerror"></div>
                         </div>
 
-                        <div class="col-md-5" style="margin-bottom: 20px;: ">
+                        <div class="col-md-4" style="margin-bottom: 20px;: ">
                               <?php
                               $group_id=$this->ion_auth->get_group_id();
                               $group_name=$this->ion_auth->get_group_name();
@@ -139,7 +147,7 @@
                                  </thead>
                                  <tbody>
                                     <?php
-                                    foreach ($approve_reject_user as $key => $value) {
+                                    foreach ($final_appruver as $key => $value) {
                                        $this->db->select('first_name');
                                        $this->db->where('id',$value->id);
                                        $query = $this->db->get('users')->row();
@@ -147,8 +155,29 @@
 
                                     }
                                     ?>
-                              </table>
-                     </div>
+                                 </tbody>
+                           </table>
+                        </div>
+                        <div class="col-md-4">
+                           <table class="table table-bordered col-md-12">
+                                 <thead>
+                                    <tr>
+                                       <th>Verifier Name</th>
+                                       <th>Remark</th>
+                                    </tr>
+                                 </thead>
+                                 <tbody>
+                                    <?php
+                                    foreach ($approve_reject_user as $key => $value) {
+                                       $this->db->select('first_name');
+                                       $this->db->where('id',$value->id);
+                                       $query = $this->db->get('users')->row();
+                                       echo '<tr><td>'.$query->first_name.'</td><td>'.$value->Remark.'</td></tr>';
+                                    }
+                                    ?>
+                                 </tbody>
+                           </table>
+                        </div>
                      </div>
 
                      <div class="row form-row">                        
@@ -191,7 +220,22 @@
 
                      <div class="form-actions">  
                         <div class="pull-right">
-                           <button type="submit" class="btn btn-primary btn-cons"><i class="icon-ok"></i> Save</button>
+                        
+                          <?php 
+                          if ($info->status!=2) { ?>
+                        <button type="submit" class="btn btn-primary btn-cons"><i class="icon-ok"></i> Save</button>
+                        <?php  }elseif($info->is_delivered==0){
+                           $pr = $this->ion_auth->get_permission();
+                                 $delivered = 'disabled';
+                                 if (in_array(4, $pr)) {
+                                    $delivered = '';
+                                 };
+                               ?>
+                              <?=anchor("requisition/delivery_product/".encrypt_url($info->id), 'Delivery Product', array('class' => 'btn btn-blueviolet btn-mini', $delivered=>$delivered))?>
+                        <?php  }else{ ?>
+                           <p class="text-success">Already Delivered</p>
+
+                        <?php } ?>
                         </div>
                      </div>
                      <?php echo form_close();?>

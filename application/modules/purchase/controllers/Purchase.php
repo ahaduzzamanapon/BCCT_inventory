@@ -100,12 +100,16 @@ class Purchase extends Backend_Controller {
       if ($this->form_validation->run() == true){
          $user = $this->ion_auth->user()->row();
          $approved_id=[];
+         $finalappr=[];
+
          $aar=json_encode($approved_id);
+         $finalappr=json_encode($finalappr);
          $form_data = array(
             'user_id'         => $user->id,            
             'supplier_name'   => $this->input->post('title'),
             'f_year_id'       => $fiscal_year->id,
             'approved_id'     => $aar,
+            'finalappr'     => $finalappr,
             'status'          => 1,
             'desk_id'         => 0,
             'is_received'     => 0,
@@ -165,23 +169,34 @@ class Purchase extends Backend_Controller {
          $this->db->where('id', $id);
          $purchase_data=$this->db->get('purchase')->row();
          $approved_id=json_decode($purchase_data->approved_id);
+         $finalappr=json_decode($purchase_data->finalappr);
 
-         $remark=[
-            'id' => $user->id,
-            'remark' => $this->input->post('remark')
-         ];
-
-         array_push($approved_id, $remark);
-         $app_id=json_encode($approved_id);
+      
          $status=$this->input->post('status');
 
          if ($status == 2) {
+
+            $remark=[
+               'id' => $user->id,
+               'remark' => $this->input->post('remark')
+            ];
+   
+            array_push($finalappr, $remark);
+            $finalappr=json_encode($approved_id);
             $form_data = array(
-               'approved_id'     => $app_id,
+               'finalappr'     => $finalappr,
                'status'          => 2,
                'desk_id'         => 0
                );
          }else{
+            $remark=[
+               'id' => $user->id,
+               'remark' => $this->input->post('remark')
+            ];
+   
+            array_push($approved_id, $remark);
+            $app_id=json_encode($approved_id);
+            
             $form_data = array(
                'approved_id'     => $app_id,
                'status'          => $this->input->post('status'),
@@ -202,7 +217,6 @@ class Purchase extends Backend_Controller {
             $this->session->set_flashdata('success', 'Update Purchase successfully.');
             redirect("purchase");
          }
-      
    }
    public function received($id){
       $form_data = array(

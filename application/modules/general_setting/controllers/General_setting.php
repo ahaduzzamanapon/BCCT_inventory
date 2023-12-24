@@ -138,10 +138,8 @@ class General_setting extends Backend_Controller {
    }
 
    public function group_add(){
-
       $this->form_validation->set_rules('group_name', 'group Name', 'required|trim');
       if ($this->form_validation->run() == true){
-         dd(implode(',', $this->input->post('pw')));
          $form_data = array(
             'name'=> $this->input->post('group_name'),
             'pw'  =>  implode(',', $this->input->post('pw')),
@@ -152,7 +150,6 @@ class General_setting extends Backend_Controller {
             redirect('general_setting/group');
          }
       }
-
       // Load page
       $this->data['meta_title'] = 'Create Group';
       $this->data['subview'] = 'group_add';

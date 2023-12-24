@@ -20,7 +20,7 @@
                   <h4><span class="semi-bold"><?=$meta_title; ?></span></h4>
                   <div class="pull-right">                
                      <a href="<?=base_url('requisition/request_list')?>" class="btn btn-blueviolet btn-xs btn-mini"> Request Requisition List</a>  
-                     <!-- <a href="<?=base_url('my_appointment/details/'.encrypt_url($info->id))?>" class="btn btn-blueviolet btn-xs btn-mini">Details</a> -->
+                     <?=anchor("requisition/change_status/".encrypt_url($info->id), 'Approval Status', array('class' => 'btn btn-blueviolet btn-mini'))?>
                   </div>
                </div>
 
@@ -98,32 +98,59 @@
                                  </td>
                               </tr>
                               <tr>
-                              <th class="tg-khup">Approver List</th>
-                              <td class="tg-ywa9" colspan="6">
-                                 <table>
-                                    <tr>
-                                       <th>SL</th>
-                                       <th>Approver Name </th>
-                                       <th>Remarks</th>
-                                    </tr>
-                                    <?php 
-                                    $sl=0;
-                                    $appruver= json_decode($info->approve_reject_user);
-                                    foreach($appruver as $value){ 
-                                       $sl++;
-                                       $this->db->select('first_name');
-                                       $this->db->where('id',$value->id);
-                                       $query = $this->db->get('users')->row();
-
-                                       ?>
-                                       <tr>
-                                          <td><?=$sl?></td>
-                                          <td><?=$query->first_name?></td>
-                                          <td><?=$value->Remark?></td>
-                                       </tr>
-                                       <?php } ?>
-                                    </table>
-                                 </td>
+                                <th class="tg-khup">Approver List</th>
+                                    <td class="tg-ywa9" colspan="6">
+                                       <table>
+                                          <tr>
+                                             <th>SL</th>
+                                             <th>Approver Name </th>
+                                             <th>Remarks</th>
+                                          </tr>
+                                          <?php 
+                                          $sl=0;
+                                          $appruver= json_decode($info->final_appruver);
+                                          foreach($appruver as $value){ 
+                                                $sl++;
+                                                $this->db->select('first_name');
+                                                $this->db->where('id',$value->id);
+                                                $query = $this->db->get('users')->row();
+                                             ?>
+                                             <tr>
+                                                <td><?=$sl?></td>
+                                                <td><?=$query->first_name?></td>
+                                                <td><?=$value->Remark?></td>
+                                             </tr>
+                                             <?php }
+                                             ?>
+                                          </table>
+                                       </td>
+                              </tr>
+                              <tr>
+                                <th class="tg-khup">Verifier List</th>
+                                    <td class="tg-ywa9" colspan="6">
+                                       <table>
+                                          <tr>
+                                             <th>SL</th>
+                                             <th>Verifier Name </th>
+                                             <th>Remarks</th>
+                                          </tr>
+                                          <?php 
+                                          $verifier= json_decode($info->approve_reject_user);
+                                          foreach($verifier as $value){ 
+                                                $sl++;
+                                                $this->db->select('first_name');
+                                                $this->db->where('id',$value->id);
+                                                $query = $this->db->get('users')->row();
+                                             ?>
+                                             <tr>
+                                                <td><?=$sl?></td>
+                                                <td><?=$query->first_name?></td>
+                                                <td><?=$value->Remark?></td>
+                                             </tr>
+                                             <?php }
+                                             ?>
+                                          </table>
+                                       </td>
                               </tr>
 
                            </table>

@@ -7,24 +7,57 @@ class Dashboard_model extends CI_Model {
         parent::__construct();
     }
 
-    public function get_count_data($status = NULL) {
+    public function get_count_data($status = 'all') {
+        $results = $this->get_requisition($limit, $offset, $status); 
+        $own_req= $this->get_own_request($this->userSessID , $status);
+        $d = array_merge($results['rows'], $own_req);
+        $d = array_map("unserialize", array_unique(array_map("serialize", $d)));
+        return count($d);
+    }
+    public function get_requisition($limit=1000, $offset=0, $status=NULL) {
         $desk_arr=[];
         $desk_arr[]=$this->ion_auth->get_group_id();
         if(in_array('4', $this->ion_auth->get_permission())){
            $desk_arr[] = 0;
         }
-        $this->db->select('COUNT(*) as count');
-
-        if ($status != NULL) {
-            $this->db->where('status', $status);
+  
+        $this->db->select('r.*, u.first_name, dp.dept_name, f.fiscal_year_name');
+        $this->db->from('requisitions as r');
+        $this->db->join('users u', 'u.id = r.user_id', 'LEFT');
+        $this->db->join('department dp', 'dp.id = u.dept_id', 'LEFT');
+        $this->db->join('fiscal_year f', 'f.id = r.f_year_id', 'LEFT');
+        if($status != 'all'){
+           $this->db->where('r.status', $status);
         }
-        $this->db->where_in('desk_id', $desk_arr);
-
-        $tmp = $this->db->get('requisitions')->result();
-        // echo $this->db->last_query(); exit;
-        $ret['count'] = $tmp[0]->count;
-        return $ret;
-    }
+        $this->db->where_in('r.desk_id', $desk_arr);
+  
+        $this->db->order_by('r.id', 'DESC');
+        $query = $this->db->get()->result();
+  
+        $result['rows'] = $query;
+        $this->db->from('requisitions'); 
+        if($status){
+           $this->db->where('status', $status);
+        }
+        $query = $this->db->get()->result();
+        $tmp = $query;
+        $result['num_rows'] = $tmp[0]->count;
+        return $result;
+     }
+     public function get_own_request($user_id,$status=NULL) {
+        $this->db->select('r.*, u.first_name, dp.dept_name, f.fiscal_year_name');
+        $this->db->from('requisitions as r');
+        $this->db->join('users u', 'u.id = r.user_id', 'LEFT');
+        $this->db->join('department dp', 'dp.id = u.dept_id', 'LEFT');
+        $this->db->join('fiscal_year f', 'f.id = r.f_year_id', 'LEFT');
+        $this->db->where('r.user_id', $user_id);
+        if($status != 'all'){
+           $this->db->where('r.status', $status);
+        }
+        $this->db->order_by('r.id', 'DESC');
+        $query = $this->db->get()->result();
+        return $query;
+     }
 
 
 
