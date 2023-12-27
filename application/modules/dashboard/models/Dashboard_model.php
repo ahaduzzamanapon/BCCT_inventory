@@ -18,8 +18,9 @@ class Dashboard_model extends CI_Model {
         $desk_arr=[];
         $desk_arr[]=$this->ion_auth->get_group_id();
         if(in_array('4', $this->ion_auth->get_permission())){
-           $desk_arr[] = 0;
+            $ta=1;
         }
+       
   
         $this->db->select('r.*, u.first_name, dp.dept_name, f.fiscal_year_name');
         $this->db->from('requisitions as r');
@@ -29,8 +30,10 @@ class Dashboard_model extends CI_Model {
         if($status != 'all'){
            $this->db->where('r.status', $status);
         }
-        $this->db->where_in('r.desk_id', $desk_arr);
-  
+        if($ta!=1){
+            $this->db->where_in('r.desk_id', $desk_arr);
+        }
+      
         $this->db->order_by('r.id', 'DESC');
         $query = $this->db->get()->result();
   
@@ -58,6 +61,60 @@ class Dashboard_model extends CI_Model {
         $query = $this->db->get()->result();
         return $query;
      }
+
+
+
+    public function get_count_data_parches($status = 'all') {
+        $results = $this->get_parches($status); 
+        $own_req= $this->get_own_request_parches($this->userSessID , $status);
+        $d = array_merge($results['rows'], $own_req);
+        $d = array_map("unserialize", array_unique(array_map("serialize", $d)));
+        return count($d);
+    }
+    public function get_parches($status=NULL) {
+        $desk_arr=[];
+        $desk_arr[]=$this->ion_auth->get_group_id();
+        if(in_array('4', $this->ion_auth->get_permission())){
+            $ta=1;
+        }
+
+        $this->db->select('r.*');
+        $this->db->from('purchase as r');
+        if($status != 'all'){
+           $this->db->where('r.status', $status);
+        }
+        if($ta!=1){
+            $this->db->where_in('r.desk_id', $desk_arr);
+        }
+      
+        $this->db->order_by('r.id', 'DESC');
+        $query = $this->db->get()->result();
+  
+        $result['rows'] = $query;
+        $this->db->from('purchase'); 
+        if($status){
+           $this->db->where('status', $status);
+        }
+        $query = $this->db->get()->result();
+        $tmp = $query;
+        $result['num_rows'] = $tmp[0]->count;
+        return $result;
+     }
+     public function get_own_request_parches($user_id,$status=NULL) {
+        $this->db->select('r.*');
+        $this->db->from('purchase as r');
+        $this->db->where('r.user_id', $user_id);
+        if($status != 'all'){
+           $this->db->where('r.status', $status);
+        }
+        $this->db->order_by('r.id', 'DESC');
+        $query = $this->db->get()->result();
+        return $query;
+     }
+
+
+
+
 
 
 

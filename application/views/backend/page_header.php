@@ -212,6 +212,7 @@
                                         <i class="fa fa-tags"></i> <span class="title">Purchase</span> <span
                                             class="selected"></span> <span class="arrow"></span> </a>
                                     <ul class="sub-menu">
+                                        <li> <a href="<?=base_url('purchase/create');?>"> Create Purchase  </a> </li>
                                         <li> <a href="<?=base_url('purchase');?>"> Purchase List </a> </li>
                                         <li> <a href="<?=base_url('purchase/purchase_pending');?>"> Purchase Pending </a> </li>
                                         <li> <a href="<?=base_url('purchase/purchase_approved');?>"> Purchase Approved </a> </li>

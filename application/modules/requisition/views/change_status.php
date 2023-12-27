@@ -194,7 +194,7 @@
                                  <tr>
                                     <th width="20%">Item Name <span class="required">*</span></th>
                                     <th width="15%">Qty. Request</th>
-                                    <th width="15%"> Qty. Approve </th>
+                                    <th width="15%"> Qty. Correction </th>
                                     <th width="15%"> Qty. Available </th>
                                     <th width="20%">Remark</th>
                                  </tr>
@@ -215,7 +215,7 @@
 
                      </div>
                      <label for="">Remark</label>
-                     <textarea name="Personal_Remark" id=""style="width: 993px; height: 84px;"></textarea>
+                     <textarea name="Personal_Remark" id="" style="width: -webkit-fill-available;height: 84px;"></textarea>
 
 
                      <div class="form-actions">  

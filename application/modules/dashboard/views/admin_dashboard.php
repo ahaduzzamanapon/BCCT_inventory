@@ -80,7 +80,87 @@
                     </div>
                 </div>
             </div>
-        </div> <!-- /row -->
+        </div> 
+        <div class="row">
+            <div class="col-md-3 m-b-20">
+                <div class="row tiles-container">
+                    <div class="col-md-4 no-padding">
+                        <div class="tiles red" style="padding:20px;">
+                            <i class="fa fa-dashboard" style="font-size: 38px;"></i>
+                        </div>
+                    </div>
+                    <div class="col-md-8 no-padding">
+                        <div class="tiles white text-center">
+                            <h2 class="semi-bold text-error weather-widget-big-text no-margin"
+                                style="padding-top: 6px; padding-bottom: 6px; "><?=$total_datap?></h2>
+                            <div class="tiles-title blend m-b-5"><a href="<?=base_url('purchase/index')?>"
+                                    style="font-size: 16px;">Total Purchase</a></div>
+                            <div class="clearfix"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-3 m-b-20">
+                <div class="row tiles-container">
+                    <div class="col-md-4 no-padding">
+                        <div class="tiles blue" style="padding:20px;">
+                            <i class="fa fa-dashboard" style="font-size: 38px;"></i>
+                        </div>
+                    </div>
+                    <div class="col-md-8 no-padding">
+                        <div class="tiles white text-center">
+                            <h2 class="semi-bold text-error weather-widget-big-text no-margin"
+                                style="padding-top: 6px; padding-bottom: 6px; "><?=$total_pendingp?></h2>
+                            <div class="tiles-title blend m-b-5"><a href="<?=base_url('purchase/purchase_pending')?>"
+                                    style="font-size: 16px;">Total Pending</a></div>
+                            <div class="clearfix"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-3 m-b-20">
+                <div class="row tiles-container">
+                    <div class="col-md-4 no-padding">
+                        <div class="tiles purple" style="padding:20px;">
+                            <i class="fa fa-dashboard" style="font-size: 38px;"></i>
+                        </div>
+                    </div>
+                    <div class="col-md-8 no-padding">
+                        <div class="tiles white text-center">
+                            <h2 class="semi-bold text-error weather-widget-big-text no-margin"
+                                style="padding-top: 6px; padding-bottom: 6px; "><?=$total_approvep?></h2>
+                            <div class="tiles-title blend m-b-5"><a href="<?=base_url('purchase/purchase_approved')?>"
+                                    style="font-size: 16px;">Total Approve</a></div>
+                            <div class="clearfix"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-3 m-b-20">
+                <div class="row tiles-container">
+                    <div class="col-md-4 no-padding">
+                        <div class="tiles green" style="padding:20px;">
+                            <i class="fa fa-dashboard" style="font-size: 38px;"></i>
+                        </div>
+                    </div>
+                    <div class="col-md-8 no-padding">
+                        <div class="tiles white text-center">
+                            <h2 class="semi-bold text-error weather-widget-big-text no-margin"
+                                style="padding-top: 6px; padding-bottom: 6px; "><?=$total_rejectedp?></h2>
+                            <div class="tiles-title blend m-b-5"><a href="<?=base_url('purchase/purchase_rejected')?>"
+                                    style="font-size: 16px;">Total Rejected</a></div>
+                            <div class="clearfix"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div> 
+        
+        
+        <!-- /row -->
         <!-- 
       <div class="row">
          <div class="col-md-6 m-b-20">

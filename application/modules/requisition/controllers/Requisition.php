@@ -31,7 +31,6 @@ class Requisition extends Backend_Controller {
    }
 
    public function request_list($offset=0){
-
       $limit = 25;
       $results = $this->Requisition_model->get_requisition($limit, $offset, '1'); 
       $own_req=$this->Requisition_model->get_own_request($this->userSessID , '1');
@@ -158,7 +157,6 @@ class Requisition extends Backend_Controller {
                   $this->Common_model->edit('requisition_item', $_POST['hide_id'][$i], 'id', $data);
                }
             }
-
             $this->session->set_flashdata('success', 'Update information successfully.');
             redirect("requisition");
          }

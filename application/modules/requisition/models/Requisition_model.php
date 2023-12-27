@@ -10,9 +10,8 @@ class Requisition_model extends CI_Model {
       $desk_arr=[];
       $desk_arr[]=$this->ion_auth->get_group_id();
       if(in_array('4', $this->ion_auth->get_permission())){
-         $desk_arr[] = 0;
-      }
-
+         $ta=1;
+     }
       $this->db->select('r.*, u.first_name, dp.dept_name, f.fiscal_year_name');
       $this->db->from('requisitions as r');
       $this->db->join('users u', 'u.id = r.user_id', 'LEFT');
@@ -21,11 +20,11 @@ class Requisition_model extends CI_Model {
       if($status){
          $this->db->where('r.status', $status);
       }
-      $this->db->where_in('r.desk_id', $desk_arr);
-
+      if($ta!=1){
+         $this->db->where_in('r.desk_id', $desk_arr);
+      }
       $this->db->order_by('r.id', 'DESC');
       $query = $this->db->get()->result();
-
       $result['rows'] = $query;
       $this->db->from('requisitions'); 
       if($status){

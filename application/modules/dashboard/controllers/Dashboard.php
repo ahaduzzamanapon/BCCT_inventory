@@ -39,6 +39,18 @@ class Dashboard extends Backend_Controller {
 			$result = $this->Dashboard_model->get_count_data(3);
 			$this->data['total_rejected'] = $result;
 
+			$result = $this->Dashboard_model->get_count_data_parches();
+			$this->data['total_datap'] = $result;
+
+			$result = $this->Dashboard_model->get_count_data_parches(1);
+			$this->data['total_pendingp'] = $result;
+
+			$result = $this->Dashboard_model->get_count_data_parches(2);
+			$this->data['total_approvep'] = $result;
+
+			$result = $this->Dashboard_model->get_count_data_parches(3);
+			$this->data['total_rejectedp'] = $result;
+
 			// Load Page
 			$this->data['meta_title'] = 'Dashboard';
 			$this->data['subview'] = 'admin_dashboard';				

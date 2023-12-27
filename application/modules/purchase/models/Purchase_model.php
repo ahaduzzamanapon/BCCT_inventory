@@ -10,8 +10,8 @@ class Purchase_model extends CI_Model {
       $desk_arr=[];
       $desk_arr[]=$this->ion_auth->get_group_id();
       if(in_array('4', $this->ion_auth->get_permission())){
-         $desk_arr[] = 0;
-      }
+         $ta=1;
+     }
       $this->db->select('p.*, f.fiscal_year_name');
       $this->db->from('purchase p');
       $this->db->join('fiscal_year f', 'f.id = p.f_year_id', 'LEFT');
@@ -20,7 +20,9 @@ class Purchase_model extends CI_Model {
       }elseif($status == 4) {
          $this->db->where('p.is_received =', 1);
       }
-      $this->db->where_in('p.desk_id', $desk_arr);
+      if($ta!=1){
+         $this->db->where_in('p.desk_id', $desk_arr);
+     }
       $this->db->order_by('p.id', 'DESC');
       $query = $this->db->get()->result();
       $result['rows'] = $query;
