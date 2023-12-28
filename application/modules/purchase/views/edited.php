@@ -1,8 +1,10 @@
+
+
 <div class="page-content">     
    <div class="content">  
       <ul class="breadcrumb">
          <li><a href="<?=base_url('dashboard')?>" class="active"> Dashboard </a></li>
-         <li><a href="<?=base_url('my_requisition')?>" class="active"><?=$module_name?></a></li>
+         <li><a href="<?=base_url('purchase')?>" class="active"><?=$module_name?></a></li>
          <li><?=$meta_title; ?></li>
       </ul>
 
@@ -16,7 +18,7 @@
                <div class="grid-title">
                   <h4><span class="semi-bold"><?=$meta_title; ?></span></h4>
                   <div class="pull-right">                
-                     <a href="<?=base_url('my_requisition')?>" class="btn btn-blueviolet btn-xs btn-mini"> My Requisition List</a>  
+                     <a href="<?=base_url('purchase')?>" class="btn btn-blueviolet btn-xs btn-mini"> Purchase List</a>  
                   </div>
                </div>
                <div class="grid-body">
@@ -28,41 +30,70 @@
                   
                   <?php 
                   $attributes = array('id' => 'jsvalidate');
-                  echo form_open_multipart("my_requisition/create",$attributes);
+                  echo form_open_multipart("purchase/edited_update",$attributes);
                   echo validation_errors();
                   ?>
+                  <input type="hidden" name="id" value="<?= $info->id?>">
 
                   <div class="row">
                      <div class="col-md-12">
                         <fieldset >      
-                           <legend>Requisition Information</legend>
-
-                           <div class="row form-row" style="font-size: 16px; color: black;">
-                              <div class="col-md-4">
-                                 Applicant Name: <strong><?=$info['user_info']->first_name?></strong> 
-                              </div>
-                              <div class="col-md-4">
-                                 Designation Name: <strong><?=$info['user_info']->desig_name?></strong> 
-                              </div>
-                              <div class="col-md-4">
-                                 Department Name: <strong><?=$info['user_info']->dept_name?></strong> 
-                              </div>
-                           </div>
-
+                           <legend>Purchase Information</legend>
                            <div class="row form-row">
                               <div class="col-md-6">
-                                 <label class="form-label">Requisition Title <span class='required'>*</span></label>
+                                 <label class="form-label">Supplier Name <span class='required'>*</span></label>
                                  <?php echo form_error('title');?>
-                                 <input name="title" value="<?=set_value('title')?>" type="text" class="form-control input-sm" placeholder=""> 
-                              </div>
-                              <!-- <div class="col-md-6" style="color: black; font-weight: bold;">
-                                 <label class="form-label">&nbsp;</label>
-                                 Fiscal Year: <?=$fiscal_year?>
-                              </div> -->
-                              <div class="col-md-12">
-                                 <p style="text-align: center; color: black; font-size: 18px;">The products / materials described below are intended to be supplied for official use. </p>
+                                 <input name="title" value="<?=$info->supplier_name?>" type="text" class="form-control input-sm" placeholder=""> 
                               </div>
                            </div>
+                           <div class="col-md-4" >
+                           <table class="table table-bordered" >
+                             <thead>
+                              <tr>
+                                 <th>Verifier  Name</th>
+                                 <th>Remark</th>
+                              </tr>
+                             </thead>
+                             <tbody>
+                              <?php
+                             $approver = json_decode($info->approved_id);
+                              foreach ($approver as $key => $value) {
+                                 $this->db->where('id', $value->id);
+                                 $query = $this->db->get('users')->row();
+                                 echo '<tr>';
+                                 echo '<td>'.$query->first_name.'</td>';
+                                 echo '<td>'.$value->remark.'</td>';
+                                 echo '</tr>';
+                              }
+                              ?>
+                             </tbody>
+
+                           </table>
+                        </div>
+                        <div class="col-md-4" >
+                           <table class="table table-bordered" >
+                             <thead>
+                              <tr>
+                                 <th>Approver Name</th>
+                                 <th>Remark</th>
+                              </tr>
+                             </thead>
+                             <tbody>
+                              <?php
+                             $approver = json_decode($info->finalappr);
+                              foreach ($approver as $key => $value) {
+                                 $this->db->where('id', $value->id);
+                                 $query = $this->db->get('users')->row();
+                                 echo '<tr>';
+                                 echo '<td>'.$query->first_name.'</td>';
+                                 echo '<td>'.$value->remark.'</td>';
+                                 echo '</tr>';
+                              }
+                              ?>
+                             </tbody>
+
+                           </table>
+                        </div>
 
                            <div class="row form-row">
                               <div class="col-md-12"> 
@@ -72,40 +103,32 @@
                                     #appRowDiv th{padding: 5px;text-align:center;border-color: #ccc; color: black;}                        
                                  </style>                              
                                  <div class="col-md-12" >
-                                    <input type="hidden" value="1" id="count">
+                                    <input type="hidden" value="<?=count($items);?>" id="count">
                                     <table width="100%" border="1" id="appRowDiv" style="border:1px solid #a09e9e;">
                                        <tr>
                                           <th width="20%">Category<span class="required">*</span></th>
                                           <th width="20%">Sub Category <span class="required">*</span></th>
                                           <th width="20%">Item Name <span class="required">*</span></th>
-                                          <th width="20%">Qty. Request</th>
+                                          <th width="20%">Quantity</th>
                                           <th width="20%">Remark</th>
                                           <th width="8%"> <a href="javascript:void();" id="addRow"  class="label label-success"> <i  class="fa fa-plus-circle"></i> Add More</a> </th>
                                        </tr>
+                                       <?php foreach ($purchase_item_data as $key => $val) { ?>
+                                        <tr>
+                                          <td> <span><?=$val->category_name?></span></td>
+                                          <td> <span><?=$val->sub_cate_name?></span></td>
+                                          <td> <span><?=$val->item_name?></span> <input type="hidden" name="pur_item_id[]" value="<?= $val->pur_item_id?>"></td>
+                                          <td><input name="pur_quantity[]"  type="text" class="form-control input-sm" value="<?= $val->pur_quantity?>"></td>
+                                          <td><textarea name="pur_remark[]"   class="form-control input-sm"><?= $val->pur_remark?></textarea></td>
+                                          <td> <a href="javascript:void();" class="label label-important" onclick="removeRow(this)"> <i class="fa fa-minus-circle"></i> Remove </a></td>
+                                       </tr>
+
+                                      <?php }?>
                                        <tr></tr>
                                     </table>
                                  </div>
                               </div>
                               
-                              <div class="invitationDiv"> 
-                                 <h4 class="semi-bold margin_left_15">Invitation Information</h4>
-                                 <div class="col-md-4">
-                                    <label class="form-label">Name of Chair <span class='required'>*</span></label>
-                                    <?php echo form_error('event_name_chair');?>
-                                    <input type="text" name="event_name_chair" value="<?=set_value('event_name_chair')?>" class="form-control input-sm" placeholder="">
-                                 </div>
-                                 <div class="col-md-4">
-                                    <label class="form-label">Name of Chief Guest </label>
-                                    <?php echo form_error('event_chief_guest');?>
-                                    <input type="text" name="event_chief_guest" value="<?=set_value('event_chief_guest')?>" class="form-control input-sm" placeholder="">
-                                 </div>
-                                 <div class="col-md-4">
-                                    <label class="form-label">Name of Special Guest </label>
-                                    <?php echo form_error('event_special_guest');?>
-                                    <input type="text" name="event_special_guest" value="<?=set_value('event_special_guest')?>" class="form-control input-sm" placeholder="">
-                                 </div>
-                              </div>
-
                            </div>
 
                         </fieldset>
@@ -144,18 +167,14 @@ foreach ($categories as $key => $value) {
 <script type="text/javascript">
    $(document).ready(function() {
       //Load First row
-      addNewRow();
+      // addNewRow();
 
       // JS Validation
       $('#jsvalidate').validate({
          // focusInvalid: false, 
          ignore: "",
          rules: {
-            title: { required: true },
-            schedule_type: { required: true },
-            date: { required: true },
-            date_end: { required: true },
-            venue: { required: true }
+            title: { required: true }
          },
 
          invalidHandler: function (event, validator) {
@@ -220,14 +239,16 @@ foreach ($categories as $key => $value) {
    }
    //add row function
    function addNewRow(){
+      // id="category_'+sl+'"
       var sl=$('#count').val();
       var items = '';
       items+= '<tr>';
+      // items+= '<td><input type="hidden" name="sl[]" value="1" ></td>';
       items+= '<td><select name="item_cate_id[]" class="form-control input-sm" id="category_'+sl+'" ><?php echo $category_data;?></select></td>';
       items+= '<td><select name="item_sub_cate_id[]"  id="subcategory_'+sl+'" class="sub_category_val_'+sl+' form-control input-sm"><option value="">-- Select One --</option></select></td>';
-      items+= '<td><select name="item_id[]" class="item_val_'+sl+' form-control input-sm"><option value="">-- Select One --</option></select></td>';
-      items+= '<td><input name="qty_request[]" value="" type="text" class="form-control input-sm"></td>';
-      items+= '<td><textarea name="remark[]" value=""  class="form-control input-sm"></textarea></td>';
+      items+= '<td><select name="pur_item_id[]" class="item_val_'+sl+' form-control input-sm"><option value="">-- Select One --</option></select></td>';
+      items+= '<td><input name="pur_quantity[]" value="" type="text" class="form-control input-sm"></td>';
+      items+= '<td> <textarea name="pur_remark[]" value=""  type="text" class="form-control input-sm"></textarea></td>';
       items+= '<td> <a href="javascript:void();" class="label label-important" onclick="removeRow(this)"> <i class="fa fa-minus-circle"></i> Remove </a></td>';
       items+= '</tr>';
       $('#count').val(sl+1);

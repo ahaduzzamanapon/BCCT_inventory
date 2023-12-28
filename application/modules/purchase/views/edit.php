@@ -120,13 +120,37 @@
                            <table class="table table-bordered" >
                              <thead>
                               <tr>
-                                 <th>Approver Name</th>
+                                 <th>Verifier  Name</th>
                                  <th>Remark</th>
                               </tr>
                              </thead>
                              <tbody>
                               <?php
                              $approver = json_decode($info->approved_id);
+                              foreach ($approver as $key => $value) {
+                                 $this->db->where('id', $value->id);
+                                 $query = $this->db->get('users')->row();
+                                 echo '<tr>';
+                                 echo '<td>'.$query->first_name.'</td>';
+                                 echo '<td>'.$value->remark.'</td>';
+                                 echo '</tr>';
+                              }
+                              ?>
+                             </tbody>
+
+                           </table>
+                        </div>
+                        <div class="col-md-4" >
+                           <table class="table table-bordered" >
+                             <thead>
+                              <tr>
+                                 <th>Approver Name</th>
+                                 <th>Remark</th>
+                              </tr>
+                             </thead>
+                             <tbody>
+                              <?php
+                             $approver = json_decode($info->finalappr);
                               foreach ($approver as $key => $value) {
                                  $this->db->where('id', $value->id);
                                  $query = $this->db->get('users')->row();
@@ -156,7 +180,7 @@
                                  <tr>
                                     <th width="20%">Item Name <span class="required">*</span></th>
                                     <th width="15%">Qty. Request</th>
-                                    <th width="15%"> Qty. Approve </th>
+                                    <th width="15%"> Qty. Correction </th>
                                     <th width="15%"> Qty. Available </th>
                                     <th width="20%">Remark</th>
                                  </tr>
@@ -167,12 +191,11 @@
                                     <td><?=$item->pur_quantity?>  <?=$item->unit_name?></td>
                                     <td><input name="pur_approve[]" value="<?=$item->pur_approve?>" type="text" class="form-control input-sm"></td>
                                     <td><?=$item->quantity?> <?=$item->unit_name?></td>
-                                    <td><?=$item->remark?></td>
+                                    <td><?=$item->pur_remark?></td>
                                     <input type="hidden" name="hide_id[]" value="<?=$item->id?>">
                                  </tr>
                                  <?php } ?>
                               </table>
-
                            </fieldset>
                         </div>
                         <label for=""> Remark </label>

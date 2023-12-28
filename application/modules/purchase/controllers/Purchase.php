@@ -151,18 +151,74 @@ class Purchase extends Backend_Controller {
       $this->load->view('backend/_layout_main', $this->data);
    }
    public function edit($id){
+      $this->data['categories'] = $this->Common_model->get_categories();
       $this->db->where('id', $id);
       $this->data['info']=$this->db->get('purchase')->row();
-      $this->db->select('items.*, purchase_item.*,item_unit.unit_name');
-      $this->db->from('purchase_item');
-      $this->db->join('items', 'items.id = purchase_item.pur_item_id');
-      $this->db->join('item_unit', 'item_unit.id = items.unit_id');
+      $this->db->select('ri.*, i.item_name, i.quantity, iu.unit_name, c.category_name, sc.sub_cate_name');
+      $this->db->from('purchase_item ri');
+      $this->db->join('items i', 'i.id = ri.pur_item_id');
+      $this->db->join('item_unit iu', 'iu.id = i.unit_id');
+      $this->db->join('categories c', 'c.id = i.cat_id');
+      $this->db->join('sub_categories sc', 'sc.id = i.sub_cate_id');
       $this->db->where('purchase_id', $id);
-      $this->db->group_by('purchase_item.id'); // Add a group by clause to ensure uniqueness
       $this->data['purchase_item_data'] = $this->db->get()->result();
       $this->data['meta_title'] = 'Purchase edit Form';
-      $this->data['subview'] = 'edit';
+     
+         $this->data['subview'] = 'edit';
+      
       $this->load->view('backend/_layout_main', $this->data);
+   }
+   public function edite($id){
+      $this->data['categories'] = $this->Common_model->get_categories();
+
+      $this->db->where('id', $id);
+      $this->data['info']=$this->db->get('purchase')->row();
+      $this->db->select('ri.*, i.item_name, i.quantity, iu.unit_name, c.category_name, sc.sub_cate_name');
+      $this->db->from('purchase_item ri');
+      $this->db->join('items i', 'i.id = ri.pur_item_id');
+      $this->db->join('item_unit iu', 'iu.id = i.unit_id');
+      $this->db->join('categories c', 'c.id = i.cat_id');
+      $this->db->join('sub_categories sc', 'sc.id = i.sub_cate_id');
+      $this->db->where('purchase_id', $id);
+      $this->data['purchase_item_data'] = $this->db->get()->result();
+      $this->data['meta_title'] = 'Purchase edit Form';
+      if($this->data['info']->user_id==$this->ion_auth->user()->row()->id){
+         if($this->data['info']->status==1){
+            $this->data['subview'] = 'edited';
+         }else{
+            $this->data['subview'] = 'edit';
+         }
+      }else{
+         $this->data['subview'] = 'edit';
+      }
+      $this->load->view('backend/_layout_main', $this->data);
+   }
+   public function edited_update(){
+      $user = $this->ion_auth->user()->row();
+      $form_data = array( 
+         'supplier_name'   => $this->input->post('title'),
+         'desk_id'         => 0,
+         );
+         $this->db->where('id', $this->input->post('id'));
+         if ($this->db->update('purchase', $form_data)) {
+            $this->db->where('purchase_id', $this->input->post('id'));
+            $this->db->delete('purchase_item');
+            for ($i=0; $i<sizeof($_POST['pur_item_id']); $i++) { 
+               $form_data2 = array(
+                  'purchase_id'        => $this->input->post('id'),
+                  'pur_item_id'        => $_POST['pur_item_id'][$i],
+                  'pur_quantity'       => $_POST['pur_quantity'][$i], 
+                  'pur_approve'     => 0,                            
+                  'pur_fiscal_year_id' =>'null',
+                  'pur_remark'         => $_POST['pur_remark'][$i]
+                  );
+               $this->Common_model->save('purchase_item', $form_data2);
+         }
+      }else{
+         $this->session->set_flashdata('error', 'Update Requisition failed.');
+      }
+      $this->session->set_flashdata('success', 'Update Requisition successfully.');
+      redirect("purchase");
    }
    public function change_status($id){
          $user = $this->ion_auth->user()->row();

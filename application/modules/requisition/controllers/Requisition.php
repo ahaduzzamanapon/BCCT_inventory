@@ -111,9 +111,6 @@ class Requisition extends Backend_Controller {
       $this->form_validation->set_rules('status', ' status','required|trim');
       //Validate and input data
       if ($this->form_validation->run() == true){
-
-       
-         
          if($this->input->post('status') == 2){
             $this->load->helper('string');
             $pinCode = random_string('alnum',5);
@@ -166,14 +163,137 @@ class Requisition extends Backend_Controller {
       $this->data['status'] = $this->Common_model->get_status(); 
 
       //Results
+      $this->data['categories'] = $this->Common_model->get_categories();
+
       
       $this->data['items'] = $this->Requisition_model->get_req_items($dataID);
+      // dd($this->data['items']);
+     
       $this->data['approve_reject_user'] =$approve_reject_user;
       $this->data['final_appruver'] =$final_appruver;
 
       $this->data['meta_title'] = 'Approval Status';
-      $this->data['subview'] = 'change_status';
+     
+         $this->data['subview'] = 'change_status';
+      
       $this->load->view('backend/_layout_main', $this->data);
+   }
+   public function edite($id){
+
+      $dataID = (int) decrypt_url($id); //exit;
+      if (!$this->Common_model->exists('requisitions', 'id', $dataID)) { 
+         show_404('requisition - update - exitsts', TRUE);
+      }
+      $this->data['info'] = $this->Requisition_model->get_info($dataID);
+      $approve_reject_user= json_decode($this->data['info']->approve_reject_user);
+      $final_appruver= json_decode($this->data['info']->final_appruver);
+      //Validation      
+      $this->form_validation->set_rules('status', ' status','required|trim');
+      //Validate and input data
+      if ($this->form_validation->run() == true){
+         if($this->input->post('status') == 2){
+            $this->load->helper('string');
+            $pinCode = random_string('alnum',5);
+            $remarks=[
+               'id'=>$this->userSessID,
+               'Remark'=>$this->input->post('Personal_Remark'),
+            ];
+            array_push($final_appruver, $remarks);
+
+            $form_data = array(
+               'final_appruver' => json_encode($final_appruver),
+               'status'       => 2,
+               'desk_id'      =>0,
+               'pin_code'     => $pinCode,
+               'updated'      => date('Y-m-d H:i:s')
+               );
+         }else{
+            $remarks=[
+               'id'=>$this->userSessID,
+               'Remark'=>$this->input->post('Personal_Remark'),
+            ];
+            array_push($approve_reject_user, $remarks);
+            $form_data = array(
+               'approve_reject_user' => json_encode($approve_reject_user),
+               'status'    => $this->input->post('status'),
+               'desk_id'      =>$this->input->post('desk_id'),
+               'updated'   => date('Y-m-d H:i:s')
+               );
+         }
+
+         if($this->Common_model->edit('requisitions',  $dataID, 'id', $form_data)){
+
+            // Requisition Data 
+            for ($i=0; $i<sizeof($_POST['hide_id']); $i++) {
+               //check exists data
+               @$data_exists = $this->Common_model->exists('requisition_item', 'id', $_POST['hide_id'][$i]);
+               if($data_exists){
+                  $data = array(
+                     'qty_approve'     => $_POST['qty_approve'][$i]
+                     ); 
+                  $this->Common_model->edit('requisition_item', $_POST['hide_id'][$i], 'id', $data);
+               }
+            }
+            $this->session->set_flashdata('success', 'Update information successfully.');
+            redirect("requisition");
+         }
+      }
+
+      //Dropdown
+      $this->data['status'] = $this->Common_model->get_status(); 
+
+      //Results
+      $this->data['categories'] = $this->Common_model->get_categories();
+
+      
+      $this->data['items'] = $this->Requisition_model->get_req_items($dataID);
+      // dd($this->data['items']);
+     
+      $this->data['approve_reject_user'] =$approve_reject_user;
+      $this->data['final_appruver'] =$final_appruver;
+
+      $this->data['meta_title'] = 'Approval Status';
+      if($this->data['info']->user_id==$this->userSessID){
+         if($this->data['info']->status==1){
+            $this->data['subview'] = 'edit';
+         }else{
+            $this->data['subview'] = 'change_status';
+         }
+      }else{
+         $this->data['subview'] = 'change_status';
+      }
+      $this->load->view('backend/_layout_main', $this->data);
+   }
+   public function edit(){
+      $user = $this->ion_auth->user()->row();
+      $form_data = array(
+         'title'     => $this->input->post('title'),
+         'desk_id'     => 0,
+         'updated'   => date('Y-m-d H:i:s')
+         );
+         $this->db->where('id', $this->input->post('id'));
+         if ($this->db->update('requisitions', $form_data)) {
+            $this->db->where('requisition_id', $this->input->post('id'));
+            $this->db->delete('requisition_item');
+            for ($i=0; $i<sizeof($_POST['item_id']); $i++) { 
+               $form_data2 = array(
+                  'requisition_id'     => $this->input->post('id'),
+                  'item_cate_id'       => $_POST['item_cate_id'][$i],
+                  'item_sub_cate_id'   => $_POST['item_sub_cate_id'][$i],
+                  'item_id'            => $_POST['item_id'][$i],
+                  'dept_id'            => $user->dept_id,
+                  'fiscal_year_id'     => 'null',
+                  'qty_request'        => $_POST['qty_request'][$i],           
+                  'remark'             => $_POST['remark'][$i]
+                  );
+               $this->Common_model->save('requisition_item', $form_data2);
+            }
+            $this->session->set_flashdata('success', 'Update information successfully.');
+            redirect("requisition");
+         } else {
+            $this->session->set_flashdata('error', 'Update information failed.');
+            redirect("requisition/change_status/" .encrypt_url($this->input->post('id')));
+           }
    }
 
    public function delivery_product($id){

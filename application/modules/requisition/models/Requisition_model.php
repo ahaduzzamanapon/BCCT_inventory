@@ -86,11 +86,12 @@ class Requisition_model extends CI_Model {
    }
 
    public function get_req_items($id) {
-      $this->db->select('ri.*, i.item_name, i.quantity, iu.unit_name, c.category_name');
+      $this->db->select('ri.*, i.item_name, i.quantity, iu.unit_name, c.category_name, sc.sub_cate_name');
       $this->db->from('requisition_item ri');
       $this->db->join('items i', 'i.id = ri.item_id', 'LEFT');
       $this->db->join('item_unit iu', 'iu.id = i.unit_id', 'LEFT');
       $this->db->join('categories c', 'c.id = i.cat_id', 'LEFT');
+      $this->db->join('sub_categories sc', 'sc.id = i.sub_cate_id', 'LEFT');
       $this->db->where('ri.requisition_id', $id);
       $query = $this->db->get()->result();
 

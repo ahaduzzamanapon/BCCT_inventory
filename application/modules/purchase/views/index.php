@@ -27,7 +27,6 @@
                         <tr>
                            <th style="width:10px;"> SL </th>
                            <th style="width:200px;">Supplier Name</th>
-                           <th style="width:100px;">Fiscal Year</th>
                            <th style="width:100px;">Created</th>
                            <th style="width:100px;">Status</th>
                            <th style="width:100px;">Received Status</th>
@@ -43,7 +42,6 @@
                         <tr>
                            <td class="v-align-middle"><?=$sl.'.'?></td>
                            <td class="v-align-middle"><?=$row->supplier_name; ?></td>
-                           <td class="v-align-middle"><?=$row->fiscal_year_name; ?></td>
                            <td class="v-align-middle"><?=date('d M, Y h:i A', strtotime($row->created)); ?>
                            </td> 
 
@@ -81,8 +79,11 @@
                               <?php
                               }}else{
                               ?>
+                               <?php if($row->user_id == $this->session->userdata('user_id')) { ?>
+                              <?=anchor("purchase/edite/".$row->id, 'Edit', array('class' => 'btn btn-info btn-mini'))?>
+                              <?php } ?>
 
-                              <a href="<?=base_url('purchase/edit/'.$row->id)?>" class="btn btn-primary btn-mini"> Edit</a>
+                              <a href="<?=base_url('purchase/edit/'.$row->id)?>" class="btn btn-primary btn-mini"> Approve Status</a>
                       
                            <?php }?>
                               <?=anchor("purchase/details/".encrypt_url($row->id), 'Details', array('class' => 'btn btn-primary btn-mini'))?>

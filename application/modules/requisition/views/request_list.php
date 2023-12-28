@@ -75,6 +75,9 @@
                            </td>
                            <td> <?=$status?></td>
                            <td align="right">
+                              <?php if($row->user_id == $this->session->userdata('user_id')) { ?>
+                              <?=anchor("requisition/edite/".encrypt_url($row->id), 'Edit', array('class' => 'btn btn-info btn-mini'))?>
+                              <?php } ?>
                               <?=anchor("requisition/change_status/".encrypt_url($row->id), 'Approval Status', array('class' => 'btn btn-blueviolet btn-mini'))?>
                               <?=anchor("requisition/details/".encrypt_url($row->id), 'Details', array('class' => 'btn btn-primary btn-mini'))?>
                            </td>
