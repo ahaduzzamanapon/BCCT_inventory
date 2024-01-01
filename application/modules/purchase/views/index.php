@@ -1,3 +1,4 @@
+
 <div class="page-content">     
    <div class="content">  
       <ul class="breadcrumb" style="margin-bottom: 20px;">
@@ -26,7 +27,8 @@
                      <thead>
                         <tr>
                            <th style="width:10px;"> SL </th>
-                           <th style="width:200px;">Supplier Name</th>
+                           <th style="width:200px;">Title Name</th>
+                           <th style="width:200px;">On Desk</th>
                            <th style="width:100px;">Created</th>
                            <th style="width:100px;">Status</th>
                            <th style="width:100px;">Received Status</th>
@@ -42,6 +44,22 @@
                         <tr>
                            <td class="v-align-middle"><?=$sl.'.'?></td>
                            <td class="v-align-middle"><?=$row->supplier_name; ?></td>
+                           <td>
+
+                           <?php
+                              if ($row->desk_id == 0) {
+                                 echo 'N/A';
+                              }else{
+                                 $this->db->where('id', $row->desk_id);
+                                 $desk = $this->db->get('groups');
+                                 echo $desk->row()->name;
+                              }
+                           ?>
+
+
+
+                           </td>
+
                            <td class="v-align-middle"><?=date('d M, Y h:i A', strtotime($row->created)); ?>
                            </td> 
 
@@ -81,10 +99,18 @@
                               ?>
                                <?php if($row->user_id == $this->session->userdata('user_id')) { ?>
                               <?=anchor("purchase/edite/".$row->id, 'Edit', array('class' => 'btn btn-info btn-mini'))?>
-                              <?php } ?>
+                              <?php }?>
 
-                              <a href="<?=base_url('purchase/edit/'.$row->id)?>" class="btn btn-primary btn-mini"> Approve Status</a>
-                      
+
+                              <?php if(!$this->ion_auth->in_group('User') ){ ?>
+                                    <?php if($this->ion_auth->in_group('Store Keeper') ){ 
+                                       if($row->desk_id==0){ ?>
+                                    <?=anchor("purchase/edit/".$row->id, 'Approval Status', array('class' => 'btn btn-blueviolet btn-mini'))?>  
+                                    <?php }}elseif($roleid==$row->desk_id){?>
+                                       
+                                       <?=anchor("purchase/edit/".$row->id, 'Approval Status', array('class' => 'btn btn-blueviolet btn-mini'))?>  
+                              <?php }} ?>
+                                             
                            <?php }?>
                               <?=anchor("purchase/details/".encrypt_url($row->id), 'Details', array('class' => 'btn btn-primary btn-mini'))?>
                            </td>

@@ -35,19 +35,41 @@
                      <div class="col-md-12">
                         <table class="tg" width="100%">
                            <tr>
-                              <th class="tg-khup"> Supplier Name </th>
+                              <th class="tg-khup"> Title Name </th>
                               <td class="tg-ywa9"><?=$info->supplier_name?></td>
                               <th class="tg-khup"> Created </th>
                               <td class="tg-ywa9"><?=date('d M, Y h:i A', strtotime($info->created)); ?></td>
+                              <th class="tg-khup"> Status </th>
+                              <td class="tg-ywa9"><?php
+                              if($info->status == 2) {
+                                 echo '<span class="label label-success">Approved</span>';
+                              }elseif($info->status == 3) {
+                                 echo '<span class="label">Rejected</span>';
+                              }else{
+                                 echo '<span class="label label-important">Pending</span>';
+                              }
+                              ?>
+                              </td>
+                              <th class="tg-khup"> Received Status </th>
+                              <td class="tg-ywa9">
+                                 <?php
+                                 if($info->is_received == 1) {
+                                    echo '<span class="label label-success">Received</span>';
+                                 }else{
+                                    echo '<span class="label">Not Received</span>';
+                                 }
+                                 ?>
+                              </td>
                            </tr> 
                            <tr>
                               <th class="tg-khup"> Purchase Item List </th>
-                              <td class="tg-ywa9" colspan="6">
+                              <td class="tg-ywa9" colspan="7">
                                  <table>
                                     <tr>
                                        <th>SL</th>
                                        <th>Item Name (Unit)</th>
-                                       <th>Purchase Qty.</th>
+                                       <th>Request Qty.</th>
+                                       <th>Approved Qty.</th>
                                        <th>Remarks</th>
                                     </tr>
                                     <?php 
@@ -59,12 +81,66 @@
                                           <td><?=$sl?></td>
                                           <td><?=$item->item_name?></td>
                                           <td><?=$item->pur_quantity?></td>
+                                          <td><?=$item->pur_approve?></td>
                                           <td><?=$item->remark?></td>
                                        </tr>
                                        <?php } ?>
                                     </table>
                                  </td>
                               </tr>
+                              <div class="col-md-4" >
+                           <table class="table table-bordered" >
+                             <thead>
+                              <tr>
+                                 <th>Verifier  Name</th>
+                                 <th>Role</th>
+                                 <th>Remark</th>
+                              </tr>
+                             </thead>
+                             <tbody>
+                              <?php
+                             $approver = json_decode($info->approved_id);
+                              foreach ($approver as $key => $value) {
+                                 $this->db->where('id', $value->id);
+                                 $query = $this->db->get('users')->row();
+
+                                 $this->db->select('name');
+                                 $this->db->where('id',$value->role);
+                                 $query2 = $this->db->get('groups')->row();
+                                 echo '<tr><td>'.$query->first_name.'</td><td>'.$query2->name.'</td><td>'.$value->remark.'</td></tr>';
+
+                              }
+                              ?>
+                             </tbody>
+
+                           </table>
+                        </div>
+                        <div class="col-md-12" >
+                           <table class="table table-bordered" >
+                             <thead>
+                              <tr>
+                                 <th>Approver Name</th>
+                                 <th>Role</th>
+                                 <th>Remark</th>
+                              </tr>
+                             </thead>
+                             <tbody>
+                              <?php
+                             $approver = json_decode($info->finalappr);
+                              foreach ($approver as $key => $value) {
+                                $this->db->where('id', $value->id);
+                                 $query = $this->db->get('users')->row();
+                                 $this->db->select('name');
+                                 $this->db->where('id',$value->role);
+                                 $query2 = $this->db->get('groups')->row();
+                                 echo '<tr><td>'.$query->first_name.'</td><td>'.$query2->name.'</td><td>'.$value->remark.'</td></tr>';
+                              }
+                              ?>
+                             </tbody>
+
+                           </table>
+                        </div>
+
                               <?php //} ?>
 
                            </table>

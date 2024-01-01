@@ -50,8 +50,8 @@
                               <td class="tg-ywa9"><?=$info->title?></td>
                               <th class="tg-khup"> Status </th>
                               <td class="tg-ywa9"><?=$status?></td>
-                              <th class="tg-khup"> Fiscal Year</th>
-                              <td class="tg-ywa9"><?=$info->fiscal_year_name?></td>
+                              <!-- <th class="tg-khup"> Fiscal Year</th>
+                              <td class="tg-ywa9"><?=$info->fiscal_year_name?></td> -->
                            </tr> 
                            <tr>
                               <th class="tg-khup"> Created </th>
@@ -97,6 +97,40 @@
                                     </table>
                                  </td>
                               </tr>
+                              
+                              <tr>
+                                <th class="tg-khup">Verifier List</th>
+                                    <td class="tg-ywa9" colspan="6">
+                                       <table>
+                                          <tr>
+                                             <th>SL</th>
+                                             <th>Verifier Name </th>
+                                             <th>Role</th>
+                                             <th>Remarks</th>
+                                          </tr>
+                                          <?php 
+                                          $verifier= json_decode($info->approve_reject_user);
+                                          foreach($verifier as $value){ 
+                                                $sl++;
+                                                $this->db->select('first_name');
+                                                $this->db->where('id',$value->id);
+                                                $query = $this->db->get('users')->row();
+                                                $this->db->select('name');
+                                                $this->db->where('id',$value->role);
+                                                $query2 = $this->db->get('groups')->row();
+
+                                             ?>
+                                             <tr>
+                                                <td><?=$sl?></td>
+                                                <td><?=$query->first_name?></td>
+                                                <td><?=$query2->name?></td>
+                                                <td><?=$value->Remark?></td>
+                                             </tr>
+                                             <?php }
+                                             ?>
+                                          </table>
+                                       </td>
+                              </tr>
                               <tr>
                                 <th class="tg-khup">Approver List</th>
                                     <td class="tg-ywa9" colspan="6">
@@ -104,6 +138,7 @@
                                           <tr>
                                              <th>SL</th>
                                              <th>Approver Name </th>
+                                             <th>Role</th>
                                              <th>Remarks</th>
                                           </tr>
                                           <?php 
@@ -114,10 +149,17 @@
                                                 $this->db->select('first_name');
                                                 $this->db->where('id',$value->id);
                                                 $query = $this->db->get('users')->row();
+
+                                                $this->db->select('name');
+                                                $this->db->where('id',$value->role);
+                                                $query2 = $this->db->get('groups')->row();
+
+
                                              ?>
                                              <tr>
                                                 <td><?=$sl?></td>
                                                 <td><?=$query->first_name?></td>
+                                                <td><?=$query2->name?></td>
                                                 <td><?=$value->Remark?></td>
                                              </tr>
                                              <?php }
@@ -126,31 +168,12 @@
                                        </td>
                               </tr>
                               <tr>
-                                <th class="tg-khup">Verifier List</th>
+                                <th class="tg-khup">Attachment</th>
                                     <td class="tg-ywa9" colspan="6">
-                                       <table>
-                                          <tr>
-                                             <th>SL</th>
-                                             <th>Verifier Name </th>
-                                             <th>Remarks</th>
-                                          </tr>
-                                          <?php 
-                                          $verifier= json_decode($info->approve_reject_user);
-                                          foreach($verifier as $value){ 
-                                                $sl++;
-                                                $this->db->select('first_name');
-                                                $this->db->where('id',$value->id);
-                                                $query = $this->db->get('users')->row();
-                                             ?>
-                                             <tr>
-                                                <td><?=$sl?></td>
-                                                <td><?=$query->first_name?></td>
-                                                <td><?=$value->Remark?></td>
-                                             </tr>
-                                             <?php }
-                                             ?>
-                                          </table>
-                                       </td>
+                                       <?php if ($info->attachment != '') { ?>
+                                          <a href="<?=base_url().'attachment/'.$info->attachment?>" target="_blank" style="cursor:pointer;">Download</a>
+                                      <?php } ?>
+                                    </td>
                               </tr>
 
                            </table>

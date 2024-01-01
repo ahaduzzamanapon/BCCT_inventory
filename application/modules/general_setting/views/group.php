@@ -43,7 +43,7 @@
                 <tr>
                   <td class="v-align-middle"><?=$sl.'.'?></td>
                   <td class="v-align-middle"><?=$row->name?></td>
-                  <td class="v-align-middle">
+                  <td class="v-align-middle" style="display: flex;flex-wrap: wrap;gap: 3px;">
 
                     <?php 
                       $pw = explode(',',$row->pw);
@@ -52,19 +52,22 @@
                     ?>
                       <?php 
                       if(in_array(1, $permission)){
-                        echo '<span class="btn btn-primary btn-xs btn-mini">Create</span>  <br>';
+                        echo '<span class="btn btn-primary btn-xs btn-mini">Create</span> &nbsp';
                       }
                       if(in_array(2, $permission)){
-                        echo '<span class="btn btn-success btn-xs btn-mini">Approve</span>  <br>';
+                        echo '<span class="btn btn-success btn-xs btn-mini">Approve</span>  &nbsp';
                       }
                       if(in_array(3, $permission)){
-                        echo '<span class="btn btn-danger btn-xs btn-mini">Reject</span>  <br>';
+                        echo '<span class="btn btn-danger btn-xs btn-mini">Reject</span> &nbsp';
                       }
                       if(in_array(4, $permission)){
-                        echo '<span class="btn btn-warning btn-xs btn-mini">Delivery</span>  <br>';
+                        echo '<span class="btn btn-warning btn-xs btn-mini">Delivery</span>  &nbsp';
                       }
                       if(in_array(5, $permission)){
-                        echo '<span class="btn btn-warning btn-xs btn-mini">View Report</span>  <br>';
+                        echo '<span class="btn btn-warning btn-xs btn-mini">View Report</span>  &nbsp';
+                      }
+                      if(in_array(6, $permission)){
+                        echo '<span class="btn btn-warning btn-xs btn-mini">Show All Data</span>  &nbsp';
                       }
                     ?>
                     <?php 
@@ -72,7 +75,7 @@
                         $this->db->where('id', $value);
                         $query = $this->db->get('groups')->row();
                         if ($query) {
-                          echo '<span class="btn btn-primary btn-xs btn-mini">Pass To '.$query->name.'</span>  <br>';
+                          echo '<span class="btn btn-primary btn-xs btn-mini">Pass To '.$query->name.'</span>  &nbsp';
                         }
                       }
                     ?>

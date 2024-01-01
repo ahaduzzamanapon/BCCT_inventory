@@ -18,8 +18,12 @@ class Requisition extends Backend_Controller {
    public function index($offset=0){
       $limit = 25;
       $results = $this->Requisition_model->get_requisition($limit, $offset); 
-      $this->data['results'] = $results['rows'];
-      $this->data['total_rows'] = $results['num_rows'];
+      $own_req=$this->Requisition_model->get_own_request($this->userSessID);
+      $d = array_merge($results['rows'], $own_req);
+      $d = array_map("unserialize", array_unique(array_map("serialize", $d)));
+      $results = $d; 
+      $this->data['results'] = $results;
+      $this->data['total_rows'] = count($d);
 
       //pagination
       $this->data['pagination'] = create_pagination('requisition/index/', $this->data['total_rows'], $limit, 3, $full_tag_wrap = true);
@@ -36,8 +40,10 @@ class Requisition extends Backend_Controller {
       $own_req=$this->Requisition_model->get_own_request($this->userSessID , '1');
       $d = array_merge($results['rows'], $own_req);
       $d = array_map("unserialize", array_unique(array_map("serialize", $d)));
+      $this->data['roleid']=$this->ion_auth->get_group_id();
+
       $this->data['results'] = $d;
-      $this->data['total_rows'] = $results['num_rows'];
+      $this->data['total_rows'] = count($d);
       $this->data['pagination'] = create_pagination('requisition/request_list/', $this->data['total_rows'], $limit, 3, $full_tag_wrap = true);
       $this->data['meta_title'] = 'Pending Requisition List';
       $this->data['subview'] = 'request_list';
@@ -51,7 +57,7 @@ class Requisition extends Backend_Controller {
       $d = array_merge($results['rows'], $own_req);
       $d = array_map("unserialize", array_unique(array_map("serialize", $d)));
       $this->data['results'] = $d;
-      $this->data['total_rows'] = $results['num_rows'];
+      $this->data['total_rows'] = count($d);
       //pagination
       $this->data['pagination'] = create_pagination('requisition/approve_list/', $this->data['total_rows'], $limit, 3, $full_tag_wrap = true);
       // Load view
@@ -70,10 +76,9 @@ class Requisition extends Backend_Controller {
          return $item->is_delivered == 1;
      });
      
-     // Convert the filtered array back to indexed array
      $filteredArray = array_values($filteredArray);
       $this->data['results'] = $filteredArray;
-      $this->data['total_rows'] = $results['num_rows'];
+      $this->data['total_rows'] = count($filteredArray);
 
       //pagination
       $this->data['pagination'] = create_pagination('requisition/delivered_list/', $this->data['total_rows'], $limit, 3, $full_tag_wrap = true);
@@ -91,7 +96,7 @@ class Requisition extends Backend_Controller {
       $d = array_merge($results['rows'], $own_req);
       $d = array_map("unserialize", array_unique(array_map("serialize", $d)));
       $this->data['results'] = $d;
-      $this->data['total_rows'] = $results['num_rows'];
+      $this->data['total_rows'] = count($d);
       $this->data['pagination'] = create_pagination('requisition/rejected_list/', $this->data['total_rows'], $limit, 3, $full_tag_wrap = true);
       $this->data['meta_title'] = 'Rejected Requisition List';
       $this->data['subview'] = 'rejected_list';
@@ -116,6 +121,7 @@ class Requisition extends Backend_Controller {
             $pinCode = random_string('alnum',5);
             $remarks=[
                'id'=>$this->userSessID,
+               'role'=>$this->ion_auth->get_group_id(),
                'Remark'=>$this->input->post('Personal_Remark'),
             ];
             array_push($final_appruver, $remarks);
@@ -130,6 +136,7 @@ class Requisition extends Backend_Controller {
          }else{
             $remarks=[
                'id'=>$this->userSessID,
+               'role'=>$this->ion_auth->get_group_id(),
                'Remark'=>$this->input->post('Personal_Remark'),
             ];
             array_push($approve_reject_user, $remarks);
@@ -196,20 +203,44 @@ class Requisition extends Backend_Controller {
             $pinCode = random_string('alnum',5);
             $remarks=[
                'id'=>$this->userSessID,
+               'role'=>$this->ion_auth->get_group_id(),
                'Remark'=>$this->input->post('Personal_Remark'),
             ];
             array_push($final_appruver, $remarks);
-
+            $attachmentname='';
+            if ($_FILES['attachment']) {
+               $config['upload_path'] = './attachment/';
+               $config['allowed_types'] = 'jpg|png|jpeg|pdf';
+               $config['max_size'] = 10240000;
+           
+               $this->load->library('upload', $config);
+           
+               if ($this->upload->do_upload('attachment')) {
+                   $data = $this->upload->data();
+                   $originalFileName = $data['file_name'];
+           
+                   // Generate a unique file name
+                   $uniqueFileName = uniqid() . '.' . pathinfo($originalFileName, PATHINFO_EXTENSION);
+           
+                   // Move the uploaded file to the destination with the unique file name
+                   $destination = base_url('attachment/') . $uniqueFileName;
+                   rename($config['upload_path'] . $originalFileName, $config['upload_path'] . $uniqueFileName);
+           
+                   $attachmentname=$uniqueFileName;
+               }
+           }
             $form_data = array(
                'final_appruver' => json_encode($final_appruver),
                'status'       => 2,
                'desk_id'      =>0,
+               'attachment'   => $attachmentname,
                'pin_code'     => $pinCode,
                'updated'      => date('Y-m-d H:i:s')
                );
          }else{
             $remarks=[
                'id'=>$this->userSessID,
+               'role'=>$this->ion_auth->get_group_id(),
                'Remark'=>$this->input->post('Personal_Remark'),
             ];
             array_push($approve_reject_user, $remarks);
@@ -266,10 +297,34 @@ class Requisition extends Backend_Controller {
    }
    public function edit(){
       $user = $this->ion_auth->user()->row();
+      $attachmentname='';
+      if ($_FILES['attachment']) {
+         $config['upload_path'] = './attachment/';
+         $config['allowed_types'] = 'jpg|png|jpeg|pdf';
+         $config['max_size'] = 10240000;
+     
+         $this->load->library('upload', $config);
+     
+         if ($this->upload->do_upload('attachment')) {
+             $data = $this->upload->data();
+             $originalFileName = $data['file_name'];
+     
+             // Generate a unique file name
+             $uniqueFileName = uniqid() . '.' . pathinfo($originalFileName, PATHINFO_EXTENSION);
+     
+             // Move the uploaded file to the destination with the unique file name
+             $destination = base_url('attachment/') . $uniqueFileName;
+             rename($config['upload_path'] . $originalFileName, $config['upload_path'] . $uniqueFileName);
+     
+             $attachmentname=$uniqueFileName;
+         }
+     }
       $form_data = array(
          'title'     => $this->input->post('title'),
          'desk_id'     => 0,
-         'updated'   => date('Y-m-d H:i:s')
+         'updated'   => date('Y-m-d H:i:s'),
+         'attachment'   => $attachmentname
+
          );
          $this->db->where('id', $this->input->post('id'));
          if ($this->db->update('requisitions', $form_data)) {
@@ -281,7 +336,7 @@ class Requisition extends Backend_Controller {
                   'item_cate_id'       => $_POST['item_cate_id'][$i],
                   'item_sub_cate_id'   => $_POST['item_sub_cate_id'][$i],
                   'item_id'            => $_POST['item_id'][$i],
-                  'dept_id'            => $user->dept_id,
+                  'dept_id'            => ($user->dept_id) ? $user->dept_id : '',
                   'fiscal_year_id'     => 'null',
                   'qty_request'        => $_POST['qty_request'][$i],           
                   'remark'             => $_POST['remark'][$i]
@@ -526,7 +581,7 @@ class Requisition extends Backend_Controller {
       //Results
       $results = $this->Requisition_model->get_my_pass($limit, $offset, $this->userSessID); 
       $this->data['results'] = $results['rows'];
-      $this->data['total_rows'] = $results['num_rows'];
+      $this->data['total_rows'] = count($results);
 
       //pagination
       $this->data['pagination'] = create_pagination('my_appointment/my_pass/', $this->data['total_rows'], $limit, 3, $full_tag_wrap = true);

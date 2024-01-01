@@ -41,15 +41,38 @@ class My_requisition extends Backend_Controller {
          $user = $this->ion_auth->user()->row();
          $approve_reject_user= [];
          $final_appruver= [];
+         $attachmentname='';
+         if ($_FILES['attachment']) {
+            $config['upload_path'] = './attachment/';
+            $config['allowed_types'] = 'jpg|png|jpeg|pdf';
+            $config['max_size'] = 10240000;
+        
+            $this->load->library('upload', $config);
+        
+            if ($this->upload->do_upload('attachment')) {
+                $data = $this->upload->data();
+                $originalFileName = $data['file_name'];
+        
+                // Generate a unique file name
+                $uniqueFileName = uniqid() . '.' . pathinfo($originalFileName, PATHINFO_EXTENSION);
+        
+                // Move the uploaded file to the destination with the unique file name
+                $destination = base_url('attachment/') . $uniqueFileName;
+                rename($config['upload_path'] . $originalFileName, $config['upload_path'] . $uniqueFileName);
+        
+                $attachmentname=$uniqueFileName;
+            }
+        }
          $form_data = array(
             'user_id'   => $user->id,
-            'department_id' => $user->dept_id,
+            'department_id' => ($user->dept_id)?$user->dept_id:'',
             'f_year_id'   => $fiscal_year->id,
             'approve_reject_user'   =>json_encode($approve_reject_user),
             'final_appruver'   =>json_encode($final_appruver),
             'title'     => $this->input->post('title'),
-            'desk_id'     => 0,
+            'desk_id'         => $this->ion_auth->in_group('Store Keeper')?1:0,
             'pin_code'   => mt_rand(1000, 9999),  
+            'attachment'   => $attachmentname,  
             'created'   => date('Y-m-d H:i:s'),
             'updated'   => date('Y-m-d H:i:s')
             );
@@ -73,7 +96,7 @@ class My_requisition extends Backend_Controller {
                   'item_cate_id'       => $_POST['item_cate_id'][$i],
                   'item_sub_cate_id'   => $_POST['item_sub_cate_id'][$i],
                   'item_id'            => $_POST['item_id'][$i],
-                  'dept_id'            => $user->dept_id,
+                  'dept_id'            => ($user->dept_id)?$user->dept_id:'',
                   'fiscal_year_id'     => $fiscal_year->id,
                   'qty_request'        => $_POST['qty_request'][$i],           
                   'remark'             => $_POST['remark'][$i]

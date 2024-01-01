@@ -5,15 +5,14 @@
          <li> General Setting</li>
          <li><?=$meta_title; ?> </li>
       </ul>
-
       <div class="row-fluid">
          <div class="span12">
             <div class="grid simple ">
                <div class="grid-title">
                   <h4><span class="semi-bold"><?=$meta_title; ?></span></h4>
-                  <!-- <div class="pull-right">
-                     <a href="#" class="btn btn-blueviolet btn-xs btn-mini"> Add Category </a>
-                  </div>  -->           
+                   <div class="pull-right">
+                     <a href="<?=base_url('general_setting/category_add')?>" class="btn btn-blueviolet btn-xs btn-mini"> Add Category </a>
+                  </div>       
                </div>
 
                <div class="grid-body ">
@@ -30,7 +29,7 @@
                         <tr>
                            <th style="width:2%"> SL </th>
                            <th style="width:60%">Category Name</th>
-                           <!-- <th style="width:18%">Status</th> -->
+                           <th style="width:40%">Action</th>
                         </tr>
                      </thead>
                      <tbody>
@@ -42,6 +41,10 @@
                         <tr>
                            <td class="v-align-middle"><?=$sl.'.'?></td>
                            <td class="v-align-middle"><?=$row->category_name?></td>
+                           <td class="v-align-middle">
+                              <a href="<?=base_url('general_setting/category_edit/'.$row->id)?>" class="btn btn-primary btn-xs btn-mini">Edit</a>
+                              <a href="<?=base_url('general_setting/category_delete/'.$row->id)?>" class="btn btn-danger btn-xs btn-mini">Delete</a>
+                           </td>
                         </tr>
                      <?php endforeach;?>                      
                   </tbody>

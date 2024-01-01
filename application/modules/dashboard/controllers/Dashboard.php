@@ -20,13 +20,13 @@ class Dashboard extends Backend_Controller {
 	}	
 
 	public function index(){
-		if($this->ion_auth->in_group('User')){
-			$this->data['info'] = $this->userData['user_info'];
-			$this->data['user'] = $this->ion_auth->user()->row();
-			$this->data['meta_title'] = 'Dashboard';
-			$this->data['subview'] = 'user_dashboard';						
-			$this->load->view('backend/_layout_main', $this->data);
-		}else{
+		// if($this->ion_auth->in_group('User')){
+		// 	$this->data['info'] = $this->userData['user_info'];
+		// 	$this->data['user'] = $this->ion_auth->user()->row();
+		// 	$this->data['meta_title'] = 'Dashboard';
+		// 	$this->data['subview'] = 'user_dashboard';						
+		// 	$this->load->view('backend/_layout_main', $this->data);
+		// }else{
 			$result = $this->Dashboard_model->get_count_data();
 			$this->data['total_data'] = $result;
 
@@ -55,7 +55,7 @@ class Dashboard extends Backend_Controller {
 			$this->data['meta_title'] = 'Dashboard';
 			$this->data['subview'] = 'admin_dashboard';				
 			$this->load->view('backend/_layout_main', $this->data);	
-		}
+		// }
 	}
 
 	public function ajaxevent(){

@@ -148,6 +148,8 @@
                                     <li class="divider"></li>
                                     <li><a href="<?=base_url('logout')?>"><i class="fa fa-power-off"></i> Log Out</a>
                                     </li>
+                                    <li><a href="<?=base_url('acl/edit_user').'/'.$userDetails['user_info']->id?>"><i class="fa fa-user"></i> Profile</a>
+                                    </li>
                                 </ul>
                             </li>
                         </ul>
@@ -198,16 +200,14 @@
                                        <li> <a href="<?=base_url('my_requisition/create');?>"> Create Requisition </a> </li>
                                         <?php } ?>
                                         <li> <a href="<?=base_url('requisition');?>"> Requisition List </a> </li>
-                                       
-
-
-
                                         <li> <a href="<?=base_url('requisition/request_list');?>"> Requisition Pending  List </a> </li>
                                         <li> <a href="<?=base_url('requisition/approve_list');?>"> Requisition Approved List </a> </li>
                                         <li> <a href="<?=base_url('requisition/rejected_list');?>"> Requisition Rejected List </a> </li>
                                         <li> <a href="<?=base_url('requisition/delivered_list');?>"> Requisition Delivered List </a> </li>
                                     </ul>
                                 </li>
+                                <?php 
+                                 if(in_array('6', $this->ion_auth->get_permission())){?>
                                 <li class="start <?=backend_activate_menu_class('purchase')?>"> <a href="javascript:;">
                                         <i class="fa fa-tags"></i> <span class="title">Purchase</span> <span
                                             class="selected"></span> <span class="arrow"></span> </a>
@@ -220,7 +220,7 @@
                                         <li> <a href="<?=base_url('purchase/purchase_received');?>"> Purchase Received </a> </li>
                                     </ul>
                                 </li>
-
+                            
                                 <li class="start <?=activate_menu_method('index')?>"><a
                                         href="<?=base_url('reports/index')?>"> <i class="fa fa-th"></i>
                                         <span class="title">Reports</span> </a>
@@ -233,6 +233,7 @@
                                         <li> <a href="<?=base_url('items');?>"> Item List </a> </li>
                                     </ul>
                                 </li>
+                                <?php } ?>
                                 <?php if($this->ion_auth->is_admin()){ ?>
                                 <li class="start <?=backend_activate_menu_class('general_setting')?>"> <a
                                         href="javascript:;"> <i class="fa fa-cogs"></i> <span class="title">General

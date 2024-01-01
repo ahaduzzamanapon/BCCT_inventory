@@ -48,6 +48,39 @@ class General_setting extends Backend_Controller {
       $this->data['subview'] = 'sub_category_add';
       $this->load->view('backend/_layout_main', $this->data);
    }
+   public function sub_category_edit($id){
+      $this->form_validation->set_rules('cate_id', 'select category', 'required|trim');
+      $this->form_validation->set_rules('sub_cate_name', 'sub category Name', 'required|trim');
+
+      if ($this->form_validation->run() == true){
+
+         $form_data = array(
+            'cate_id'             => $this->input->post('cate_id'),
+            'sub_cate_name'      => $this->input->post('sub_cate_name')
+            );     
+            $this->db->where('id', $id);
+            $this->db->update('sub_categories', $form_data);
+            $this->session->set_flashdata('success', 'Sub category update successfully.');
+            redirect('general_setting/sub_categories');
+      
+      }
+
+      $this->data['categories'] = $this->Common_model->get_dropdown('categories', 'category_name', 'id');
+      $this->data['sub_categorie'] = $this->General_setting_model->get_sub_categories($id)[0];
+
+      // Load page
+      $this->data['meta_title'] = 'Edit Sub Category';
+      $this->data['subview'] = 'sub_category_edit';
+      $this->load->view('backend/_layout_main', $this->data);
+   }
+   public function sub_category_delete($id){
+
+      $this->db->where('id', $id);
+      $this->db->delete('sub_categories');
+      $this->session->set_flashdata('success', 'Sub category delete successfully.');
+      redirect('general_setting/sub_categories');
+      
+   }
 
    public function sub_categories(){
       $this->data['results'] = $this->General_setting_model->get_sub_categories(); 
@@ -61,6 +94,52 @@ class General_setting extends Backend_Controller {
       $this->data['meta_title'] = 'Categories List';
       $this->data['subview'] = 'categories';
       $this->load->view('backend/_layout_main', $this->data);
+   }
+   public function category_add(){
+      $this->form_validation->set_rules('cate_name', 'category Name', 'required|trim');
+      if ($this->form_validation->run() == true){
+         
+         $form_data = array(
+            'category_name'      => $this->input->post('cate_name'),
+            'status'      => 'Enable'
+            );
+            $this->db->insert('categories', $form_data);
+            $this->session->set_flashdata('success', 'Category create successfully.');
+            redirect('general_setting/categories');
+      }else{
+         $this->data['meta_title'] = 'Create Category';
+         $this->data['subview'] = 'category_add';
+         $this->load->view('backend/_layout_main', $this->data);
+      }
+    
+   }
+   public function category_edit($id){
+      $this->form_validation->set_rules('cate_name', 'category Name', 'required|trim');
+      if ($this->form_validation->run() == true){
+         
+         $form_data = array(
+            'category_name'      => $this->input->post('cate_name'),
+            'status'      => 'Enable'
+            );
+            $this->db->where('id', $id);
+            $this->db->update('categories', $form_data);
+            $this->session->set_flashdata('success', 'Category update successfully.');
+
+            redirect('general_setting/categories');
+      }else{
+      $this->data['category'] = $this->General_setting_model->get_categories($id);
+      $this->data['meta_title'] = 'Edit Category';
+      $this->data['subview'] = 'category_edit';
+      $this->load->view('backend/_layout_main', $this->data);
+      }
+   }
+   public function category_delete($id){
+      $this->db->where('id', $id);
+      $this->db->delete('categories');
+      $this->session->set_flashdata('success', 'Category delete successfully.');
+
+      redirect('general_setting/categories');
+      
    }
 
    public function item_unit(){

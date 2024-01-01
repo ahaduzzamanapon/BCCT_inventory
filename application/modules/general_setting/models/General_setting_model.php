@@ -7,22 +7,26 @@ class General_setting_model extends CI_Model {
       parent::__construct();
    }
 
-   public function get_sub_categories() {
+   public function get_sub_categories($id=null) {
       // result query
       $this->db->select('sc.*, c.category_name');
-      // $this->db->where('is_delete',0);
       $this->db->from('sub_categories sc');
       $this->db->join('categories c', 'c.id=sc.cate_id');
+      if($id){
+         $this->db->where('sc.id', $id);
+      }
       $query = $this->db->get()->result();
 
       return $query;
    }
 
-   public function get_categories() {
+   public function get_categories($id=null) {
       // result query
       $this->db->select('*');
-      // $this->db->where('is_delete',0);
       $this->db->from('categories');
+      if($id){
+         $this->db->where('id', $id);
+      }
       $query = $this->db->get()->result();
 
       return $query;

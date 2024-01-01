@@ -9,7 +9,7 @@ class Purchase_model extends CI_Model {
    public function get_purchase($limit=1000, $offset=0, $status=null) {
       $desk_arr=[];
       $desk_arr[]=$this->ion_auth->get_group_id();
-      if(in_array('4', $this->ion_auth->get_permission())){
+      if(in_array('6', $this->ion_auth->get_permission())){
          $ta=1;
      }
       $this->db->select('p.*, f.fiscal_year_name');

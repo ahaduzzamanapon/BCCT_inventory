@@ -32,7 +32,9 @@ class Purchase extends Backend_Controller {
    }
    public function purchase_pending($offset=0){
       $limit = 25;
-      $results = $this->Purchase_model->get_purchase($limit, $offset, '1'); 
+      $results = $this->Purchase_model->get_purchase($limit, $offset, '1');         
+      $this->data['roleid']=$this->ion_auth->get_group_id();
+
       $this->data['results'] = $results['rows'];
       $this->data['total_rows'] = $results['num_rows'];
       $this->data['pagination'] = create_pagination('purchase/index/', $this->data['total_rows'], $limit, 3, $full_tag_wrap = true);
@@ -71,25 +73,25 @@ class Purchase extends Backend_Controller {
       $this->load->view('backend/_layout_main', $this->data);
    }
 
-   public function fiscal_year($f_year){
-      $limit = 25;
-      $offset=0;
+   // public function fiscal_year($f_year){
+   //    $limit = 25;
+   //    $offset=0;
 
-      //Results
-      $results = $this->Purchase_model->get_purchase($limit, $offset, $f_year); 
-      $this->data['results'] = $results['rows'];
-      $this->data['total_rows'] = $results['num_rows'];
+   //    //Results
+   //    $results = $this->Purchase_model->get_purchase($limit, $offset, $f_year); 
+   //    $this->data['results'] = $results['rows'];
+   //    $this->data['total_rows'] = $results['num_rows'];
 
-      //pagination
-      $this->data['pagination'] = create_pagination('purchase/fiscal_year/', $this->data['total_rows'], $limit, 3, $full_tag_wrap = true);
+   //    //pagination
+   //    $this->data['pagination'] = create_pagination('purchase/fiscal_year/', $this->data['total_rows'], $limit, 3, $full_tag_wrap = true);
 
-      $f_year_name = $this->Common_model->get_fiscal_year($f_year)->fiscal_year_name;
+   //    $f_year_name = $this->Common_model->get_fiscal_year($f_year)->fiscal_year_name;
 
-      // Load view
-      $this->data['meta_title'] = $f_year_name .' Fiscal Year Purchase List';
-      $this->data['subview'] = 'index';
-      $this->load->view('backend/_layout_main', $this->data);
-   }
+   //    // Load view
+   //    $this->data['meta_title'] = $f_year_name .' Fiscal Year Purchase List';
+   //    $this->data['subview'] = 'index';
+   //    $this->load->view('backend/_layout_main', $this->data);
+   // }
 
    public function create(){
       $fiscal_year = $this->Common_model->get_current_fiscal_year();
@@ -104,6 +106,28 @@ class Purchase extends Backend_Controller {
 
          $aar=json_encode($approved_id);
          $finalappr=json_encode($finalappr);
+         $attachmentname='';
+         if ($_FILES['attachment']) {
+            $config['upload_path'] = './attachment/';
+            $config['allowed_types'] = 'jpg|png|jpeg|pdf';
+            $config['max_size'] = 10240000;
+        
+            $this->load->library('upload', $config);
+        
+            if ($this->upload->do_upload('attachment')) {
+                $data = $this->upload->data();
+                $originalFileName = $data['file_name'];
+        
+                // Generate a unique file name
+                $uniqueFileName = uniqid() . '.' . pathinfo($originalFileName, PATHINFO_EXTENSION);
+        
+                // Move the uploaded file to the destination with the unique file name
+                $destination = base_url('attachment/') . $uniqueFileName;
+                rename($config['upload_path'] . $originalFileName, $config['upload_path'] . $uniqueFileName);
+        
+                $attachmentname=$uniqueFileName;
+            }
+        }
          $form_data = array(
             'user_id'         => $user->id,            
             'supplier_name'   => $this->input->post('title'),
@@ -111,8 +135,9 @@ class Purchase extends Backend_Controller {
             'approved_id'     => $aar,
             'finalappr'     => $finalappr,
             'status'          => 1,
-            'desk_id'         => 0,
+            'desk_id'         => $this->ion_auth->in_group('Store Keeper')?1:0,
             'is_received'     => 0,
+            'attachment'      => $attachmentname,
             'created'         => date('Y-m-d H:i:s')
             );
          if($this->Common_model->save('purchase', $form_data)){     
@@ -229,11 +254,11 @@ class Purchase extends Backend_Controller {
 
       
          $status=$this->input->post('status');
-
          if ($status == 2) {
 
             $remark=[
                'id' => $user->id,
+               'role'=>$this->ion_auth->get_group_id(),
                'remark' => $this->input->post('remark')
             ];
    
@@ -247,6 +272,7 @@ class Purchase extends Backend_Controller {
          }else{
             $remark=[
                'id' => $user->id,
+               'role'=>$this->ion_auth->get_group_id(),
                'remark' => $this->input->post('remark')
             ];
    

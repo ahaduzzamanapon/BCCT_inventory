@@ -316,6 +316,7 @@ class Acl extends Backend_Controller {
 
     // edit a user
     public function edit_user($id){
+
         if (!$this->ion_auth->logged_in() || (!($this->ion_auth->is_admin()) && !($this->ion_auth->user()->row()->id == $id))){
             redirect('dashboard');
         }
@@ -330,36 +331,77 @@ class Acl extends Backend_Controller {
         $this->form_validation->set_rules('phone', $this->lang->line('edit_user_validation_phone_label'), 'trim');
 
         if (isset($_POST) && !empty($_POST)){
-            // do we have a valid request?
-            // if ($this->_valid_csrf_nonce() === FALSE || $id != $this->input->post('id')){
-            //     show_error($this->lang->line('error_csrf'));
-            // }
 
-            // update the password if it was posted
+            if($this->input->post('active')){
+                $active = $this->input->post('active');
+            }else{
+                $active = 1;
+            }
+           
             if ($this->input->post('password')){
                 $this->form_validation->set_rules('password', $this->lang->line('edit_user_validation_password_label'), 'required|min_length[' . $this->config->item('min_password_length', 'ion_auth') . ']|max_length[' . $this->config->item('max_password_length', 'ion_auth') . ']|matches[password_confirm]');
                 $this->form_validation->set_rules('password_confirm', $this->lang->line('edit_user_validation_password_confirm_label'), 'required');
             }
-
             if ($this->form_validation->run() === TRUE){
+                if ($_FILES['profile_img']) {
+                    $config['upload_path'] = './profile_img/';
+                    $config['allowed_types'] = 'jpg|png|jpeg';
+                    $config['max_size'] = 10240000;
+                
+                    $this->load->library('upload', $config);
+                
+                    if ($this->upload->do_upload('profile_img')) {
+                        $data = $this->upload->data();
+                        $originalFileName = $data['file_name']; // Keep the original file name
+                
+                        // Generate a unique file name
+                        $uniqueFileName = uniqid() . '.' . pathinfo($originalFileName, PATHINFO_EXTENSION);
+                
+                        // Move the uploaded file to the destination with the unique file name
+                        $destination = base_url('profile_img/') . $uniqueFileName;
+                        rename($config['upload_path'] . $originalFileName, $config['upload_path'] . $uniqueFileName);
+                
+                        $data = array(
+                            'first_name' => $this->input->post('full_name'),
+                            'email'      => $this->input->post('email'),
+                            'phone'      => $this->input->post('phone'),
+                            'dept_id'    => $this->input->post('dept_id'),
+                            'desig_id'   => $this->input->post('desig_id'),
+                            'active'     => $active,
+                            'profile_img'     => $uniqueFileName
+                        );
+                    }else{
+                        $data = array(
+                            'first_name' => $this->input->post('full_name'),
+                            'email'      => $this->input->post('email'),
+                            'phone'      => $this->input->post('phone'),
+                            'dept_id'    => $this->input->post('dept_id'),
+                            'desig_id'   => $this->input->post('desig_id'),
+                            'active'     =>$active
+                            );
+                    }
+                
+                }else{
                 $data = array(
                     'first_name' => $this->input->post('full_name'),
                     'email'      => $this->input->post('email'),
                     'phone'      => $this->input->post('phone'),
                     'dept_id'    => $this->input->post('dept_id'),
                     'desig_id'   => $this->input->post('desig_id'),
-                    'active'     => $this->input->post('active')
+                    'active'     =>$active
                     );
+                }
 
                 // update the password if it was posted
                 if ($this->input->post('password')){
                     $data['password'] = $this->input->post('password');
                 }
+                if($this->input->post('group')){
                     $groupData = $this->input->post('group');
                     // dd($groupData);
                     $this->ion_auth->remove_from_group('', $id);
-                    $this->ion_auth->add_to_group($groupData, $id);
-                        
+                    $this->ion_auth->add_to_group($groupData, $id);   
+                }
 
                     
             // check to see if we are updating the user

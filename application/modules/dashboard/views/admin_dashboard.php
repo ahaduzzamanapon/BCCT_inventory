@@ -1,10 +1,20 @@
+
+<style>
+    .tiles-container {
+    margin-left: 0px;
+    margin-right: 0px;
+    box-shadow: 0px 0px 7px 1px #adadad;
+}
+</style>
 <div class="page-content">
     <div class="content">
-        <div class="page-title"> <i class="fa fa-dashboard"></i>
-            <h3>Dashboard</h3>
+        <div class="page-title">
+            <h3>Welcome to Dashboard<strong>, <?php echo $this->session->userdata('first_name')?></strong></h3>
         </div>
 
-        <div class="row">
+        <div class="row"
+        style="box-shadow: 0px 0px 7px 1px #adadad;margin: 8px;padding: 4px;display: flex;flex-wrap: wrap;background: white;">
+            <h3 class="col-md-12"><strong>Requisition</strong></h3>
             <div class="col-md-3 m-b-20">
                 <div class="row tiles-container">
                     <div class="col-md-4 no-padding">
@@ -80,8 +90,13 @@
                     </div>
                 </div>
             </div>
-        </div> 
-        <div class="row">
+        </div>
+        <?php if(!$this->ion_auth->in_group('User')){ ?>
+
+        <div class="row"
+        style="box-shadow: 0px 0px 7px 1px #adadad;margin: 8px;padding: 4px;display: flex;flex-wrap: wrap;background: white;">
+            <h3 class="col-md-12"><strong>Purchase</strong></h3>
+
             <div class="col-md-3 m-b-20">
                 <div class="row tiles-container">
                     <div class="col-md-4 no-padding">
@@ -157,9 +172,9 @@
                     </div>
                 </div>
             </div>
-        </div> 
-        
-        
+        </div>
+        <?php } ?>
+
         <!-- /row -->
         <!-- 
       <div class="row">
@@ -196,10 +211,19 @@
            $percent_rejected = 0;
         }
 
+        if ($total_datap != 0) {
+           $percent_pendingp = ($total_pendingp / $total_datap) * 100;
+           $percent_approvep = ($total_approvep / $total_datap) * 100;
+           $percent_rejectedp = ($total_rejectedp / $total_datap) * 100;
+        }else{
+           $percent_pendingp = 0;
+           $percent_approvep = 0;
+           $percent_rejectedp = 0;
+        }
          ?>
         <div class="row">
-            <div class="col-md-12">
-                <div style="background: #fff; padding-top: 15px">
+            <div class="col-md-6">
+                <div style="background: #fff;padding-top: 15px;box-shadow: 0px 0px 7px 1px #adadad;margin: 9px;">
                     <canvas id="myChart" style="width:100%"></canvas>
                 </div>
 
@@ -234,6 +258,46 @@
                 });
                 </script>
             </div>
+            <?php if(!$this->ion_auth->in_group('User')){ ?>
+
+            <div class="col-md-6">
+                <div style="background: #fff;padding-top: 15px;box-shadow: 0px 0px 7px 1px #adadad;margin: 9px;">
+                    <canvas id="myChartp" style="width:100%"></canvas>
+                </div>
+
+                <script>
+                const xValuesp = [
+                    'Total Pending',
+                    'Total Approve',
+                    'Total Rejected'
+                ];
+                const yValuesp = [<?=$percent_pendingp?>, <?=$percent_approvep?>, <?=$percent_rejectedp?>];
+                // const barColors = [
+                //     "#b91d47",
+                //     "#00aba9",
+                //     "#2b5797"
+                // ];
+
+                new Chart("myChartp", {
+                    type: "pie",
+                    data: {
+                        labels: xValuesp,
+                        datasets: [{
+                            backgroundColor: barColors,
+                            data: yValuesp
+                        }]
+                    },
+                    options: {
+                        title: {
+                            display: true,
+                            text: "Purchase Status"
+                        }
+                    }
+                });
+                </script>
+            </div>
+
+            <?php } ?>
         </div>
     </div>
 </div>

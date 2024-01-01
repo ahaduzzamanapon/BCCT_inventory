@@ -1193,8 +1193,8 @@ body.menu-non-fixed .page-sidebar {
   .page-content {
     margin-top: 0px;
     padding: 0px;
-    /*background-color: #e5e9ec;*/
-    background-color: #eaffcf;
+    background-color: #e5e9ec;
+    /* background-color: #ededed; */
     overflow: auto;
     position: relative;
     min-height: 911px;
@@ -4353,7 +4353,8 @@ body.menu-non-fixed .page-sidebar {
   }
   .grid.simple {
     padding: 0px !important;
-  }
+    box-shadow: 0px 0px 7px 1px #adadad;
+}
   .grid.simple .grid-title {
     padding: 10px 15px 0px 15px;
     border-bottom: 1px solid #eee;

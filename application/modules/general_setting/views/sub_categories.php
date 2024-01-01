@@ -52,7 +52,7 @@
                   <td class="v-align-middle"><?=$row->sub_cate_name?></td>
                   <td class="v-align-middle"><?=$status?></td>
                   <!-- <td> <?php echo ($row->status) ?'<span class="btn btn-primary btn-xs btn-mini">Enable </span>': '<span class="btn btn-danger btn-xs btn-mini">Disable</span>';?> </td> -->
-                  <td><?php echo anchor(base_url('#'), 'Edit', 'class="btn btn-mini btn-primary"') ;?>&nbsp;<a class="btn btn-mini btn-primary" href="#" onclick="return confirm('Are you sure you want to delete this Department?');">Delete</a></td>
+                  <td><?php echo anchor(base_url('general_setting/sub_category_edit/'.$row->id), 'Edit', 'class="btn btn-mini btn-primary"') ;?>&nbsp;<a class="btn btn-mini btn-primary" href="<?=base_url('general_setting/sub_category_delete/'.$row->id)?>" onclick="return confirm('Are you sure you want to delete this Department?');">Delete</a></td>
                 <?php endforeach;?>                      
               </tbody>
             </table>

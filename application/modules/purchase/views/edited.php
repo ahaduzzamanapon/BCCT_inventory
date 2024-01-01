@@ -41,16 +41,17 @@
                            <legend>Purchase Information</legend>
                            <div class="row form-row">
                               <div class="col-md-6">
-                                 <label class="form-label">Supplier Name <span class='required'>*</span></label>
+                                 <label class="form-label">Title Name <span class='required'>*</span></label>
                                  <?php echo form_error('title');?>
                                  <input name="title" value="<?=$info->supplier_name?>" type="text" class="form-control input-sm" placeholder=""> 
                               </div>
                            </div>
-                           <div class="col-md-4" >
+                        <div class="col-md-4" >
                            <table class="table table-bordered" >
                              <thead>
                               <tr>
                                  <th>Verifier  Name</th>
+                                 <th>Role</th>
                                  <th>Remark</th>
                               </tr>
                              </thead>
@@ -60,10 +61,12 @@
                               foreach ($approver as $key => $value) {
                                  $this->db->where('id', $value->id);
                                  $query = $this->db->get('users')->row();
-                                 echo '<tr>';
-                                 echo '<td>'.$query->first_name.'</td>';
-                                 echo '<td>'.$value->remark.'</td>';
-                                 echo '</tr>';
+
+                                 $this->db->select('name');
+                                 $this->db->where('id',$value->id);
+                                 $query2 = $this->db->get('groups')->row();
+                                 echo '<tr><td>'.$query->first_name.'</td><td>'.$query2->name.'</td><td>'.$value->Remark.'</td></tr>';
+
                               }
                               ?>
                              </tbody>
@@ -82,12 +85,13 @@
                               <?php
                              $approver = json_decode($info->finalappr);
                               foreach ($approver as $key => $value) {
-                                 $this->db->where('id', $value->id);
+                                $this->db->where('id', $value->id);
                                  $query = $this->db->get('users')->row();
-                                 echo '<tr>';
-                                 echo '<td>'.$query->first_name.'</td>';
-                                 echo '<td>'.$value->remark.'</td>';
-                                 echo '</tr>';
+                                 
+                                 $this->db->select('name');
+                                 $this->db->where('id',$value->id);
+                                 $query2 = $this->db->get('groups')->row();
+                                 echo '<tr><td>'.$query->first_name.'</td><td>'.$query2->name.'</td><td>'.$value->Remark.'</td></tr>';
                               }
                               ?>
                              </tbody>

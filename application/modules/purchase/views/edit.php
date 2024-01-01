@@ -63,7 +63,7 @@
                                  <div class="col-md-12">
                                     <table class="tg" width="100%">
                                        <tr>
-                                          <th class="tg-khup"> Supplier Name</th>
+                                          <th class="tg-khup"> Title Name</th>
                                           <td class="tg-ywa9"><?=$info->supplier_name?></td>
                                           <th class="tg-khup"> Status </th>
                                           <td class="tg-ywa9"><?=$status?></td>
@@ -101,16 +101,17 @@
                            $group_name=$this->ion_auth->get_group_name();
                            ?>
                            <label class="form-label">Send To <span class='required'>*</span></label>
-
-                          <input type="radio" name="desk_id" value=" <?=$group_id?>" checked > <?= $group_name ?> &nbsp;&nbsp;
-
+                          <input  style="visibility: hidden" type="radio" name="desk_id" value=" <?=$group_id?>" checked > <span  style="visibility: hidden"> <?= $group_name ?></span> &nbsp;&nbsp;
                            <?php echo form_error('status');
                            $pw=$this->ion_auth->get_pw();
                            foreach ($pw as $key => $value) {
+                              if ($this->ion_auth->get_group_id()==$value) {
+                                 continue;
+                              }
                               $this->db->where('id', $value);
                               $query = $this->db->get('groups')->row();
                               if ($query) {
-                                 echo '<input type="radio" name="desk_id" value="'.$query->id.'" >'.$query->name.' &nbsp;&nbsp;';
+                                 echo '<input  type="radio" name="desk_id" value="'.$query->id.'" > <span>'.$query->name.' </span> &nbsp;&nbsp;';
                               }
                            }
                            ?>
@@ -121,6 +122,7 @@
                              <thead>
                               <tr>
                                  <th>Verifier  Name</th>
+                                 <th>Role</th>
                                  <th>Remark</th>
                               </tr>
                              </thead>
@@ -130,10 +132,12 @@
                               foreach ($approver as $key => $value) {
                                  $this->db->where('id', $value->id);
                                  $query = $this->db->get('users')->row();
-                                 echo '<tr>';
-                                 echo '<td>'.$query->first_name.'</td>';
-                                 echo '<td>'.$value->remark.'</td>';
-                                 echo '</tr>';
+
+                                 $this->db->select('name');
+                                 $this->db->where('id',$value->role);
+                                 $query2 = $this->db->get('groups')->row();
+                                 echo '<tr><td>'.$query->first_name.'</td><td>'.$query2->name.'</td><td>'.$value->remark.'</td></tr>';
+
                               }
                               ?>
                              </tbody>
@@ -145,6 +149,7 @@
                              <thead>
                               <tr>
                                  <th>Approver Name</th>
+                                 <th>Role</th>
                                  <th>Remark</th>
                               </tr>
                              </thead>
@@ -152,18 +157,20 @@
                               <?php
                              $approver = json_decode($info->finalappr);
                               foreach ($approver as $key => $value) {
-                                 $this->db->where('id', $value->id);
+                                $this->db->where('id', $value->id);
                                  $query = $this->db->get('users')->row();
-                                 echo '<tr>';
-                                 echo '<td>'.$query->first_name.'</td>';
-                                 echo '<td>'.$value->remark.'</td>';
-                                 echo '</tr>';
+                                 
+                                 $this->db->select('name');
+                                 $this->db->where('id',$value->role);
+                                 $query2 = $this->db->get('groups')->row();
+                                 echo '<tr><td>'.$query->first_name.'</td><td>'.$query2->name.'</td><td>'.$value->remark.'</td></tr>';
                               }
                               ?>
                              </tbody>
 
                            </table>
                         </div>
+
                      </div>
 
                      <div class="row form-row">                        
@@ -189,7 +196,7 @@
                                  <tr>
                                     <td><?=$item->item_name?></td>
                                     <td><?=$item->pur_quantity?>  <?=$item->unit_name?></td>
-                                    <td><input name="pur_approve[]" value="<?=$item->pur_approve?>" type="text" class="form-control input-sm"></td>
+                                    <td><input name="pur_approve[]"  max="<?=$item->quantity?>" value="<?=$item->pur_approve?>" type="number" class="form-control input-sm"></td>
                                     <td><?=$item->quantity?> <?=$item->unit_name?></td>
                                     <td><?=$item->pur_remark?></td>
                                     <input type="hidden" name="hide_id[]" value="<?=$item->id?>">
@@ -200,26 +207,19 @@
                         </div>
                         <label for=""> Remark </label>
                         <textarea name="remark" id="remark" class="form-control input-sm" rows="5" ><?=$info->remark?></textarea>
-
                      </div>
-
-
                      <div class="form-actions">  
                         <div class="pull-right">
                            <button type="submit" class="btn btn-primary btn-cons"><i class="icon-ok"></i> Save</button>
                         </div>
                      </div>
                      <?php echo form_close();?>
-
                   </div>  <!-- END GRID BODY -->              
                </div> <!-- END GRID -->
             </div>
-
          </div> <!-- END ROW -->
-
       </div>
    </div>
-
    <script type="text/javascript">
       $(document).ready(function() {
       //Load First row

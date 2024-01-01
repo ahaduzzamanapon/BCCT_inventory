@@ -84,8 +84,10 @@
                                     $delivered = '';
                                  };
                                ?>
+                               <?php  if($delivered=='') {?>
                               <?=anchor("requisition/delivery_product/".encrypt_url($row->id), 'Delivery Product', array('class' => 'btn btn-blueviolet btn-mini', $delivered=>$delivered))?>
-                              <?php } ?>
+
+                              <?php }} ?>
                               <?=anchor("requisition/details/".encrypt_url($row->id), 'Details', array('class' => 'btn btn-primary btn-mini'))?>
                            </td>
                         </tr>

@@ -74,7 +74,9 @@
                            </td>
                            <td> <?=$status?></td>
                            <td align="right">
+                           <?php if(!$this->ion_auth->in_group('User')){ ?>
                               <?=anchor("requisition/change_status/".encrypt_url($row->id), 'Approval Status', array('class' => 'btn btn-blueviolet btn-mini'))?>
+                              <?php } ?>
                               <?=anchor("requisition/details/".encrypt_url($row->id), 'Details', array('class' => 'btn btn-primary btn-mini'))?>
                            </td>
                         </tr>

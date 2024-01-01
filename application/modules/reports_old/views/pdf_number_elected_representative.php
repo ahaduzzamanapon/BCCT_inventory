@@ -167,9 +167,9 @@
 				<?= !empty($start_date)?' অনুসন্ধানের তারিখ : '.date_bangla_calender_format($start_date).', ':''?>
 				<?= !empty($end_date)?' থেকে '.date_bangla_calender_format($end_date):''?>
 			</div>
-			<div class="col-12r">
+			<!-- <div class="col-12r">
 				অর্থবছর : <?=$this->Common_model->en2bn($fiscal_year->name_bn)?>
-			</div>
+			</div> -->
 			<div class="col-12r">
 				তারিখ : <?=date_bangla_calender_format(date('d-m-Y'))?>
 			</div>

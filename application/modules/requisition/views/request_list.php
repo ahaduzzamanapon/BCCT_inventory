@@ -77,15 +77,26 @@
                            <td align="right">
                               <?php if($row->user_id == $this->session->userdata('user_id')) { ?>
                               <?=anchor("requisition/edite/".encrypt_url($row->id), 'Edit', array('class' => 'btn btn-info btn-mini'))?>
-                              <?php } ?>
-                              <?=anchor("requisition/change_status/".encrypt_url($row->id), 'Approval Status', array('class' => 'btn btn-blueviolet btn-mini'))?>
+                              <?php }?>
+                              <?php if(!$this->ion_auth->in_group('User') ){ ?>
+                                    <?php if($this->ion_auth->in_group('Store Keeper') ){ 
+                                       if($row->desk_id==0){
+                                       ?>
+
+                                    <?=anchor("requisition/change_status/".encrypt_url($row->id), 'Approval Status', array('class' => 'btn btn-blueviolet btn-mini'))?>  
+                                   
+                                    <?php }}elseif($roleid==$row->desk_id){?>
+                                       
+                                       <?=anchor("requisition/change_status/".encrypt_url($row->id), 'Approval Status', array('class' => 'btn btn-blueviolet btn-mini'))?>  
+                              <?php }} ?>
+                       
+
                               <?=anchor("requisition/details/".encrypt_url($row->id), 'Details', array('class' => 'btn btn-primary btn-mini'))?>
                            </td>
                         </tr>
                      <?php endforeach;?>                      
                   </tbody>
                </table>
-
                <div class="row">
                   <div class="col-sm-4 col-md-4 text-left" style="margin-top: 20px;"> Total <span style="color: green; font-weight: bold;"><?php echo $total_rows; ?> Requisition </span></div>
                   <div class="col-sm-8 col-md-8 text-right">

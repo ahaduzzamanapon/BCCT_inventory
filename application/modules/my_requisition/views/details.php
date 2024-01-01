@@ -50,8 +50,8 @@
                               <td class="tg-ywa9"><?=$info->title?></td>
                               <th class="tg-khup"> Status </th>
                               <td class="tg-ywa9"><?=$status?></td>
-                              <th class="tg-khup"> Fiscal Year</th>
-                              <td class="tg-ywa9"><?=$info->fiscal_year_name?></td>
+                              <!-- <th class="tg-khup"> Fiscal Year</th>
+                              <td class="tg-ywa9"><?=$info->fiscal_year_name?></td> -->
                            </tr> 
                            <tr>
                               <th class="tg-khup"> Created </th>
