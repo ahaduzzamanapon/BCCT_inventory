@@ -49,11 +49,11 @@ class General_setting extends Backend_Controller {
       $this->load->view('backend/_layout_main', $this->data);
    }
    public function sub_category_edit($id){
+
       $this->form_validation->set_rules('cate_id', 'select category', 'required|trim');
       $this->form_validation->set_rules('sub_cate_name', 'sub category Name', 'required|trim');
 
       if ($this->form_validation->run() == true){
-
          $form_data = array(
             'cate_id'             => $this->input->post('cate_id'),
             'sub_cate_name'      => $this->input->post('sub_cate_name')

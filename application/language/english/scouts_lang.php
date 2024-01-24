@@ -102,9 +102,9 @@ $lang['site_complain_address'] =  'Address';
 $lang['site_complain_feedback_details'] =  'Feedback Details';
 
 
-$lang['site_meta_title'] = 'TMED';
+$lang['site_meta_title'] = 'BCCT';
 
-$lang['site_title'] = 'Digitized Work Schedule fo the Secretary, TMED';
+$lang['site_title'] = 'Digitized Work Schedule fo the Secretary, BCCT';
 
 $lang['site_service_list'] =  'Service List';
 $lang['site_service_traking'] =  'Service Traking';

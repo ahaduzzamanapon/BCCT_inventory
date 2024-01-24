@@ -9,7 +9,7 @@
       echo form_open("login/index", $attributes);
       ?>
       <div class="col-md-4 col-sm-6 col-sm-offset-3 col-md-offset-4 box_reg"> 
-        <h4 class="box_title">Technical and Madrasah Education Division (TMED)</h4>
+        <h4 class="box_title">Technical and Madrasah Education Division (BCCT)</h4>
         <img src="<?=base_url('awedget/assets/img/govt-logo.png');?>" class="box_img img-responsive"  width="50">
         <h4 class="box_title">Inventory Management System</h4>
         <div id="infoMessage"><?php echo $message;?></div>

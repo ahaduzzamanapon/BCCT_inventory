@@ -84,7 +84,7 @@
                <a href="<?=base_url('Activity_logs/activity_logs_pdf')?>" class="btn btn-primary btn-xs btn-mini" style="float: right;">PDF Download</a>
 
                <?php if($results) { ?>
-               <table class="table table-hover table-condensed" id="example">
+               <table class="table table-hover dataTable table-condensed" id="example">
                  <thead>
                    <tr>
                      <th width="5%"> SL </th>

@@ -23,7 +23,7 @@
                         <?=$this->session->flashdata('success');?>
                      </div>
                   <?php endif; ?>
-                  <table class="table table-hover table-condensed" border="0">
+                  <table class="table table-hover table-condensed dataTable" border="0">
                      <thead>
                         <tr>
                            <th style="width:10px;"> SL </th>

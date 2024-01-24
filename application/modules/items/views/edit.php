@@ -38,7 +38,7 @@
                      <div class="col-md-5">
                         <label class="form-label">Select Sub Category <span class="required">*</span></label>
                         <?php echo form_error('sub_cate_id');
-                        $more_attr = 'class="sub_category_val form-control input-sm"';
+                        $more_attr = 'class="sub_category_val form-control input-sm" id="sub_category" required';
                         echo form_dropdown('sub_cate_id', $sub_categories, set_value('sub_cate_id', $info->sub_cate_id), $more_attr);
                         ?>
                      </div>

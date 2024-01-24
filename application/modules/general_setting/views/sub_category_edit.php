@@ -5,14 +5,13 @@
          <li> <?=$module_name?> </li>
          <li><?=$meta_title; ?></li>
       </ul>
-
       <div class="row">
          <div class="col-md-8">
             <div class="grid simple horizontal red">
                <div class="grid-title">
                   <h4><span class="semi-bold"><?=$meta_title; ?></span></h4>
                   <div class="pull-right">                
-                     <a href="<?=base_url('general_setting/sub_category_edit').'/'.$sub_categorie->id?>" class="btn btn-success btn-xs btn-mini"> Sub Category List</a>  
+                     <a href="<?=base_url('general_setting/sub_categories')?>" class="btn btn-success btn-xs btn-mini"> Sub Category List</a>  
                   </div>
                </div>
                <div class="grid-body">
@@ -28,7 +27,7 @@
 
                   <?php 
                   $attributes = array('id' => 'jsvalidate');
-                  echo form_open_multipart("general_setting/sub_category_edit", $attributes);?>
+                  echo form_open_multipart("general_setting/sub_category_edit/{$sub_categorie->id}", $attributes); ?>
 
                   <div class="row form-row">
                      <div class="col-md-6">

@@ -41,7 +41,7 @@
 
                <div style="border-left: 1px solid #7030a0; margin-left: 20px; float: left;height: 55px;"></div>
 
-               <div class="pull-right">TMED<br>
+               <div class="pull-right">BCCT<br>
                   <ul class="list-inline" class="pull-right" style="width: 55px; float: right; text-align: center;">
                      <li class="list-inline-item"><img src="<?=base_url();?>fwedget/assets/images/bd_logo1.png" height="30"></li>               
                   </ul>

@@ -57,6 +57,13 @@ class Items extends Backend_Controller {
       $this->data['subview'] = 'create';
       $this->load->view('backend/_layout_main', $this->data);
    }
+   public function get_sub_category_by_category($id){
+      $dataID = $id;
+      $this->db->where('cate_id', $dataID);
+      $query = $this->db->get('sub_categories');
+      $sub_category = $query->result();
+      echo json_encode($sub_category);  
+   }
 
    public function edit($id){
       $dataID = (int) decrypt_url($id); //exit;

@@ -24,7 +24,7 @@
                      </div>
                   <?php endif; ?>
 
-                  <table class="table table-hover table-condensed" id="example">
+                  <table class="table table-hover dataTable table-condensed">
                      <thead>
                         <tr>
                            <th style="width:2%"> SL </th>

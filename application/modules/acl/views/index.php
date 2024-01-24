@@ -36,7 +36,7 @@
               </div>
             </form>
 
-            <table class="table table-hover table-bordered  table-flip-scroll cf">
+            <table class="table table-hover table-bordered dataTable  table-flip-scroll cf">
               <thead class="cf">
                 <tr>
                   <th>SL</th>

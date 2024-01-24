@@ -17,12 +17,11 @@
     <link href="<?=base_url();?>awedget/assets/plugins/fullcalendar/dist/fullcalendar.print.min.css" rel="stylesheet"
         type="text/css" media="print" />
         <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
-    <?php /*
-   <!--  <link href="<?=base_url();?>awedget/assets/plugins/bootstrap-select2/select2.css" rel="stylesheet"
-    type="text/css" media="screen"/> -->
-    <!-- <link href="<?=base_url();?>awedget/assets/plugins/select2/select2.css" rel="stylesheet" type="text/css" media="screen"/>  -->
-    <!-- <link href="<?=base_url();?>awedget/assets/plugins/dropzone/css/dropzone.css" rel="stylesheet" type="text/css"/> -->
-    */ ?>
+   <link href="<?=base_url();?>awedget/assets/plugins/bootstrap-select2/select2.css" rel="stylesheet"
+    type="text/css" media="screen"/>
+   <link href="<?=base_url();?>awedget/assets/plugins/select2/select2.css" rel="stylesheet" type="text/css" media="screen"/>
+    <link href="<?=base_url();?>awedget/assets/plugins/dropzone/css/dropzone.css" rel="stylesheet" type="text/css"/>
+ 
     <link href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/4.0.1/min/dropzone.min.css" rel="stylesheet">
     <!-- Datepicker -->
     <link href="<?=base_url();?>awedget/assets/plugins/bootstrap-datepicker/css/datepicker.css" rel="stylesheet"
@@ -30,8 +29,8 @@
     <!-- <link href="<?=base_url();?>awedget/assets/plugins/bootstrap-timepicker/css/bootstrap-timepicker.css" rel="stylesheet" type="text/css" /> -->
     <!-- <link href="<?=base_url();?>awedget/assets/plugins/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css" rel="stylesheet" type="text/css" /> -->
 
-    <!-- <link href="<?=base_url();?>awedget/assets/plugins/jquery-datatable/css/jquery.dataTables.css" rel="stylesheet" type="text/css"/> -->
-    <!-- <link href="<?=base_url();?>awedget/assets/plugins/datatables-responsive/css/datatables.responsive.css" rel="stylesheet" type="text/css" media="screen"/> -->
+    <link href="<?=base_url();?>awedget/assets/plugins/jquery-datatable/css/jquery.dataTables.css" rel="stylesheet" type="text/css"/>
+    <link href="<?=base_url();?>awedget/assets/plugins/datatables-responsive/css/datatables.responsive.css" rel="stylesheet" type="text/css" media="screen"/>
     <link href="<?=base_url();?>awedget/assets/plugins/boostrap-checkbox/css/bootstrap-checkbox.css" rel="stylesheet"
         type="text/css" media="screen" />
     <link rel="stylesheet" href="<?=base_url();?>awedget/assets/plugins/ios-switch/ios7-switch.css" type="text/css"
@@ -66,14 +65,19 @@
     <!-- <script src="<?=base_url();?>awedget/assets/plugins/jquery-1.9.1.min.js" type="text/javascript"></script> -->
     */?>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.10.3/dist/sweetalert2.min.css" rel="stylesheet">
     <!-- <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.js"></script> -->
     <script type="text/javascript">
     var hostname = '<?php echo base_url();?>';
     </script>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css" rel="stylesheet" />
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js"></script>
+    <!-- <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css" rel="stylesheet" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js"></script> -->
 </head> <!-- END HEAD -->
-
+<style>
+    .select2-container{
+        display: inline-table !important;
+    }
+</style>
 <?php if($this->router->fetch_class('my_message') == 'my_message'){ ?>
 
 <body class="inner-menu-always-open">
@@ -113,8 +117,7 @@
                     <!-- BEGIN CHAT TOGGLER -->
                     <div class="pull-right">
                         <div class="chat-toggler">
-                            <a href="javascript:;" class="dropdown-toggle" id="my-task-list" data-placement="bottom"
-                                data-content='' data-toggle="dropdown" data-original-title="Notifications">
+                            <a>
                                 <div class="user-details">
                                     <div class="username">
                                         <span class="bold"
@@ -123,17 +126,113 @@
                                             style="font-size: 12px; font-weight: bold;">(<?=$userDetails['user_info']->username;?>)</span>
                                     </div>
                                 </div>
-                                <div class="iconset top-down-arrow"></div>
                             </a>
-
                             <?php
-                  $path = base_url().'profile_img/';
-                  if($userDetails['user_info']->profile_img != NULL){
-                     $img_url = $path.$userDetails['user_info']->profile_img;
-                  }else{
-                     $img_url = $path.'no-img.png';
-                  }
-                  ?>
+                            $this->load->model('Common_model');
+                            $get_requisition = $this->Common_model->get_requisition($limit, $offset, '1');
+                            $get_purchase = $this->Common_model->get_purchase($limit, $offset, '1'); 
+                            $allcount=count($get_requisition) + count($get_purchase);
+                            ?>
+
+                             <a id="notification" onclick="get_notification()" style="padding: 11px 19px;position: relative; display: inline-block; cursor: pointer;"> 
+                               <span class="badge badge-danger" style="position: absolute;height: 15px;padding: 1px 6px;margin: -5px 9px;"><?=$allcount?></span>
+                                <i class="fa fa-bell" style="font-size: 22px; color: #8dc641 !important;"></i>
+                             </a>
+                             <style>
+                                .listt {
+                                    list-style: none;
+                                    padding: 4px 7px;
+                                    border: 1px solid black;
+                                    display: flex;
+                                    margin: 5px 7px;
+                                    overflow: hidden;
+                                    border-radius: 5px;
+                                }
+                                .r_title{
+                                    font-size: 16px;
+                                    font-weight: bold;
+                                }
+                                .r_date {
+                                    font-size: 11px;
+                                    color: #606162;
+                                    padding-left: 12px;
+                                }
+                                .r_status {
+                                    font-size: 11px;
+                                    color: #606162;
+                                    padding-left: 12px;
+                                }
+                             </style>
+                             <div id="notification_content" style="position: absolute;background: aliceblue;width: 264px;min-height: 198px;margin: 33px -87px;border-radius: 15px;height: fit-content;"> 
+                                <div class="col-md-12" style="height: fit-content;border-bottom: 1px solid;padding: 0;overflow: auto;max-height: 241px;">
+                                    <span style="height: 31px;display: block;background: #8dc641;color: black;font-weight: bold;padding: 5px 9px;font-size: larger;position: fixed;width: 264px;">Requisition <span class="badge badge-danger"><?=count($get_requisition)?></span></span>
+                                    <ul style="margin-top: 36px;padding: 0;">
+                                    <?php 
+                                        if(count($get_requisition) > 0){
+                                            foreach ($get_requisition as $key => $value) {
+                                                ?>
+                                                 <li class="listt">
+                                                    <a href="<?=base_url('requisition/details/').encrypt_url($value->id) ?>" style="color: black;">
+                                                    <div style="line-height: 15px;">
+                                                    <span class="r_title"><?=$value->title?></span><br>
+                                                    <span class="r_date">Create On : <?= date('d-M-Y h:i A', strtotime($value->created))?></span><br>
+                                                    <span class="r_date">Update On : <?=date('d-M-Y h:i A', strtotime($value->updated)) ?></span><br>
+                                                    <span class="r_status"><span class=" badge badge-danger">Pending</span>
+                                                    </div>
+                                                    </a>
+                                                </li>
+                                                <?php }
+                                             }else{?>
+                                                    <span>No Requisition</span>
+                                                <?php }?>
+                                    </ul>
+                                </div>
+                                <div class="col-md-12" style="height: fit-content;border-bottom: 1px solid;padding: 0;overflow: auto;max-height: 241px;">
+                                    <span style="height: 31px;display: block;background: #8dc641;color: black;font-weight: bold;padding: 5px 9px;font-size: larger;position: fixed;width: 264px;">Purchase <span class="badge badge-danger"><?=count($get_purchase)?> </span></span>
+                                    <ul style="margin-top: 36px;padding: 0;">
+                                        <?php
+                                            if(count($get_purchase) > 0){
+                                                foreach ($get_purchase as $key => $value) {
+                                                    ?>
+                                                     <li class="listt">
+                                                        <a href="<?=base_url('purchase/details/').encrypt_url($value->id)?>" style="color: black;">
+                                                        <div style="line-height: 15px;">
+                                                        <span class="r_title"><?=$value->supplier_name?></span><br>
+                                                        <span class="r_date">Create On <?= date('d-M-Y h:i A', strtotime($value->created))?></span><br>
+                                                        <span class="r_date">Update On <?=date('d-M-Y h:i A', strtotime($value->updated)) ?></span><br>
+                                                        <span class="r_status"><span class=" badge badge-danger">Pending</span>
+                                                        </div>
+                                                        </a>
+                                                    </li>
+
+                                               <?php }}else{?>
+                                                    <span>No Purchase</span>
+                                                <?php }?>
+                                       
+                                    </ul>
+                                </div>
+                                
+                             </div>
+                             <script>
+                             function get_notification(){
+                                 $("#notification_content").toggle();
+                               }
+                               $("#notification_content").hide();
+                            //    window.onclick = function(event) {
+                            //      if (!event.target.matches('#notification')) {
+                            //        $("#notification_content").toggle();
+                            //      }
+                            //    }
+                               
+                             </script>
+                            <?php
+                                $path = base_url().'profile_img/';
+                                if($userDetails['user_info']->profile_img != NULL){
+                                    $img_url = $path.$userDetails['user_info']->profile_img;
+                                }else{
+                                    $img_url = $path.'no-img.png';
+                                }
+                                ?>
                             <div class="profile-pic"> <img src="<?=$img_url?>" alt="Profile Image"
                                     data-src="<?=$img_url?>" data-src-retina="<?=$img_url?>" width="35" height="35" />
                             </div>

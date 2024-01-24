@@ -22,7 +22,7 @@
                         <?=$this->session->flashdata('success');?>
                      </div>
                   <?php endif; ?>
-                  <table class="table table-hover table-condensed" border="0">
+                  <table class="table table-hover table-condensed dataTable" border="0">
                      <thead>
                         <tr>
                            <th style="width:10px;"> SL </th>
@@ -32,6 +32,7 @@
                            <th style="width:100px;">Created</th>
                            <th style="width:100px;">Updated</th>
                            <th style="width:50px;">Status</th>
+                           <th style="width:50px;">Urgent status</th>
                            <th style="width:40px; text-align: right;">Action</th>
                         </tr>
                      </thead>
@@ -49,7 +50,24 @@
                            $status = '<span class="label label-important">Pending</span>';
                         }
                         ?>
-                        <tr>
+                        <?php 
+                        $create_at=date('Y-m-d', strtotime($row->created)); 
+                        $today_date = date('Y-m-d');
+                        $day_diff=abs(strtotime($today_date) - strtotime($create_at));
+                        $number_of_days=floor($day_diff/(60*60*24));
+                        if($number_of_days > 7) {
+                           $colorb = '#ff8686';
+                        }elseif($number_of_days > 5) {
+                           $colorb = '#ffbc86';
+                        }elseif($number_of_days > 3) {
+                           $colorb = '#f3f982';
+                        }else{
+                           $colorb = 'white';
+                        }
+
+                        
+                        ?>
+                        <tr style="background-color:<?=$colorb?>;">
                            <td class="v-align-middle"><?=$sl.'.'?></td>
                            <td class="v-align-middle"><?=$row->title?></td>
                            <td><?=$row->first_name; ?></td>
@@ -73,6 +91,7 @@
                            <td class="v-align-middle"><?=date('d M, Y h:i A', strtotime($row->updated)); ?>                              
                            </td>
                            <td> <?=$status?></td>
+                           <td> <?=($row->urgent_status==1)?'Urgent':'Not Urgent'?></td>
                            <td align="right">
                               <?php
                               if($row->is_delivered==0){

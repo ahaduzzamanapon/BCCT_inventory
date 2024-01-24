@@ -17,6 +17,7 @@ class Requisition_model extends CI_Model {
       $this->db->join('users u', 'u.id = r.user_id', 'LEFT');
       $this->db->join('department dp', 'dp.id = u.dept_id', 'LEFT');
       $this->db->join('fiscal_year f', 'f.id = r.f_year_id', 'LEFT');
+      $this->db->where('r.is_save', 0);
       if($status){
          $this->db->where('r.status', $status);
       }

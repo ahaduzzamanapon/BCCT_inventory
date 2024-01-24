@@ -1509,4 +1509,59 @@ public function get_user_details() {
    return $result;
 }
 
+
+
+
+public function get_purchase($limit=1000, $offset=0, $status=null) {
+   $desk_arr=[];
+   $desk_arr[]=$this->ion_auth->get_group_id();
+   if(in_array('6', $this->ion_auth->get_permission())){
+      $ta=1;
+  }
+   $this->db->select('p.*, f.fiscal_year_name');
+   $this->db->from('purchase p');
+   $this->db->join('fiscal_year f', 'f.id = p.f_year_id', 'LEFT');
+   if($status != null && $status != 4) {
+      $this->db->where('p.status', $status);
+   }elseif($status == 4) {
+      $this->db->where('p.is_received =', 1);
+   }
+   if($ta!=1){
+      $this->db->where_in('p.desk_id', $desk_arr);
+  }
+   $this->db->order_by('p.id', 'DESC');
+   $query = $this->db->get()->result();
+   
+  
+
+   return $query;
+}
+public function get_requisition($limit=1000, $offset=0, $status=NULL) {
+   $desk_arr=[];
+   $desk_arr[]=$this->ion_auth->get_group_id();
+   if(in_array('6', $this->ion_auth->get_permission())){
+      $ta=1;
+  }
+   $this->db->select('r.*, u.first_name, dp.dept_name, f.fiscal_year_name');
+   $this->db->from('requisitions as r');
+   $this->db->join('users u', 'u.id = r.user_id', 'LEFT');
+   $this->db->join('department dp', 'dp.id = u.dept_id', 'LEFT');
+   $this->db->join('fiscal_year f', 'f.id = r.f_year_id', 'LEFT');
+   $this->db->where('r.is_save', 0);
+   if($status){
+      $this->db->where('r.status', $status);
+   }
+   if($ta!=1){
+      $this->db->where_in('r.desk_id', $desk_arr);
+   }
+   $this->db->order_by('r.id', 'DESC');
+   $query = $this->db->get()->result();
+  
+   return $query;
+}
+
+
+
+
+
 }

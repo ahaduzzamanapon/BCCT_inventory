@@ -361,8 +361,10 @@
                         </div>
                         <div class="form-actions">
                             <div class="pull-right">
-                                <button type="submit" class="btn btn-primary btn-cons"><i class="icon-ok"></i>
+                            <button type="submit" class="btn btn-info btn-cons" name="submit_type" value="save"><i class="icon-ok"></i>
                                     Save</button>
+                                <button type="submit" class="btn btn-primary btn-cons" name="submit_type" value="send"><i class="icon-ok"></i>
+                                    Send</button>
                             </div>
                         </div>
                         <?php echo form_close();?>

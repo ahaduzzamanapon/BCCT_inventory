@@ -25,7 +25,7 @@
                      </div>
                   <?php endif; ?>
                   <!-- <a href="<?=base_url('Committee/national_pdf')?>" class="btn btn-primary btn-xs btn-mini" style="float: right;">PDF Download</a> -->
-                  <table class="table table-hover table-condensed" border="0">
+                  <table class="table table-hover table-condensed dataTable" border="0">
                      <thead>
                         <tr>
                            <th style="width:10px;"> SL </th>

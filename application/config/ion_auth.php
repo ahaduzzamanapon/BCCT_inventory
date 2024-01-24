@@ -82,7 +82,7 @@ $config['salt_prefix']    = version_compare(PHP_VERSION, '5.3.7', '<') ? '$2a$' 
  | The controller should check this function and act
  | appropriately. If this variable set to 0, there is no maximum.
  */
-$config['site_title']                 = "TMED Inventory";       // Site Title, example.com
+$config['site_title']                 = "BCCT Inventory";       // Site Title, example.com
 $config['admin_email']                = "noreply@mysoftheaven.com"; 	// Admin Email, admin@example.com
 
 $config['admin_group']                = 'admin';            // id= 1, Default administrators

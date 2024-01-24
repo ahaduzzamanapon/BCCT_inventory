@@ -20,7 +20,19 @@
                   <h4><span class="semi-bold"><?=$meta_title; ?></span></h4>
                   <div class="pull-right">                
                      <a href="<?=base_url('requisition/request_list')?>" class="btn btn-blueviolet btn-xs btn-mini"> Request Requisition List</a>  
-                     <?=anchor("requisition/change_status/".encrypt_url($info->id), 'Approval Status', array('class' => 'btn btn-blueviolet btn-mini'))?>
+
+
+                     <?php if(!$this->ion_auth->in_group('User') ){ ?>
+                                    <?php if($this->ion_auth->in_group('Store Keeper') ){ 
+                                       if($row->desk_id==0){
+                                       ?>
+
+                                    <?=anchor("requisition/change_status/".encrypt_url($info->id), 'Approval Status', array('class' => 'btn btn-blueviolet btn-mini'))?>  
+                                   
+                                    <?php }}elseif($roleid==$row->desk_id){?>
+                                       
+                                       <?=anchor("requisition/change_status/".encrypt_url($info->id), 'Approval Status', array('class' => 'btn btn-blueviolet btn-mini'))?>  
+                              <?php }} ?>
                   </div>
                </div>
 
@@ -68,6 +80,13 @@
                               <td class="tg-ywa9"><?=$info->desig_name?></td>
                               <th class="tg-khup"> Department </th>
                               <td class="tg-ywa9"><?=$info->dept_name?></td>
+                           </tr> 
+                           <tr>
+                              <th class="tg-khup"> Urgent </th>
+                              <td class="tg-ywa9"><?=($info->urgent_status==0)?'<span >No</span>':'<span class="text-danger">Yes</span>'?></td>
+                              <th class="tg-khup"> Save </th>
+                              <td class="tg-ywa9"><?=($info->is_save)?'<span class="text-success">Yes</span>':'No' ?></td>
+                              
                            </tr> 
 
                            <tr>

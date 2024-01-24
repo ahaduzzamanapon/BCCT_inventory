@@ -8,6 +8,23 @@
 
         <style type="text/css">
         /*#appointment, #invitation { display: none; }*/
+        legend {
+    font-size: 14px;
+    font-weight: bold;
+    margin-bottom: 0px;
+    width: fit-content;
+    border: 1px solid #8BC34A;
+    border-radius: 4px;
+    padding: 5px 5px 5px 10px;
+    background-color: #eaffce;
+}
+.form-row input, .form-row select, .form-row textarea, .form-row select2 {
+    /* margin-top: 10px; */
+    margin-bottom: 8px;
+    border: 1px solid #0aa699;
+    color: black;
+    width: -webkit-fill-available;
+}
         </style>
 
         <div class="row">
@@ -37,7 +54,6 @@
                             <div class="col-md-12">
                                 <fieldset>
                                     <legend>Requisition Information</legend>
-
                                     <div class="row form-row" style="font-size: 16px; color: black;">
                                         <div class="col-md-4">
                                             Applicant Name: <strong><?=$info['user_info']->first_name?></strong>
@@ -51,12 +67,19 @@
                                     </div>
 
                                     <div class="row form-row">
-                                        <div class="col-md-6">
+                                        <div class="col-md-4">
                                             <label class="form-label">Requisition Title <span
                                                     class='required'>*</span></label>
                                             <?php echo form_error('title');?>
                                             <input name="title" value="<?=set_value('title')?>" type="text"
                                                 class="form-control input-sm" placeholder="">
+                                        </div>
+                                        <div class="col-md-2">
+                                            <label class="form-label">Urgent Status<span
+                                                    class='required'>*</span></label>
+                                            <?php echo form_error('title');?>
+                                            <input type="checkbox" name="urgent_status">
+                                            
                                         </div>
                                         <style>
                                         .resizable {
@@ -237,7 +260,7 @@
                                         });
                                         </script>
 
-                                        <div class="row form-row">
+                                        <div class="row form-row col-md-12" style="overflow-x: hidden;">
                                             <div class="col-md-12">
                                                 <h4 class="semi-bold margin_left_15">Item List <em
                                                         style="color: #f73838; font-size: 15px;">Click <strong>Add
@@ -255,7 +278,7 @@
                                                     color: black;
                                                 }
                                                 </style>
-                                                <div class="col-md-12">
+                                                <div class="col-md-12" style="overflow-x: scroll;">
                                                     <input type="hidden" value="1" id="count">
                                                     <table width="100%" border="1" id="appRowDiv"
                                                         style="border:1px solid #a09e9e;">
@@ -264,6 +287,9 @@
                                                             <th width="20%">Sub Category <span class="required">*</span>
                                                             </th>
                                                             <th width="20%">Item Name <span class="required">*</span>
+                                                            </th>
+                                                            <th width="20%">Previous data <span class="required"></span>
+                                                            <th width="20%">Available<span class="required"></span>
                                                             </th>
                                                             <th width="20%">Qty. Request</th>
                                                             <th width="20%">Remark</th>
@@ -312,8 +338,10 @@
 
                         <div class="form-actions">
                             <div class="pull-right">
-                                <button type="submit" class="btn btn-primary btn-cons"><i class="icon-ok"></i>
+                                <button type="submit" class="btn btn-info btn-cons" name="submit_type" value="save"><i class="icon-ok"></i>
                                     Save</button>
+                                <button type="submit" class="btn btn-primary btn-cons" name="submit_type" value="send"><i class="icon-ok"></i>
+                                    Send</button>
                             </div>
                         </div>
                         <?php echo form_close();?>
@@ -431,13 +459,16 @@ function addNewRow() {
     var sl = $('#count').val();
     var items = '';
     items += '<tr>';
-    items += '<td><select name="item_cate_id[]" class="form-control input-sm" id="category_' + sl +
+    items += '<td><select style="width: 90%;" name="item_cate_id[]" class="form-control input-sm" id="category_' + sl +
         '" ><?php echo $category_data;?></select></td>';
-    items += '<td><select name="item_sub_cate_id[]"  id="subcategory_' + sl + '" class="sub_category_val_' + sl +
-        ' form-control input-sm"><option value="">-- Select One --</option></select></td>';
-    items += '<td><select name="item_id[]" class="item_val_' + sl +
-        ' form-control input-sm"><option value="">-- Select One --</option></select></td>';
-    items += '<td><input name="qty_request[]" value="" type="number" class="form-control input-sm"></td>';
+    items += '<td><select style="width: 90%;" name="item_sub_cate_id[]"  id="subcategory_' + sl + '" class="sub_category_val_' + sl +
+        ' form-control input-sm"><option value="">Select One</option></select></td>';
+    items += '<td><select style="width: 90%;" onchange="getprevrecord(this)" name="item_id[]" id="item_' + sl + '" class="item_val_' + sl +
+        ' form-control input-sm"><option value="">Select One</option></select></td>';
+    items += '<td><strong class="prevdata"></strong></td>';
+    items += '<td><strong class="qtdata"></strong></td>';
+    items += '<td><input style="width: 82px;" name="qty_request[]" value="" type="number" class="form-control input-sm qtyr"></td>';
+
     items += '<td><textarea name="remark[]" value=""  class="form-control input-sm"></textarea></td>';
     items +=
         '<td> <a href="javascript:void();" class="label label-important" onclick="removeRow(this)"> <i class="fa fa-minus-circle"></i> Remove </a></td>';
@@ -449,24 +480,21 @@ function addNewRow() {
 }
 
 function category_dd(sl) {
-    //Category Dropdown
     $('#category_' + sl).change(function() {
-        $('.sub_category_val_' + sl).addClass('form-control input-sm');
-        $('.sub_category_val_' + sl + ' > option').remove();
-        var id = $('#category_' + sl).val();
+        // $('.sub_category_val_' + sl).addClass('form-control input-sm');
+        $('#subcategory_'+sl+'').empty();
 
+        var id = $('#category_' + sl).val();
         $.ajax({
             type: "POST",
             url: hostname + "common/ajax_get_sub_category_by_category/" + id,
-            success: function(func_data) {
-                // console.log(func_data);
-                $.each(func_data, function(id, name) {
-                    var opt = $('<option />');
-                    opt.val(id);
-                    opt.text(name);
-                    $('.sub_category_val_' + sl).append(opt);
+           success: function(func_data) {
+                var item=''
+               $.each(func_data, function(id, name) {
+                item+='<option value="'+id+'">'+name+'</option>';
                 });
-            }
+                $('#subcategory_'+sl+'').append(item).select2();
+           }
         });
     });
 }
@@ -474,22 +502,63 @@ function category_dd(sl) {
 function subcategory_dd(sl) {
     //Category Dropdown
     $('#subcategory_' + sl).change(function() {
-        $('.item_val_' + sl).addClass('form-control input-sm');
-        $(".item_val_" + sl + "> option").remove();
         var id = $('#subcategory_' + sl).val();
+        $('#item_' + sl).empty();
+
+
+
 
         $.ajax({
             type: "POST",
             url: hostname + "common/ajax_get_item_by_sub_category/" + id,
             success: function(func_data) {
+                var item=''
                 $.each(func_data, function(id, name) {
-                    var opt = $('<option />');
-                    opt.val(id);
-                    opt.text(name);
-                    $('.item_val_' + sl).append(opt);
+                    item+='<option value="'+id+'">'+name+'</option>';
                 });
+                $('#item_'+sl+'').append(item).select2();
             }
         });
     });
 }
+</script>
+<script>
+ function getprevrecord(obj) {
+    var $item_id = obj.value;
+
+    $.ajax({
+        type: "POST",
+        url: hostname + "common/ajax_get_item_by_id/" + $item_id,
+        success: function(data) {
+            var data = JSON.parse(data);
+            console.log(data);
+
+            var previtem = '';
+            var avl_data = '';
+
+            if (data.status === 'yes') {
+                previtem = `
+                    Date: ${data.requisition} <br>
+                    Quantity: ${data.requisition_qty}
+                `;
+            } else {
+                previtem = '---';
+            }
+
+            avl_data = `${data.items.quantity}`;
+
+            console.log($(obj).closest('.prevdata'));
+            $(obj).closest('tr').find('.prevdata').html(previtem);
+            $(obj).closest('tr').find('.qtdata').html(avl_data);
+            $(obj).closest('tr').find('.qtyr').attr('max', avl_data);
+
+        },
+        error: function(xhr, status, error) {
+            // Handle errors if needed
+            console.error("AJAX request failed:", status, error);
+        }
+    });
+}
+
+
 </script>

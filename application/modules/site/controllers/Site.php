@@ -123,9 +123,9 @@ class Site extends Frontend_Controller {
    }
 
    public function registration(){     
-      //echo strlen('Congratulations! You have successfully registered with the TMED Digital Schedule System. Please check mail for account activation. '); 
+      //echo strlen('Congratulations! You have successfully registered with the BCCT Digital Schedule System. Please check mail for account activation. '); 
       //echo $name = ucwords('a mosrafa');
-      //$mailBody = "Dear ".$name.", \r\n\r\n Welcome to TMED \r\n Thanks your for registration with us. \r\n\r\n If you want to get appointment please login to your account. \r\n\r\n\r\n\r\n Thank You!"; 
+      //$mailBody = "Dear ".$name.", \r\n\r\n Welcome to BCCT \r\n Thanks your for registration with us. \r\n\r\n If you want to get appointment please login to your account. \r\n\r\n\r\n\r\n Thank You!"; 
       // Send Mail
       //$this->send_mail($mailBody); 
 
@@ -206,7 +206,7 @@ class Site extends Frontend_Controller {
       if ($this->form_validation->run() == true && $this->ion_auth->register($identity, $password, $email, $additional_data)){
          // Send Message
          $mobile = '+88'.$this->input->post('phone');
-         $message = 'Congratulations! You have successfully registered with the TMED Digital Schedule System. Please check your mail for TMED account activation link.';
+         $message = 'Congratulations! You have successfully registered with the BCCT Digital Schedule System. Please check your mail for BCCT account activation link.';
          // $this->send_sms($mobile, $message);
 
          // Send Mail

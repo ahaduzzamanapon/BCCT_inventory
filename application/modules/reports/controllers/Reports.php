@@ -44,8 +44,8 @@ class Reports extends Backend_Controller {
 
         // Generate PDF
         $this->data['headding'] = 'Item Report';
-        $html = $this->load->view('pdf_item_report', $this->data, true);
-
+        echo $this->load->view('pdf_item_report', $this->data, true);
+exit();
         $mpdf = new mPDF('', 'A4', 10, '', 10, 10, 10, 5);
         $mpdf->WriteHtml($html);
         $mpdf->output();
@@ -65,8 +65,8 @@ class Reports extends Backend_Controller {
 
         // Generate PDF
         $this->data['headding'] = 'Request Requisition';
-        $html = $this->load->view('pdf_request_requisition', $this->data, true);
-
+        echo $this->load->view('pdf_request_requisition', $this->data, true);
+exit();
         $mpdf = new mPDF('', 'A4', 10, '', 10, 10, 10, 5);
         $mpdf->WriteHtml($html);
         $mpdf->output();
@@ -86,8 +86,8 @@ class Reports extends Backend_Controller {
 
         // Generate PDF
         $this->data['headding'] = 'Approve Requisition';
-        $html = $this->load->view('pdf_approve_requisition', $this->data, true);
-
+        echo $this->load->view('pdf_approve_requisition', $this->data, true);
+exit();
         $mpdf = new mPDF('', 'A4', 10, '', 10, 10, 10, 5);
         $mpdf->WriteHtml($html);
         $mpdf->output();
@@ -107,8 +107,8 @@ class Reports extends Backend_Controller {
 
         // Generate PDF
         $this->data['headding'] = 'Rejected Requisition';
-        $html = $this->load->view('pdf_rejected_requisition', $this->data, true);
-
+        echo $this->load->view('pdf_rejected_requisition', $this->data, true);
+exit();
         $mpdf = new mPDF('', 'A4', 10, '', 10, 10, 10, 5);
         $mpdf->WriteHtml($html);
         $mpdf->output();
@@ -129,8 +129,8 @@ class Reports extends Backend_Controller {
 
         // Generate PDF
         $this->data['headding'] = 'Delivered Requisition';
-        $html = $this->load->view('pdf_delivered_requisition', $this->data, true);
-
+        echo $this->load->view('pdf_delivered_requisition', $this->data, true);
+exit();
         $mpdf = new mPDF('', 'A4', 10, '', 10, 10, 10, 5);
         $mpdf->WriteHtml($html);
         $mpdf->output();
@@ -147,8 +147,8 @@ class Reports extends Backend_Controller {
 
         // Generate PDF
         $this->data['headding'] = 'Low Inventory Item Report';
-        $html = $this->load->view('pdf_low_inventory_item', $this->data, true);
-
+        echo $this->load->view('pdf_low_inventory_item', $this->data, true);
+exit();
         $mpdf = new mPDF('', 'A4', 10, '', 10, 10, 10, 5);
         $mpdf->WriteHtml($html);
         $mpdf->output();
@@ -167,8 +167,8 @@ class Reports extends Backend_Controller {
 
         // Generate PDF
         $this->data['headding'] = 'Request Requisition';
-        $html = $this->load->view('pdf_request_requisition', $this->data, true);
-
+        echo $this->load->view('pdf_request_requisition', $this->data, true);
+exit();
         $mpdf = new mPDF('', 'A4', 10, '', 10, 10, 10, 5);
         $mpdf->WriteHtml($html);
         $mpdf->output();
@@ -188,8 +188,8 @@ class Reports extends Backend_Controller {
 
         // Generate PDF
         $this->data['headding'] = 'Approve Requisition';
-        $html = $this->load->view('pdf_approve_requisition', $this->data, true);
-
+        echo $this->load->view('pdf_approve_requisition', $this->data, true);
+exit();
         $mpdf = new mPDF('', 'A4', 10, '', 10, 10, 10, 5);
         $mpdf->WriteHtml($html);
         $mpdf->output();
@@ -209,8 +209,8 @@ class Reports extends Backend_Controller {
 
         // Generate PDF
         $this->data['headding'] = 'Rejected Requisition';
-        $html = $this->load->view('pdf_rejected_requisition', $this->data, true);
-
+        echo $this->load->view('pdf_rejected_requisition', $this->data, true);
+exit();
         $mpdf = new mPDF('', 'A4', 10, '', 10, 10, 10, 5);
         $mpdf->WriteHtml($html);
         $mpdf->output();
@@ -231,8 +231,8 @@ class Reports extends Backend_Controller {
 
         // Generate PDF
         $this->data['headding'] = 'Delivered Requisition';
-        $html = $this->load->view('pdf_delivered_requisition', $this->data, true);
-
+        echo $this->load->view('pdf_delivered_requisition', $this->data, true);
+exit();
         $mpdf = new mPDF('', 'A4', 10, '', 10, 10, 10, 5);
         $mpdf->WriteHtml($html);
         $mpdf->output();

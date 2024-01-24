@@ -87,7 +87,33 @@ class Common extends Backend_Controller {
       header('Content-Type: application/json');
       echo json_encode($json);
    }
+  public function ajax_get_item_by_id($id){
+   $this->db->where('id', $id);
+   $query = $this->db->get('items');
 
-   
+   $data['items'] = $query->row();
+   $user_id=$this->session->userdata('user_id');
+   $data['status'] = 'no';
 
+   $this->db->where('user_id', $user_id);
+   $this->db->order_by('id', 'DESC');
+   $query = $this->db->get('requisitions');
+
+   foreach ($query->result() as $key => $value) {
+      $this->db->where('requisition_id', $value->id);
+      $query2 = $this->db->get('requisition_item');
+         foreach ($query2->result() as $key2 => $value2) {
+            if ($value2->item_id == $id) {
+               $data['requisition_qty'] = $value2->qty_approve;
+               $data['requisition'] = date('Y-m-d', strtotime($value->created));
+               $data['status'] = 'yes';
+               break;
+            } 
+       }
+       if ( $data['status'] =='yes'){
+          break;
+       }
+   };
+   echo json_encode($data);
+  }
 }

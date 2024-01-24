@@ -2,8 +2,7 @@ $(document).ready(function() {
    /*********************** Dependable Dropdown *********************/
 
    $('#category').change(function(){
-      $('.sub_category_val').addClass('form-control input-sm');
-      $(".sub_category_val > option").remove();
+      $("#sub_category").empty();
       var id = $('#category').val();
 
       $.ajax({
@@ -11,13 +10,13 @@ $(document).ready(function() {
          url: hostname +"common/ajax_get_sub_category_by_category/" + id,
          success: function(func_data)
          {
+            var item='';
             $.each(func_data,function(id,name)
             {
-               var opt = $('<option />');
-               opt.val(id);
-               opt.text(name);
-               $('.sub_category_val').append(opt);
+               item+='<option value="'+id+'">'+name+'</option>';
             });
+            $("#sub_category").append(item);
+
          }
       });
    });

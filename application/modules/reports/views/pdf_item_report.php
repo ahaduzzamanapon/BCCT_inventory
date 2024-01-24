@@ -51,7 +51,7 @@
   <div class="priview-body">
     <div class="priview-header">
       <p class="text-center">
-            <span style="font-size:20px;font-weight: bold;">TMED Inventory Management System</span>
+            <span style="font-size:20px;font-weight: bold;">BCCT Inventory Management System</span>
             <br> <span style="font-size: 14px;">Address </span>
             <!-- <br><span style="font-size:12px;">www.scouts.gov.bd</span> -->
          </p>
@@ -66,7 +66,6 @@
             </div>
          </div>
       </div>
-
       <div class="priview-demand">
          <div class="report_date">Report Date: <?=date('d-m-Y')?></div>
          <table class="table table-hover table-bordered report">

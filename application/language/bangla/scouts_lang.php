@@ -103,9 +103,9 @@ $lang['site_complain_feedback_details'] =  'প্রতিক্রিয়া
 
 
 
-$lang['site_meta_title'] = 'বাংলাদেশ স্কাউটস | বাংলাদেশ স্কাউটস অনলাইন ডিজিটাল রেকর্ড এবং স্কাউট সার্ভিস সিস্টেম';
+$lang['site_meta_title'] = 'BCCT';
 
-$lang['site_title'] = 'TMED';
+$lang['site_title'] = 'BCCT';
 
 $lang['site_service_list'] =  'সার্ভিস সমূহ';
 $lang['site_service_traking'] =  'সার্ভিস ট্রেকিং';

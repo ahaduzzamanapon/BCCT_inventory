@@ -383,20 +383,21 @@ function removeRow(id) {
     $(id).closest("tr").remove();
 }
 //add row function
+//add row function
 function addNewRow() {
-    // id="category_'+sl+'"
     var sl = $('#count').val();
     var items = '';
     items += '<tr>';
-    // items+= '<td><input type="hidden" name="sl[]" value="1" ></td>';
-    items += '<td><select name="item_cate_id[]" class="form-control input-sm" id="category_' + sl +
+    items += '<td><select style="width: 90%;" name="item_cate_id[]" class="form-control input-sm" id="category_' + sl +
         '" ><?php echo $category_data;?></select></td>';
-    items += '<td><select name="item_sub_cate_id[]"  id="subcategory_' + sl + '" class="sub_category_val_' + sl +
-        ' form-control input-sm"><option value="">-- Select One --</option></select></td>';
-    items += '<td><select name="pur_item_id[]" class="item_val_' + sl +
-        ' form-control input-sm"><option value="">-- Select One --</option></select></td>';
-    items += '<td><input name="pur_quantity[]" value="" type="text" class="form-control input-sm"></td>';
-    items += '<td> <textarea name="pur_remark[]" value=""  type="text" class="form-control input-sm"></textarea></td>';
+    items += '<td><select style="width: 90%;" name="item_sub_cate_id[]"  id="subcategory_' + sl + '" class="sub_category_val_' + sl +
+        ' form-control input-sm"><option value="">Select One</option></select></td>';
+    items += '<td><select style="width: 90%;" onchange="getprevrecord(this)" name="item_id[]" id="item_' + sl + '" class="item_val_' + sl +
+        ' form-control input-sm"><option value="">Select One</option></select></td>';
+
+    items += '<td><input style="width: 82px;" name="qty_request[]" value="" type="number" class="form-control input-sm qtyr"></td>';
+
+    items += '<td><textarea name="remark[]" value=""  class="form-control input-sm" ></textarea></td>';
     items +=
         '<td> <a href="javascript:void();" class="label label-important" onclick="removeRow(this)"> <i class="fa fa-minus-circle"></i> Remove </a></td>';
     items += '</tr>';
@@ -407,24 +408,21 @@ function addNewRow() {
 }
 
 function category_dd(sl) {
-    //Category Dropdown
     $('#category_' + sl).change(function() {
-        $('.sub_category_val_' + sl).addClass('form-control input-sm');
-        $('.sub_category_val_' + sl + ' > option').remove();
-        var id = $('#category_' + sl).val();
+        // $('.sub_category_val_' + sl).addClass('form-control input-sm');
+        $('#subcategory_'+sl+'').empty();
 
+        var id = $('#category_' + sl).val();
         $.ajax({
             type: "POST",
             url: hostname + "common/ajax_get_sub_category_by_category/" + id,
-            success: function(func_data) {
-                // console.log(func_data);
-                $.each(func_data, function(id, name) {
-                    var opt = $('<option />');
-                    opt.val(id);
-                    opt.text(name);
-                    $('.sub_category_val_' + sl).append(opt);
+           success: function(func_data) {
+                var item=''
+               $.each(func_data, function(id, name) {
+                item+='<option value="'+id+'">'+name+'</option>';
                 });
-            }
+                $('#subcategory_'+sl+'').append(item).select2();
+           }
         });
     });
 }
@@ -432,20 +430,21 @@ function category_dd(sl) {
 function subcategory_dd(sl) {
     //Category Dropdown
     $('#subcategory_' + sl).change(function() {
-        $('.item_val_' + sl).addClass('form-control input-sm');
-        $(".item_val_" + sl + "> option").remove();
         var id = $('#subcategory_' + sl).val();
+        $('#item_' + sl).empty();
+
+
+
 
         $.ajax({
             type: "POST",
             url: hostname + "common/ajax_get_item_by_sub_category/" + id,
             success: function(func_data) {
+                var item=''
                 $.each(func_data, function(id, name) {
-                    var opt = $('<option />');
-                    opt.val(id);
-                    opt.text(name);
-                    $('.item_val_' + sl).append(opt);
+                    item+='<option value="'+id+'">'+name+'</option>';
                 });
+                $('#item_'+sl+'').append(item).select2();
             }
         });
     });

@@ -25,10 +25,10 @@
 <script src="<?=base_url();?>awedget/assets/plugins/jquery-inputmask/jquery.inputmask.min.js" type="text/javascript"></script>
 <script src="<?=base_url();?>awedget/assets/plugins/jquery-autonumeric/autoNumeric.js" type="text/javascript"></script>
 <script src="<?=base_url();?>awedget/assets/plugins/ios-switch/ios7-switch.js" type="text/javascript"></script>
-<?php /*
-<!-- <script src="<?=base_url();?>awedget/assets/plugins/bootstrap-select2/select2.min.js" type="text/javascript"></script> -->
-<!-- <script src="<?=base_url();?>awedget/assets/plugins/select2/select2.min.js" type="text/javascript"></script> -->
-*/ ?>
+
+<script src="<?=base_url();?>awedget/assets/plugins/bootstrap-select2/select2.min.js" type="text/javascript"></script>
+ <script src="<?=base_url();?>awedget/assets/plugins/select2/select2.min.js" type="text/javascript"></script>
+
 <script src="<?=base_url();?>awedget/assets/plugins/boostrap-form-wizard/js/jquery.bootstrap.wizard.min.js" type="text/javascript"></script>
 <script src="<?=base_url();?>awedget/assets/plugins/jquery-validation/js/jquery.validate.min.js" type="text/javascript"></script>
 <script src="//oss.maxcdn.com/jquery.mask/1.11.4/jquery.mask.min.js"></script>
@@ -45,16 +45,15 @@
 
 
 <!-- BEGIN PAGE DATATABLE -->   
-<!-- <script src="<?=base_url();?>awedget/assets/plugins/jquery-datatable/js/jquery.dataTables.min.js" type="text/javascript" ></script> -->
-<!-- <script src="<?=base_url();?>awedget/assets/plugins/jquery-datatable/extra/js/TableTools.min.js" type="text/javascript" ></script> -->
-<!-- <script src="<?=base_url();?>awedget/assets/plugins/datatables-responsive/js/datatables.responsive.js" type="text/javascript"></script> -->
-<!-- <script src="<?=base_url();?>awedget/assets/plugins/datatables-responsive/js/lodash.min.js" type="text/javascript"></script> -->
-<!-- <script src="<?=base_url();?>awedget/assets/plugins/owl-carousel/owl.carousel.min.js" type="text/javascript"></script> -->
-<!-- <script src="<?=base_url();?>assets/plugins/jquery-metrojs/MetroJs.min.js" type="text/javascript" ></script> -->
+<script src="<?=base_url();?>awedget/assets/plugins/jquery-datatable/js/jquery.dataTables.min.js" type="text/javascript" ></script>
+<script src="<?=base_url();?>awedget/assets/plugins/jquery-datatable/extra/js/TableTools.min.js" type="text/javascript" ></script> 
+ <script src="<?=base_url();?>awedget/assets/plugins/datatables-responsive/js/datatables.responsive.js" type="text/javascript"></script> 
+ <script src="<?=base_url();?>awedget/assets/plugins/datatables-responsive/js/lodash.min.js" type="text/javascript"></script> 
+ <script src="<?=base_url();?>awedget/assets/plugins/owl-carousel/owl.carousel.min.js" type="text/javascript"></script>
+<script src="<?=base_url();?>assets/plugins/jquery-metrojs/MetroJs.min.js" type="text/javascript" ></script>
 <!-- END PAGE LEVEL PLUGINS -->
-<?php /*
-<!-- <script src="<?=base_url();?>awedget/assets/js/datatables.js" type="text/javascript"></script> -->
-*/ ?>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.10.3/dist/sweetalert2.all.min.js"></script>
+
 <script src="<?=base_url()?>awedget/assets/js/tabs_accordian.js" type="text/javascript"></script>
 <script src="<?=base_url()?>awedget/assets/plugins/moment/min/moment.min.js"></script>
 <script src="<?=base_url()?>awedget/assets/plugins/fullcalendar/dist/fullcalendar.min.js"></script>
@@ -74,7 +73,7 @@
 <?php /*
 <!-- <script src="<?=base_url();?>awedget/assets/js/chat.js" type="text/javascript"></script>  -->
 */ ?>
-<!-- <script src="<?=base_url();?>awedget/assets/js/datatables.js" type="text/javascript"></script>  -->
+ <script src="<?=base_url();?>awedget/assets/js/datatables.js" type="text/javascript"></script> 
 <script src="<?=base_url();?>awedget/assets/js/demo.js" type="text/javascript"></script> 
 <!-- <script src="<?=base_url();?>awedget/assets/croper/js/cropper.min.js"></script> -->
 <script src="<?=base_url();?>awedget/assets/js/bangla-input.js"></script>
@@ -98,8 +97,8 @@
 
     // Jquery Onload
     $(document).ready(function() {
-      // console.log( "run!" );
-      $('.basic-select2').select2();
+      console.log( "run!" );
+      $('select').select2();
 
       //Datepicker
       datetime();   
@@ -163,7 +162,28 @@
 
       }
     </script>
+<script>
+  $('.dataTable').dataTable();
+</script>
+<script>
 
-
+function showMessage(icon, message) {
+  const Toast = Swal.mixin({
+      toast: true,
+      position: "top-end",
+      showConfirmButton: false,
+      timer: 3000,
+      timerProgressBar: true,
+      didOpen: (toast) => {
+          toast.addEventListener("mouseenter", Swal.stopTimer);
+          toast.addEventListener("mouseleave", Swal.resumeTimer);
+      },
+  });
+  Toast.fire({
+      icon: icon,
+      title: message,
+  });
+}
+</script>
   </body>
   </html>

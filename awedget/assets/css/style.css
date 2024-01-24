@@ -4391,11 +4391,17 @@ body.menu-non-fixed .page-sidebar {
     border-bottom: 1px solid #D7DBE0;
     background-color: transparent;
   }
+  .btn{
+      width: fit-content;
+      overflow: hidden;
+      margin: 3px;
+  }
   .grid.simple .grid-body {
     background-color: #ffffff;
-    padding: 26px;
+    padding: 26px 1px;
     border: 1px solid #dddddd;
     color: #6f7b8a;
+    overflow-x: scroll;
   }
   .grid.simple .grid-body.no-padding {
     padding: 0px;

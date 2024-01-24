@@ -38,6 +38,7 @@ class My_requisition extends Backend_Controller {
       $this->form_validation->set_rules('title', 'title','required|trim|max_length[255]');
       //Validate and input data
       if ($this->form_validation->run() == true){
+
          $user = $this->ion_auth->user()->row();
          $approve_reject_user= [];
          $final_appruver= [];
@@ -48,7 +49,6 @@ class My_requisition extends Backend_Controller {
             $config['max_size'] = 10240000;
         
             $this->load->library('upload', $config);
-        
             if ($this->upload->do_upload('attachment')) {
                 $data = $this->upload->data();
                 $originalFileName = $data['file_name'];
@@ -63,6 +63,17 @@ class My_requisition extends Backend_Controller {
                 $attachmentname=$uniqueFileName;
             }
         }
+
+        if ($_POST['submit_type']=='save'){ 
+            $is_save = 1;
+        }else{
+            $is_save = 0;
+        }
+        if ($_POST['urgent_status']){ 
+            $urgent_status = 1;
+        }else{
+            $urgent_status = 0;
+        }
          $form_data = array(
             'user_id'   => $user->id,
             'department_id' => ($user->dept_id)?$user->dept_id:'',
@@ -74,7 +85,9 @@ class My_requisition extends Backend_Controller {
             'pin_code'   => mt_rand(1000, 9999),  
             'attachment'   => $attachmentname,  
             'created'   => date('Y-m-d H:i:s'),
-            'updated'   => date('Y-m-d H:i:s')
+            'updated'   => date('Y-m-d H:i:s'),
+            'is_save' => $is_save,
+            'urgent_status' => $urgent_status,
             );
          // print_r($form_data); exit;
          if($this->Common_model->save('requisitions', $form_data)){     

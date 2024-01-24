@@ -1,3 +1,15 @@
+
+<style>
+.input-sm {
+    height: 30px;
+    padding: 0px 0px;
+    font-size: 12px;
+    line-height: 1.5;
+    border-radius: 3px;
+}
+</style>
+
+
 <div class="page-content">     
    <div class="content">  
       <ul class="breadcrumb">
@@ -7,7 +19,7 @@
       </ul>
 
       <div class="row">
-         <div class="col-md-9">
+         <div class="col-md-12">
             <div class="grid simple horizontal red">
                <div class="grid-title">
                   <h4><span class="semi-bold"><?=$meta_title; ?></span></h4>
@@ -15,7 +27,7 @@
                      <a href="<?=base_url('items')?>" class="btn btn-blueviolet btn-xs btn-mini"> Items List</a>  
                   </div>
                </div>
-               <div class="grid-body">
+               <div class="grid-body" style="padding: 26px 29px;">
                   <?php if($this->session->flashdata('success')):?>
                      <div class="alert alert-success">
                         <?php echo $this->session->flashdata('success');;?>
@@ -28,15 +40,24 @@
                   <div class="row form-row">
                      <div class="col-md-5">
                         <label class="form-label">Select Category <span class="required">*</span></label>
-                        <?php echo form_error('cat_id');
-                        $more_attr = 'class="form-control input-sm" id="category"';
-                        echo form_dropdown('cat_id', $categories, set_value('cat_id'), $more_attr);
+                        <?php
+                      
+                        $cat=$this->db->get('categories')->result();
                         ?>
+                        <select name="cat_id" onchange="getSubCategory(this.value)" class="form-control input-sm" required>
+                           <option value="">-- Select One --</option>
+                           <?php
+                           foreach ($cat as $key => $value) {
+                              ?>
+                              <option value="<?=$value->id?>"><?=$value->category_name?></option>
+                              <?php
+                           } ?>
+                        </select>
                      </div>
                      <div class="col-md-5">
                         <label class="form-label">Select Sub Category <span class="required">*</span></label>
                         <?php echo form_error('sub_cate_id'); ?>
-                        <select name="sub_cate_id" <?=set_value('sub_cate_id')?> class="sub_category_val form-control input-sm">
+                        <select name="sub_cate_id" class="sub_category_val form-control input-sm" id="sub_category" required>
                            <option value="">-- Select One --</option>
                         </select>
                      </div>
@@ -87,7 +108,6 @@
 <script type="text/javascript">
    $(document).ready(function() {
       $('#validate').validate({
-      // focusInvalid: false, 
       ignore: "",
       rules: {
          cat_id: { required: true },
@@ -98,4 +118,20 @@
       }
    });
    });   
+</script>
+<script>
+   function getSubCategory(id){
+      $.ajax({
+         type: "POST",
+         url: "<?=base_url('items/get_sub_category_by_category/');?>"+id,
+         success: function(data){
+             var parsedData = JSON.parse(data);
+             $('#sub_category').empty();
+             parsedData.forEach(function(item){
+                 $('#sub_category').append('<option value="' + item.id + '">' + item.sub_cate_name + '</option>');
+             })
+         }
+      })
+      
+   }
 </script>
