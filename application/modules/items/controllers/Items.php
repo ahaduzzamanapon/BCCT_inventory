@@ -43,11 +43,22 @@ class Items extends Backend_Controller {
 
          // print_r($form_data); exit;
          if($this->Common_model->save('items', $form_data)){
+            $item_id=$this->db->insert_id();
+           $group_id= $this->input->post('group_id');
+           $availability=$this->input->post('availability');
+           foreach ($group_id as $key => $value) {
+              $data = array(
+                'item_id' => $item_id,
+                'group_id' => $value,
+                'availability' => $availability[$key],
+                'year' => date('Y')
+              );
+              $this->db->insert('availability_items', $data);
+           }
             $this->session->set_flashdata('success', 'Item create successfully.');
             redirect('items');
          }
       }
-
       //Dropdown
       $this->data['categories'] = $this->Common_model->get_categories();
       $this->data['units'] = $this->Common_model->get_units();
@@ -91,6 +102,20 @@ class Items extends Backend_Controller {
 
          // print_r($form_data); exit;
          if($this->Common_model->edit('items', $dataID, 'id', $form_data)){
+            $item_id= $dataID;
+            $group_id= $this->input->post('group_id');
+            $availability=$this->input->post('availability');
+            $this->db->where('item_id', $item_id);
+            $this->db->delete('availability_items');
+            foreach ($group_id as $key => $value) {
+               $data = array(
+                 'item_id' => $item_id,
+                 'group_id' => $value,
+                 'availability' => $availability[$key],
+                 'year' => date('Y')
+               );
+               $this->db->insert('availability_items', $data);
+            }
             $this->session->set_flashdata('success', 'Informatioin update successfully.');
             redirect('items');
          }

@@ -1553,9 +1553,12 @@ class Ion_auth_model extends CI_Model
 		$group = $this->ion_auth->get_users_groups($this->ion_auth->get_user_id())->row()->permission;
         return explode(",", $group);
 	}
-	public function get_group_id()
+	public function get_group_id($user_id=null)
 	{
-		$group = $this->ion_auth->get_users_groups($this->ion_auth->get_user_id())->row()->id;
+		if (!$user_id) {
+			$user_id = $this->ion_auth->get_user_id();
+		}
+		$group = $this->ion_auth->get_users_groups($user_id)->row()->id;
         return $group;
 	}
 	public function get_group_name()

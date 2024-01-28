@@ -7,7 +7,7 @@
       </ul>
 
       <div class="row">
-         <div class="col-md-8">
+         <div class="col-md-12">
             <div class="grid simple horizontal red">
                <div class="grid-title">
                   <h4><span class="semi-bold"><?=$meta_title?></span></h4>
@@ -72,6 +72,36 @@
                         <?php echo form_error('status'); ?>
                         <input type="radio" name="status" id="" class="group_control" value="1" <?=set_value('status', $info->status)==1?'checked':'';?>> Enable &nbsp;&nbsp;
                         <input type="radio" name="status" id="" class="group_control" value="0" <?=set_value('status', $info->status)==0?'checked':'';?>> Disable
+                     </div>
+                  </div>
+                  <div class="row form-row">
+                     <div class="col-md-12">
+                        <h4 class="form-header">Item Group Availability</h4>
+                     </div>
+                     <div class="col-md-12">
+                        <style>
+                           td{
+                              padding: 5px 0px;
+                           }
+                        </style>
+                        <table class="table table-bordered">
+                           <tr>
+                              <th>#</th>
+                              <th>Group Name</th>
+                              <th>Availability</th>
+                           </tr>
+                           <?php
+                           $groups=$this->db->get('groups')->result();
+                           foreach ($groups as $key => $value) {
+                              $abb_info=$this->db->get_where('availability_items',array('group_id'=>$value->id,'item_id'=>$info->id,'year'=>date('Y')))->row();
+                              ?> 
+                              <tr>
+                                 <td><?= $key+1 ?></td>
+                                 <td><?= $value->name ?><input type="hidden" name="group_id[]" value="<?= $value->id ?>"></td>
+                                 <td><input type="number" name="availability[]" value="<?=(!empty($abb_info))?$abb_info->availability:0?>"></td>
+                              </tr>  
+                        <?php } ?>
+                       </table>
                      </div>
                   </div>
 

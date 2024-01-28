@@ -88,6 +88,35 @@
                      </div>
                   </div>
 
+                  <div class="row form-row">
+                     <div class="col-md-12">
+                        <h4 class="form-header">Item Group Availability</h4>
+                     </div>
+                     <div class="col-md-12">
+                        <style>
+                           td{
+                              padding: 5px 0px;
+                           }
+                        </style>
+                        <table class="table table-bordered">
+                           <tr>
+                              <th>#</th>
+                              <th>Group Name</th>
+                              <th>Availability</th>
+                           </tr>
+                           <?php
+                           $groups=$this->db->get('groups')->result();
+                           foreach ($groups as $key => $value) { ?>   
+                              <tr>
+                                 <td><?= $key+1 ?></td>
+                                 <td><?= $value->name ?> <input type="hidden" name="group_id[]" value="<?= $value->id ?>"></td>
+                                 <td><input type="number" name="availability[]" value="0"></td>
+                              </tr>  
+                        <?php } ?>
+                       </table>
+                     </div>
+                  </div>
+
                   <div class="form-actions">  
                      <div class="pull-right">
                         <button type="submit" class="btn btn-primary btn-cons"><i class="icon-ok"></i> Save</button>

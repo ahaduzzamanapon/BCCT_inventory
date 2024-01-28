@@ -114,6 +114,21 @@ class Common extends Backend_Controller {
           break;
        }
    };
+   $availability_enjoy=0;
+   foreach ($query->result() as $key => $value) {
+      $this->db->where('requisition_id', $value->id);
+      $query2 = $this->db->get('requisition_item');
+         foreach ($query2->result() as $key2 => $value2) {
+            if ($value2->item_id == $id) {
+              $availability_enjoy=$availability_get+$value2->qty_approve;
+            } 
+       }
+   };
+
+   $availability_get=$this->Common_model->get_item_availability($user_id,$id);
+   $data['availability_enjoy']=$availability_enjoy;
+   $data['availability_get']=$availability_get;
+
    echo json_encode($data);
   }
 }

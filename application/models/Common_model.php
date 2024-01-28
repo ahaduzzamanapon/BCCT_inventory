@@ -1559,6 +1559,18 @@ public function get_requisition($limit=1000, $offset=0, $status=NULL) {
   
    return $query;
 }
+public function get_item_availability($user_id,$item_id){ 
+   $groupe_id=$this->ion_auth->get_group_id($user_id);
+   $this->db->where('item_id', $item_id);
+   $this->db->where('group_id', $groupe_id);
+   $query = $this->db->get('availability_items')->row();
+   if (!empty($query)) {
+      $get=$query->availability;
+   }else{
+      $get=0;
+   }
+   return $get;
+}
 
 
 

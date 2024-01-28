@@ -288,6 +288,7 @@
                                                             </th>
                                                             <th width="20%">Item Name <span class="required">*</span>
                                                             </th>
+                                                            <th width="20%">Availability Items <span class="required"></span>
                                                             <th width="20%">Previous data <span class="required"></span>
                                                             <th width="20%">Available<span class="required"></span>
                                                             </th>
@@ -465,11 +466,12 @@ function addNewRow() {
         ' form-control input-sm"><option value="">Select One</option></select></td>';
     items += '<td><select style="width: 90%;" onchange="getprevrecord(this)" name="item_id[]" id="item_' + sl + '" class="item_val_' + sl +
         ' form-control input-sm"><option value="">Select One</option></select></td>';
+    items += '<td><strong class="availability_items_t"></strong></td>';
     items += '<td><strong class="prevdata"></strong></td>';
     items += '<td><strong class="qtdata"></strong></td>';
     items += '<td><input style="width: 82px;" name="qty_request[]" value="" type="number" class="form-control input-sm qtyr"></td>';
 
-    items += '<td><textarea name="remark[]" value=""  class="form-control input-sm"></textarea></td>';
+    items += '<td><textarea name="remark[]" value=""  class="form-control input-sm" style="width: 89px; height: 37px;"></textarea></td>';
     items +=
         '<td> <a href="javascript:void();" class="label label-important" onclick="removeRow(this)"> <i class="fa fa-minus-circle"></i> Remove </a></td>';
     items += '</tr>';
@@ -532,10 +534,8 @@ function subcategory_dd(sl) {
         success: function(data) {
             var data = JSON.parse(data);
             console.log(data);
-
             var previtem = '';
             var avl_data = '';
-
             if (data.status === 'yes') {
                 previtem = `
                     Date: ${data.requisition} <br>
@@ -546,12 +546,26 @@ function subcategory_dd(sl) {
             }
 
             avl_data = `${data.items.quantity}`;
+            var availability_items_t=`
+                    Availability: ${data.availability_get} <br>
+                    Already Enjoy: ${data.availability_enjoy}
+            `;
 
+            var avdata= data.availability_get - data.availability_enjoy;
+            if (avdata < 0) {
+                avdata = 0;
+            };
+
+            if (avl_data>avdata) {
+                avl_data = avdata;
+            }else{
+                avl_data = avl_data;
+            }
             console.log($(obj).closest('.prevdata'));
+            $(obj).closest('tr').find('.availability_items_t').html(availability_items_t);
             $(obj).closest('tr').find('.prevdata').html(previtem);
             $(obj).closest('tr').find('.qtdata').html(avl_data);
-            $(obj).closest('tr').find('.qtyr').attr('max', avl_data);
-
+            $(obj).closest('tr').find('.qtyr').attr('max', avl_data)
         },
         error: function(xhr, status, error) {
             // Handle errors if needed
