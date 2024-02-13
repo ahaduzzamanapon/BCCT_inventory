@@ -480,7 +480,7 @@ function removeRow(id) {
 //add row function
 function addNewRow() {
     var sl = $('#count').val();
-    var items = '';
+    var items = '';  
     items += '<tr>';
     items += '<td><select name="item_cate_id[]" class="form-control input-sm" id="category_' + sl +
         '" ><?php echo $category_data;?></select></td>';

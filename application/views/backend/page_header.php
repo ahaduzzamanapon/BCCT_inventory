@@ -78,7 +78,7 @@
         display: inline-table !important;
     }
 </style>
-<?php if($this->router->fetch_class('my_message') == 'my_message'){ ?>
+<?php  if($this->router->fetch_class('my_message') == 'my_message'){ ?>
 
 <body class="inner-menu-always-open">
     <?php }else{ ?>

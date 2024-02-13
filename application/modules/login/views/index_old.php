@@ -1,3 +1,8 @@
+
+<?php
+dd('dsjfb')
+?>
+
 <body class="error-body no-top" style="background: url(<?=base_url('awedget/assets/img/inventeory.png');?>) no-repeat center center fixed; -webkit-background-size: cover;
   -moz-background-size: cover;
   -o-background-size: cover;

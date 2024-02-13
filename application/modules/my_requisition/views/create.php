@@ -564,7 +564,7 @@ function subcategory_dd(sl) {
             console.log($(obj).closest('.prevdata'));
             $(obj).closest('tr').find('.availability_items_t').html(availability_items_t);
             $(obj).closest('tr').find('.prevdata').html(previtem);
-            $(obj).closest('tr').find('.qtdata').html(avl_data);
+            $(obj).closest('tr').find('.qtdata').html(data.items.quantity);
             $(obj).closest('tr').find('.qtyr').attr('max', avl_data)
         },
         error: function(xhr, status, error) {
